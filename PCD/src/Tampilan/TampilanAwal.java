@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Image;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -20,6 +21,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JInternalFrame;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.UIManager;
@@ -32,7 +35,15 @@ import java.awt.image.*;
 public class TampilanAwal extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField txtSourceAddress;
+	private JTextField txtFinalAddress;
+	private String alamat = "null";
+	private String simpan = "null";
 	JFileChooser fc;
+	
+	 BufferedImage  image;
+	   int width;
+	   int height;
 
 	/**
 	 * Launch the application.
@@ -98,13 +109,30 @@ public class TampilanAwal extends JFrame {
 		panel.setLayout(null);
 		
 		JLabel l = new JLabel("");
-		//BufferedImage img = ImageIO.read("java.png")
 		
-		JPanel source = new JPanel() {
-		//	protected void paint
-		};
-		source.setBounds(59, 130, 320, 240);
+		JPanel source = new JPanel();
+		source.setBounds(59, 104, 320, 240);
 		panel.add(source);
+		
+		JLabel LblIS = new JLabel("");
+		LblIS.setHorizontalAlignment(SwingConstants.CENTER);
+		LblIS.setBounds(0, 0, 320, 240);
+		source.add(LblIS);
+		
+		txtSourceAddress = new JTextField();
+		txtSourceAddress.addMouseListener(new MouseAdapter() {
+		});
+
+		txtSourceAddress.setHorizontalAlignment(SwingConstants.CENTER);
+		txtSourceAddress.setBounds(69, 389, 300, 45);
+		txtSourceAddress.setColumns(10);
+		panel.add(txtSourceAddress);
+		
+		txtFinalAddress = new JTextField();
+		txtFinalAddress.setHorizontalAlignment(SwingConstants.CENTER);
+		txtFinalAddress.setColumns(10);
+		txtFinalAddress.setBounds(501, 389, 300, 45);
+		panel.add(txtFinalAddress);
 		
 		JLabel lblRGBtoGray = new JLabel("True Color to Gray");
 		lblRGBtoGray.setBounds(357, 5, 162, 26);
@@ -112,13 +140,20 @@ public class TampilanAwal extends JFrame {
 		panel.add(lblRGBtoGray);
 		
 		JPanel result = new JPanel();
-		result.setBounds(495, 130, 320, 240);
+		result.setBounds(492, 104, 320, 240);
 		panel.add(result);
 		
-		JButton btnLoadImage = new JButton("Load Image");
-		btnLoadImage.addActionListener(new ActionListener() {
+		JLabel LblFS = new JLabel("");
+		LblFS.setForeground(new Color(139, 69, 19));
+		LblFS.setBackground(new Color(255, 255, 0));
+		LblFS.setHorizontalAlignment(SwingConstants.CENTER);
+		LblFS.setBounds(0, 0, 320, 240);
+		result.add(LblFS);
+		
+		JButton btnBrowse = new JButton("Browse");
+		btnBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 if (e.getSource() == btnLoadImage) {
+				 if (e.getSource() == btnBrowse) {
 					 JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
 					  
 			            // invoke the showsOpenDialog function to show the save dialog 
@@ -129,7 +164,7 @@ public class TampilanAwal extends JFrame {
 			  
 			            { 
 			                // set the label to the path of the selected file 
-			                l.setText(j.getSelectedFile().getAbsolutePath()); 
+			            	txtSourceAddress.setText(j.getSelectedFile().getAbsolutePath()); 
 			            } 
 			            // if the user cancelled the operation 
 			            else
@@ -137,24 +172,84 @@ public class TampilanAwal extends JFrame {
 			            }
 			}
 		});
-		btnLoadImage.setBounds(159, 381, 106, 23);
-		panel.add(btnLoadImage);
+		btnBrowse.setBounds(59, 355, 106, 23);
+		panel.add(btnBrowse);
 		
 		JButton btnConvert = new JButton("Convert");
-		btnConvert.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btnConvert.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				alamat = txtSourceAddress.getText();			
+				simpan = txtFinalAddress.getText();
+				
+	
+				ImageIcon gambarAwal = new ImageIcon (alamat);				
+				Image ga = gambarAwal.getImage(); // transform it 
+				Image newimg = ga.getScaledInstance(300, 254,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+				gambarAwal = new ImageIcon(newimg);  // transform it back
+				LblIS.setIcon(gambarAwal);
+				
+				try {
+			         //File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
+					
+					 File input = new File(alamat);
+			         image = ImageIO.read(input);
+			         width = image.getWidth();
+			         height = image.getHeight();
+			         
+			         for(int i=0; i<height; i++) {
+			         
+			            for(int j=0; j<width; j++) {
+			            
+			               Color c = new Color(image.getRGB(j, i));
+			               int red = (int)(c.getRed() * 0.299);
+			               int green = (int)(c.getGreen() * 0.587);
+			               int blue = (int)(c.getBlue() *0.114);
+			               Color newColor = new Color(red+green+blue, red+green+blue,red+green+blue);
+			               
+			               image.setRGB(j,i,newColor.getRGB());
+			            }
+			         }
+			         
+			         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
+			         File ouptut = new File(simpan);
+			         ImageIO.write(image, "jpg", ouptut);
+			         
+					 ImageIcon gambarAkhir = new ImageIcon (simpan);
+					 Image gak = gambarAkhir.getImage(); // transform it 
+					 Image newimg2 = gak.getScaledInstance(300, 254,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+					 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+					 LblFS.setIcon(gambarAkhir);
+			      } catch (Exception e) {}
+
 			}
 		});
 		btnConvert.setBounds(393, 238, 89, 23);
 		panel.add(btnConvert);
 		
 		JLabel lblSource = new JLabel("Source");
-		lblSource.setBounds(194, 105, 46, 14);
+		lblSource.setBounds(194, 79, 46, 14);
 		panel.add(lblSource);
 		
 		JLabel lblResult = new JLabel("Result");
-		lblResult.setBounds(636, 105, 46, 14);
+		lblResult.setBounds(634, 79, 46, 14);
 		panel.add(lblResult);
+		
+		JButton btnLoad = new JButton("Load Image");
+		btnLoad.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				alamat = txtSourceAddress.getText();			
+				
+				ImageIcon gambarAwal = new ImageIcon (alamat);				
+				Image ga = gambarAwal.getImage(); // transform it 
+				Image newimg = ga.getScaledInstance(320, 240,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+				gambarAwal = new ImageIcon(newimg);  // transform it back
+				LblIS.setIcon(gambarAwal);
+							
+			}
+		});
+		btnLoad.setBounds(273, 355, 106, 23);
+		panel.add(btnLoad);
 	}
-	
 }
