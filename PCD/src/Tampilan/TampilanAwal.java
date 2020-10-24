@@ -12,16 +12,27 @@ import javax.swing.JOptionPane;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JInternalFrame;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.UIManager;
+import javax.swing.filechooser.*;
+import java.awt.image.*;
+
+
+
 
 public class TampilanAwal extends JFrame {
 
 	private JPanel contentPane;
+	JFileChooser fc;
 
 	/**
 	 * Launch the application.
@@ -86,7 +97,12 @@ public class TampilanAwal extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JPanel source = new JPanel();
+		JLabel l = new JLabel("");
+		//BufferedImage img = ImageIO.read("java.png")
+		
+		JPanel source = new JPanel() {
+		//	protected void paint
+		};
 		source.setBounds(59, 130, 320, 240);
 		panel.add(source);
 		
@@ -100,6 +116,27 @@ public class TampilanAwal extends JFrame {
 		panel.add(result);
 		
 		JButton btnLoadImage = new JButton("Load Image");
+		btnLoadImage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 if (e.getSource() == btnLoadImage) {
+					 JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
+					  
+			            // invoke the showsOpenDialog function to show the save dialog 
+			            int r = j.showOpenDialog(null); 
+			  
+			            // if the user selects a file 
+			            if (r == JFileChooser.APPROVE_OPTION) 
+			  
+			            { 
+			                // set the label to the path of the selected file 
+			                l.setText(j.getSelectedFile().getAbsolutePath()); 
+			            } 
+			            // if the user cancelled the operation 
+			            else
+			                l.setText("the user cancelled the operation"); 
+			            }
+			}
+		});
 		btnLoadImage.setBounds(159, 381, 106, 23);
 		panel.add(btnLoadImage);
 		
@@ -119,4 +156,5 @@ public class TampilanAwal extends JFrame {
 		lblResult.setBounds(636, 105, 46, 14);
 		panel.add(lblResult);
 	}
+	
 }
