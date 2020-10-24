@@ -251,5 +251,29 @@ public class TampilanAwal extends JFrame {
 		});
 		btnLoad.setBounds(273, 355, 106, 23);
 		panel.add(btnLoad);
+		
+		JButton btnSave = new JButton("Save Image");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// create an object of JFileChooser class 
+				JFileChooser js = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
+
+				// invoke the showsSaveDialog function to show the save dialog 
+				int r = js.showSaveDialog(null); 
+
+				// if the user selects a file 
+				if (r == JFileChooser.APPROVE_OPTION) 
+
+				{ 
+					// set the label to the path of the selected file 
+					txtFinalAddress.setText(js.getSelectedFile().getAbsolutePath()); 
+				} 
+				// if the user cancelled the operation 
+				else
+					l.setText("the user cancelled the operation"); 
+			}
+		});
+		btnSave.setBounds(604, 355, 106, 23);
+		panel.add(btnSave);
 	}
 }
