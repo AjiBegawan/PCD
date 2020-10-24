@@ -185,7 +185,7 @@ public class TampilanAwal extends JFrame {
 	
 				ImageIcon gambarAwal = new ImageIcon (alamat);				
 				Image ga = gambarAwal.getImage(); // transform it 
-				Image newimg = ga.getScaledInstance(300, 254,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+				Image newimg = ga.getScaledInstance(320, 240,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 				gambarAwal = new ImageIcon(newimg);  // transform it back
 				LblIS.setIcon(gambarAwal);
 				
@@ -217,7 +217,7 @@ public class TampilanAwal extends JFrame {
 			         
 					 ImageIcon gambarAkhir = new ImageIcon (simpan);
 					 Image gak = gambarAkhir.getImage(); // transform it 
-					 Image newimg2 = gak.getScaledInstance(300, 254,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+					 Image newimg2 = gak.getScaledInstance(320, 240,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 					 gambarAkhir = new ImageIcon(newimg2);  // transform it back
 					 LblFS.setIcon(gambarAkhir);
 			      } catch (Exception e) {}
