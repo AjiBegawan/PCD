@@ -12,12 +12,14 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.JInternalFrame;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.UIManager;
 
 public class TampilanAwal extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtSourceAddress;
-	private JTextField txtFinalAddress;
 
 	/**
 	 * Launch the application.
@@ -40,57 +42,48 @@ public class TampilanAwal extends JFrame {
 	 */
 	public TampilanAwal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1021, 564);
+		setBounds(100, 100, 1000, 500);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(255, 239, 213));
+		contentPane.setBackground(UIManager.getColor("ColorChooser.background"));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblTrueColorTo = new JLabel("TRUE COLOR TO GRAYSCALE ");
-		lblTrueColorTo.setForeground(new Color(255, 99, 71));
-		lblTrueColorTo.setBackground(new Color(255, 99, 71));
-		lblTrueColorTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblTrueColorTo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTrueColorTo.setBounds(260, 42, 455, 32);
-		contentPane.add(lblTrueColorTo);
+		JPanel menu = new JPanel();
+		menu.setBackground(new Color(102, 204, 255));
+		menu.setBounds(0, 0, 120, 461);
+		contentPane.add(menu);
+		menu.setLayout(null);
 		
-		JLabel lblSourceImage = new JLabel("SOURCE IMAGE");
-		lblSourceImage.setBounds(190, 114, 100, 14);
-		contentPane.add(lblSourceImage);
+		JLabel lblmenu = new JLabel("Menu");
+		lblmenu.setBackground(UIManager.getColor("text"));
+		lblmenu.setForeground(UIManager.getColor("Button.disabledShadow"));
+		lblmenu.setFont(new Font("Segoe UI Black", Font.PLAIN, 15));
+		lblmenu.setBounds(39, 11, 46, 14);
+		menu.add(lblmenu);
 		
-		JLabel lblFinalImage = new JLabel("FINAL IMAGE");
-		lblFinalImage.setBounds(672, 114, 100, 14);
-		contentPane.add(lblFinalImage);
+		JButton btnAbout = new JButton("About");
+		btnAbout.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		btnAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnAbout.setBounds(15, 427, 89, 23);
+		menu.add(btnAbout);
 		
-		JLabel lblIs = new JLabel("IS");
-		lblIs.setHorizontalAlignment(SwingConstants.CENTER);
-		lblIs.setBounds(119, 140, 259, 254);
-		contentPane.add(lblIs);
+		JButton btnRGBtoGray = new JButton("RGB to Gray");
+		btnRGBtoGray.setBounds(5, 50, 109, 23);
+		menu.add(btnRGBtoGray);
+		btnRGBtoGray.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		
-		JLabel lblFs = new JLabel("FS");
-		lblFs.setForeground(new Color(139, 69, 19));
-		lblFs.setBackground(new Color(255, 255, 0));
-		lblFs.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFs.setBounds(561, 139, 259, 254);
-		contentPane.add(lblFs);
+		JPanel panel = new JPanel();
+		panel.setForeground(UIManager.getColor("text"));
+		panel.setBackground(new Color(245, 245, 220));
+		panel.setBounds(122, 0, 862, 461);
+		contentPane.add(panel);
 		
-		JButton btnConvert = new JButton("CONVERT");
-		btnConvert.setBounds(417, 256, 89, 23);
-		contentPane.add(btnConvert);
-		
-		txtSourceAddress = new JTextField();
-		txtSourceAddress.setHorizontalAlignment(SwingConstants.CENTER);
-		txtSourceAddress.setText("SOURCE ADDRESS");
-		txtSourceAddress.setBounds(174, 428, 140, 20);
-		contentPane.add(txtSourceAddress);
-		txtSourceAddress.setColumns(10);
-		
-		txtFinalAddress = new JTextField();
-		txtFinalAddress.setHorizontalAlignment(SwingConstants.CENTER);
-		txtFinalAddress.setText("FINAL ADDRESS");
-		txtFinalAddress.setColumns(10);
-		txtFinalAddress.setBounds(625, 428, 170, 20);
-		contentPane.add(txtFinalAddress);
+		JLabel lblRGBtoGray = new JLabel("True Color to Gray");
+		lblRGBtoGray.setFont(new Font("Segoe UI Black", Font.PLAIN, 18));
+		panel.add(lblRGBtoGray);
 	}
 }
