@@ -1,0 +1,17 @@
+package Tampilan;
+
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
+
+public class GrayScale {
+	public static void toGrayScale (File alamatInput) {
+		try {
+			ImageInputStream gambar = ImageIO.createImageInputStream(alamatInput)
+			BufferedImage image = ImageIO.read(gambar);
+		}
+		catch{
+			
+		}
+	}
+}

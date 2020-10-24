@@ -1,0 +1,9 @@
+package Tampilan;
+
+import javax.imageio.ImageIO;
+
+public class GrayScale {
+	public static void toGrayScale () {
+		BufferedImage image = ImageIO.read(gambar);
+	}
+}

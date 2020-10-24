@@ -1,0 +1,131 @@
+package Tampilan;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import java.awt.Color;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class TampilanAwal extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField txtSourceAddress;
+	private JTextField txtFinalAddress;
+	private JTextField test1;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TampilanAwal frame = new TampilanAwal();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public TampilanAwal() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1021, 564);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 239, 213));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblTrueColorTo = new JLabel("TRUE COLOR TO GRAYSCALE ");
+		lblTrueColorTo.setForeground(new Color(255, 99, 71));
+		lblTrueColorTo.setBackground(new Color(255, 99, 71));
+		lblTrueColorTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		lblTrueColorTo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTrueColorTo.setBounds(260, 42, 455, 32);
+		contentPane.add(lblTrueColorTo);
+		
+		JLabel lblSourceImage = new JLabel("SOURCE IMAGE");
+		lblSourceImage.setBounds(190, 114, 100, 14);
+		contentPane.add(lblSourceImage);
+		
+		JLabel lblFinalImage = new JLabel("FINAL IMAGE");
+		lblFinalImage.setBounds(672, 114, 100, 14);
+		contentPane.add(lblFinalImage);
+		
+		JLabel lblIs = new JLabel("IS");
+		lblIs.setHorizontalAlignment(SwingConstants.CENTER);
+		lblIs.setBounds(109, 150, 259, 254);
+		contentPane.add(lblIs);
+		
+		JLabel lblFs = new JLabel("FS");
+		lblFs.setForeground(new Color(139, 69, 19));
+		lblFs.setBackground(new Color(255, 255, 0));
+		lblFs.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFs.setBounds(561, 139, 259, 254);
+		contentPane.add(lblFs);
+		
+		JButton btnConvert = new JButton("CONVERT");
+		btnConvert.setBounds(417, 256, 89, 23);
+		contentPane.add(btnConvert);
+		
+		txtSourceAddress = new JTextField();
+		txtSourceAddress.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String input= txtSourceAddress.getText();			
+				
+			}
+		});
+		txtSourceAddress.setHorizontalAlignment(SwingConstants.CENTER);
+		txtSourceAddress.setText("SOURCE ADDRESS");
+		txtSourceAddress.setBounds(174, 428, 140, 20);
+		contentPane.add(txtSourceAddress);
+		txtSourceAddress.setColumns(10);
+		
+		txtFinalAddress = new JTextField();
+		txtFinalAddress.setHorizontalAlignment(SwingConstants.CENTER);
+		txtFinalAddress.setText("FINAL ADDRESS");
+		txtFinalAddress.setColumns(10);
+		txtFinalAddress.setBounds(625, 428, 170, 20);
+		contentPane.add(txtFinalAddress);
+		
+		JButton btnNewButton = new JButton("LOAD IMAGE");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+			}
+		});
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnNewButton.setBounds(406, 217, 118, 23);
+		contentPane.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("ABOUT");
+		btnNewButton_1.setBounds(417, 480, 89, 23);
+		contentPane.add(btnNewButton_1);
+		
+		test1 = new JTextField();
+		test1.setBounds(174, 459, 86, 20);
+		contentPane.add(test1);
+		test1.setColumns(10);
+	}
+}
