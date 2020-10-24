@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import java.awt.Font;
@@ -66,6 +68,7 @@ public class TampilanAwal extends JFrame {
 		btnAbout.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		btnAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Kelompok 4\nDicky Febrian Dwiputra 3411181097\nAde Ridwan Nugraha 3411181117\nIndiarto Aji Begawan 3411181114");
 			}
 		});
 		btnAbout.setBounds(15, 427, 89, 23);
@@ -81,9 +84,39 @@ public class TampilanAwal extends JFrame {
 		panel.setBackground(new Color(245, 245, 220));
 		panel.setBounds(122, 0, 862, 461);
 		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JPanel source = new JPanel();
+		source.setBounds(59, 130, 320, 240);
+		panel.add(source);
 		
 		JLabel lblRGBtoGray = new JLabel("True Color to Gray");
+		lblRGBtoGray.setBounds(357, 5, 162, 26);
 		lblRGBtoGray.setFont(new Font("Segoe UI Black", Font.PLAIN, 18));
 		panel.add(lblRGBtoGray);
+		
+		JPanel result = new JPanel();
+		result.setBounds(495, 130, 320, 240);
+		panel.add(result);
+		
+		JButton btnLoadImage = new JButton("Load Image");
+		btnLoadImage.setBounds(159, 381, 106, 23);
+		panel.add(btnLoadImage);
+		
+		JButton btnConvert = new JButton("Convert");
+		btnConvert.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnConvert.setBounds(393, 238, 89, 23);
+		panel.add(btnConvert);
+		
+		JLabel lblSource = new JLabel("Source");
+		lblSource.setBounds(194, 105, 46, 14);
+		panel.add(lblSource);
+		
+		JLabel lblResult = new JLabel("Result");
+		lblResult.setBounds(636, 105, 46, 14);
+		panel.add(lblResult);
 	}
 }
