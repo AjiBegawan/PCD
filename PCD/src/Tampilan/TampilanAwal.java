@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import java.awt.Component;
 
@@ -16,14 +18,20 @@ import java.awt.Image;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
+import javax.swing.JInternalFrame;
 import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.awt.event.ActionEvent;
+import javax.swing.UIManager;
+import javax.swing.filechooser.*;
+import java.awt.image.*;
+
+
+
 
 public class TampilanAwal extends JFrame {
 
@@ -33,9 +41,9 @@ public class TampilanAwal extends JFrame {
 	private JTextField txtFinalAddress;
 	private String alamat = "null";
 	private String simpan = "null";
-
+	JFileChooser fc;
 	
-	   BufferedImage  image;
+	 BufferedImage  image;
 	   int width;
 	   int height;
 
@@ -61,42 +69,116 @@ public class TampilanAwal extends JFrame {
 	public TampilanAwal() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1021, 564);
+		setBounds(100, 100, 1000, 500);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(255, 239, 213));
+		contentPane.setBackground(UIManager.getColor("ColorChooser.background"));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblTrueColorTo = new JLabel("TRUE COLOR TO GRAYSCALE ");
-		lblTrueColorTo.setForeground(new Color(255, 99, 71));
-		lblTrueColorTo.setBackground(new Color(255, 99, 71));
-		lblTrueColorTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblTrueColorTo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTrueColorTo.setBounds(260, 42, 455, 32);
-		contentPane.add(lblTrueColorTo);
+		JPanel menu = new JPanel();
+		menu.setBackground(new Color(102, 204, 255));
+		menu.setBounds(0, 0, 120, 461);
+		contentPane.add(menu);
+		menu.setLayout(null);
 		
-		JLabel lblSourceImage = new JLabel("SOURCE IMAGE");
-		lblSourceImage.setBounds(190, 114, 100, 14);
-		contentPane.add(lblSourceImage);
+		JLabel lblmenu = new JLabel("Menu");
+		lblmenu.setBackground(UIManager.getColor("text"));
+		lblmenu.setForeground(UIManager.getColor("Button.disabledShadow"));
+		lblmenu.setFont(new Font("Segoe UI Black", Font.PLAIN, 15));
+		lblmenu.setBounds(39, 11, 46, 14);
+		menu.add(lblmenu);
 		
-		JLabel lblFinalImage = new JLabel("FINAL IMAGE");
-		lblFinalImage.setBounds(672, 114, 100, 14);
-		contentPane.add(lblFinalImage);
+		JButton btnAbout = new JButton("About");
+		btnAbout.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		btnAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Kelompok 4\nDicky Febrian Dwiputra 3411181097\nAde Ridwan Nugraha 3411181117\nIndiarto Aji Begawan 3411181114");
+			}
+		});
+		btnAbout.setBounds(15, 427, 89, 23);
+		menu.add(btnAbout);
+		
+		JButton btnRGBtoGray = new JButton("RGB to Gray");
+		btnRGBtoGray.setBounds(5, 50, 109, 23);
+		menu.add(btnRGBtoGray);
+		btnRGBtoGray.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		
+		JPanel panel = new JPanel();
+		panel.setForeground(UIManager.getColor("text"));
+		panel.setBackground(new Color(245, 245, 220));
+		panel.setBounds(122, 0, 862, 461);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JLabel l = new JLabel("");
+		
+		JPanel source = new JPanel();
+		source.setBounds(59, 104, 320, 240);
+		panel.add(source);
+		
+		JLabel LblIS = new JLabel("");
+		LblIS.setHorizontalAlignment(SwingConstants.CENTER);
+		LblIS.setBounds(0, 0, 320, 240);
+		source.add(LblIS);
+		
+		txtSourceAddress = new JTextField();
+		txtSourceAddress.addMouseListener(new MouseAdapter() {
+		});
+
+		txtSourceAddress.setHorizontalAlignment(SwingConstants.CENTER);
+		txtSourceAddress.setBounds(69, 389, 300, 45);
+		txtSourceAddress.setColumns(10);
+		panel.add(txtSourceAddress);
+		
+		txtFinalAddress = new JTextField();
+		txtFinalAddress.setHorizontalAlignment(SwingConstants.CENTER);
+		txtFinalAddress.setColumns(10);
+		txtFinalAddress.setBounds(501, 389, 300, 45);
+		panel.add(txtFinalAddress);
+		
+		JLabel lblRGBtoGray = new JLabel("True Color to Gray");
+		lblRGBtoGray.setBounds(357, 5, 162, 26);
+		lblRGBtoGray.setFont(new Font("Segoe UI Black", Font.PLAIN, 18));
+		panel.add(lblRGBtoGray);
+		
+		JPanel result = new JPanel();
+		result.setBounds(492, 104, 320, 240);
+		panel.add(result);
 		
 		JLabel LblFS = new JLabel("");
 		LblFS.setForeground(new Color(139, 69, 19));
 		LblFS.setBackground(new Color(255, 255, 0));
 		LblFS.setHorizontalAlignment(SwingConstants.CENTER);
-		LblFS.setBounds(561, 139, 300, 254);
-		contentPane.add(LblFS);
+		LblFS.setBounds(0, 0, 320, 240);
+		result.add(LblFS);
 		
-		JLabel LblIS = new JLabel("");
-		LblIS.setHorizontalAlignment(SwingConstants.CENTER);
-		LblIS.setBounds(79, 139, 300, 254);
-		contentPane.add(LblIS);
+		JButton btnBrowse = new JButton("Browse");
+		btnBrowse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 if (e.getSource() == btnBrowse) {
+					 JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
+					  
+			            // invoke the showsOpenDialog function to show the save dialog 
+			            int r = j.showOpenDialog(null); 
+			  
+			            // if the user selects a file 
+			            if (r == JFileChooser.APPROVE_OPTION) 
+			  
+			            { 
+			                // set the label to the path of the selected file 
+			            	txtSourceAddress.setText(j.getSelectedFile().getAbsolutePath()); 
+			            } 
+			            // if the user cancelled the operation 
+			            else
+			                l.setText("the user cancelled the operation"); 
+			            }
+			}
+		});
+		btnBrowse.setBounds(59, 355, 106, 23);
+		panel.add(btnBrowse);
 		
-		JButton btnConvert = new JButton("CONVERT");
+		JButton btnConvert = new JButton("Convert");
 		btnConvert.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -106,7 +188,7 @@ public class TampilanAwal extends JFrame {
 	
 				ImageIcon gambarAwal = new ImageIcon (alamat);				
 				Image ga = gambarAwal.getImage(); // transform it 
-				Image newimg = ga.getScaledInstance(300, 254,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+				Image newimg = ga.getScaledInstance(320, 240,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 				gambarAwal = new ImageIcon(newimg);  // transform it back
 				LblIS.setIcon(gambarAwal);
 				
@@ -138,70 +220,63 @@ public class TampilanAwal extends JFrame {
 			         
 					 ImageIcon gambarAkhir = new ImageIcon (simpan);
 					 Image gak = gambarAkhir.getImage(); // transform it 
-					 Image newimg2 = gak.getScaledInstance(300, 254,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+					 Image newimg2 = gak.getScaledInstance(320, 240,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 					 gambarAkhir = new ImageIcon(newimg2);  // transform it back
 					 LblFS.setIcon(gambarAkhir);
 			      } catch (Exception e) {}
 
 			}
 		});
-		btnConvert.setBounds(406, 256, 118, 23);
-		contentPane.add(btnConvert);
+		btnConvert.setBounds(393, 238, 89, 23);
+		panel.add(btnConvert);
 		
-		txtSourceAddress = new JTextField();
-		txtSourceAddress.addMouseListener(new MouseAdapter() {
-		});
-
-		txtSourceAddress.setHorizontalAlignment(SwingConstants.CENTER);
-		txtSourceAddress.setBounds(79, 428, 300, 45);
-		contentPane.add(txtSourceAddress);
-		txtSourceAddress.setColumns(10);
+		JLabel lblSource = new JLabel("Source");
+		lblSource.setBounds(194, 79, 46, 14);
+		panel.add(lblSource);
 		
-		txtFinalAddress = new JTextField();
-		txtFinalAddress.setHorizontalAlignment(SwingConstants.CENTER);
-		txtFinalAddress.setColumns(10);
-		txtFinalAddress.setBounds(561, 428, 300, 45);
-		contentPane.add(txtFinalAddress);
+		JLabel lblResult = new JLabel("Result");
+		lblResult.setBounds(634, 79, 46, 14);
+		panel.add(lblResult);
 		
-		JButton btnNewButton = new JButton("LOAD IMAGE");
-		btnNewButton.addMouseListener(new MouseAdapter() {
+		JButton btnLoad = new JButton("Load Image");
+		btnLoad.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				alamat = txtSourceAddress.getText();			
 				
 				ImageIcon gambarAwal = new ImageIcon (alamat);				
 				Image ga = gambarAwal.getImage(); // transform it 
-				Image newimg = ga.getScaledInstance(300, 254,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+				Image newimg = ga.getScaledInstance(320, 240,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 				gambarAwal = new ImageIcon(newimg);  // transform it back
 				LblIS.setIcon(gambarAwal);
 							
 			}
 		});
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		btnLoad.setBounds(273, 355, 106, 23);
+		panel.add(btnLoad);
+		
+		JButton btnSave = new JButton("Save Image");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// create an object of JFileChooser class 
+				JFileChooser js = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
+
+				// invoke the showsSaveDialog function to show the save dialog 
+				int r = js.showSaveDialog(null); 
+
+				// if the user selects a file 
+				if (r == JFileChooser.APPROVE_OPTION) 
+
+				{ 
+					// set the label to the path of the selected file 
+					txtFinalAddress.setText(js.getSelectedFile().getAbsolutePath()); 
+				} 
+				// if the user cancelled the operation 
+				else
+					l.setText("the user cancelled the operation"); 
 			}
 		});
-		btnNewButton.setBounds(406, 217, 118, 23);
-		contentPane.add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("ABOUT");
-		btnNewButton_1.setBounds(406, 480, 118, 23);
-		contentPane.add(btnNewButton_1);
-		
-		JLabel lblNewLabel = new JLabel("SOURCE ADDRESS");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(79, 404, 300, 14);
-		contentPane.add(lblNewLabel);
-		
-		JLabel lblTargetAddress = new JLabel("TARGET ADDRESS");
-		lblTargetAddress.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTargetAddress.setBounds(561, 404, 300, 14);
-		contentPane.add(lblTargetAddress);
-		
-
-		
-
-		
-		
+		btnSave.setBounds(604, 355, 106, 23);
+		panel.add(btnSave);
 	}
 }
