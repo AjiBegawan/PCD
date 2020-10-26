@@ -1,0 +1,5 @@
+Nambahin : 
+1. Peningkatan Kecerahan / Brighness
+2. Operasi Negasi / Negatif Film
+3. Tresholding / Convert to Black & White
+4. Peregangan Kontras (Sebagai Nilai Tambahan)
