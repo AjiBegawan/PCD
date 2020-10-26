@@ -6,4 +6,10 @@
 		<item key="width" value="530"/>
 		<item key="height" value="346"/>
 	</section>
+	<section name="org.eclipse.wb.internal.core.model.property.order.ReorderDialog">
+		<item key="x" value="405"/>
+		<item key="y" value="-723"/>
+		<item key="width" value="520"/>
+		<item key="height" value="366"/>
+	</section>
 </section>

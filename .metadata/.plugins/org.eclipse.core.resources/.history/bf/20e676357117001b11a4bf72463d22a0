@@ -69,7 +69,7 @@ public class TampilanAwal extends JFrame {
 	public TampilanAwal() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1080, 720);
+		setBounds(100, 100, 1000, 500);
 		contentPane = new JPanel();
 		contentPane.setBackground(UIManager.getColor("ColorChooser.background"));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -77,17 +77,16 @@ public class TampilanAwal extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel menu = new JPanel();
-		menu.setBackground(new Color(30, 144, 255));
-		menu.setBounds(0, 0, 130, 681);
+		menu.setBackground(new Color(102, 204, 255));
+		menu.setBounds(0, 0, 120, 461);
 		contentPane.add(menu);
 		menu.setLayout(null);
 		
 		JLabel lblmenu = new JLabel("Menu");
-		lblmenu.setHorizontalAlignment(SwingConstants.CENTER);
 		lblmenu.setBackground(UIManager.getColor("text"));
 		lblmenu.setForeground(UIManager.getColor("Button.disabledShadow"));
-		lblmenu.setFont(new Font("Arial", Font.PLAIN, 15));
-		lblmenu.setBounds(40, 11, 50, 20);
+		lblmenu.setFont(new Font("Segoe UI Black", Font.PLAIN, 15));
+		lblmenu.setBounds(39, 11, 46, 14);
 		menu.add(lblmenu);
 		
 		JButton btnAbout = new JButton("About");
@@ -97,49 +96,25 @@ public class TampilanAwal extends JFrame {
 				JOptionPane.showMessageDialog(null, "Kelompok 4\nDicky Febrian Dwiputra 3411181097\nAde Ridwan Nugraha 3411181117\nIndiarto Aji Begawan 3411181114");
 			}
 		});
-		btnAbout.setBounds(10, 647, 110, 23);
+		btnAbout.setBounds(15, 427, 89, 23);
 		menu.add(btnAbout);
 		
 		JButton btnRGBtoGray = new JButton("RGB to Gray");
-		btnRGBtoGray.setBackground(new Color(255, 255, 255));
-		btnRGBtoGray.setBounds(10, 50, 110, 23);
+		btnRGBtoGray.setBounds(5, 50, 109, 23);
 		menu.add(btnRGBtoGray);
-		btnRGBtoGray.setFont(new Font("Arial", Font.PLAIN, 11));
-		
-		JButton btnNewButton = new JButton("Brightness");
-		btnNewButton.setFont(new Font("Arial", Font.PLAIN, 11));
-		btnNewButton.setBackground(new Color(255, 255, 255));
-		btnNewButton.setBounds(10, 84, 110, 23);
-		menu.add(btnNewButton);
-		
-		JButton btnBW = new JButton("B & W");
-		btnBW.setBackground(new Color(255, 255, 255));
-		btnBW.setBounds(10, 152, 110, 23);
-		menu.add(btnBW);
-		
-		JButton btnNewButton_1_1 = new JButton("Negatif Film");
-		btnNewButton_1_1.setFont(new Font("Arial", Font.PLAIN, 11));
-		btnNewButton_1_1.setBackground(new Color(255, 255, 255));
-		btnNewButton_1_1.setBounds(10, 118, 110, 23);
-		menu.add(btnNewButton_1_1);
-		
-		JButton btnNewButton_1_2 = new JButton("Kontras");
-		btnNewButton_1_2.setBackground(new Color(255, 255, 255));
-		btnNewButton_1_2.setBounds(10, 186, 110, 23);
-		menu.add(btnNewButton_1_2);
+		btnRGBtoGray.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		
 		JPanel panel = new JPanel();
 		panel.setForeground(UIManager.getColor("text"));
-		panel.setBackground(Color.WHITE);
-		panel.setBounds(128, 0, 936, 681);
+		panel.setBackground(new Color(245, 245, 220));
+		panel.setBounds(122, 0, 862, 461);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JLabel l = new JLabel("");
 		
 		JPanel source = new JPanel();
-		source.setBackground(new Color(255, 255, 255));
-		source.setBounds(60, 100, 320, 240);
+		source.setBounds(59, 104, 320, 240);
 		panel.add(source);
 		
 		JLabel LblIS = new JLabel("");
@@ -152,28 +127,22 @@ public class TampilanAwal extends JFrame {
 		});
 
 		txtSourceAddress.setHorizontalAlignment(SwingConstants.CENTER);
-		txtSourceAddress.setBounds(59, 389, 320, 45);
+		txtSourceAddress.setBounds(69, 389, 300, 45);
 		txtSourceAddress.setColumns(10);
 		panel.add(txtSourceAddress);
 		
 		txtFinalAddress = new JTextField();
 		txtFinalAddress.setHorizontalAlignment(SwingConstants.CENTER);
 		txtFinalAddress.setColumns(10);
-		txtFinalAddress.setBounds(492, 389, 320, 45);
+		txtFinalAddress.setBounds(501, 389, 300, 45);
 		panel.add(txtFinalAddress);
 		
-		JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
-		lblRGBtoGray.setBounds(324, 11, 200, 26);
-		lblRGBtoGray.setFont(new Font("Arial", Font.PLAIN, 24));
+		JLabel lblRGBtoGray = new JLabel("True Color to Gray");
+		lblRGBtoGray.setBounds(357, 5, 162, 26);
+		lblRGBtoGray.setFont(new Font("Segoe UI Black", Font.PLAIN, 18));
 		panel.add(lblRGBtoGray);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(0, 0, 936, 55);
-		panel.add(panel_1);
-		panel_1.setBackground(new Color(0, 191, 255));
-		
 		JPanel result = new JPanel();
-		result.setBackground(new Color(255, 255, 255));
 		result.setBounds(492, 104, 320, 240);
 		panel.add(result);
 		
@@ -184,9 +153,7 @@ public class TampilanAwal extends JFrame {
 		LblFS.setBounds(0, 0, 320, 240);
 		result.add(LblFS);
 		
-		JButton btnBrowse = new JButton("Browse Source Image");
-		btnBrowse.setBackground(new Color(30, 144, 255));
-		btnBrowse.setForeground(Color.WHITE);
+		JButton btnBrowse = new JButton("Browse");
 		btnBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 if (e.getSource() == btnBrowse) {
@@ -208,7 +175,7 @@ public class TampilanAwal extends JFrame {
 			            }
 			}
 		});
-		btnBrowse.setBounds(59, 355, 150, 25);
+		btnBrowse.setBounds(59, 355, 106, 23);
 		panel.add(btnBrowse);
 		
 		JButton btnConvert = new JButton("Convert");
@@ -260,22 +227,18 @@ public class TampilanAwal extends JFrame {
 
 			}
 		});
-		btnConvert.setBounds(492, 355, 150, 25);
+		btnConvert.setBounds(393, 238, 89, 23);
 		panel.add(btnConvert);
 		
-		JLabel lblSource = new JLabel("Source Image");
-		lblSource.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSource.setBounds(168, 74, 100, 20);
+		JLabel lblSource = new JLabel("Source");
+		lblSource.setBounds(194, 79, 46, 14);
 		panel.add(lblSource);
 		
-		JLabel lblResult = new JLabel("Result Image");
-		lblResult.setHorizontalAlignment(SwingConstants.CENTER);
-		lblResult.setBounds(604, 78, 100, 20);
+		JLabel lblResult = new JLabel("Result");
+		lblResult.setBounds(634, 79, 46, 14);
 		panel.add(lblResult);
 		
 		JButton btnLoad = new JButton("Load Image");
-		btnLoad.setForeground(new Color(255, 255, 255));
-		btnLoad.setBackground(new Color(30, 144, 255));
 		btnLoad.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -289,10 +252,10 @@ public class TampilanAwal extends JFrame {
 							
 			}
 		});
-		btnLoad.setBounds(229, 355, 150, 25);
+		btnLoad.setBounds(273, 355, 106, 23);
 		panel.add(btnLoad);
 		
-		JButton btnSave = new JButton("Save As");
+		JButton btnSave = new JButton("Save Image");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// create an object of JFileChooser class 
@@ -313,7 +276,7 @@ public class TampilanAwal extends JFrame {
 					l.setText("the user cancelled the operation"); 
 			}
 		});
-		btnSave.setBounds(662, 353, 150, 25);
+		btnSave.setBounds(604, 355, 106, 23);
 		panel.add(btnSave);
 	}
 }

@@ -69,7 +69,7 @@ public class TampilanAwal extends JFrame {
 	public TampilanAwal() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1080, 720);
+		setBounds(100, 100, 1000, 500);
 		contentPane = new JPanel();
 		contentPane.setBackground(UIManager.getColor("ColorChooser.background"));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -78,7 +78,7 @@ public class TampilanAwal extends JFrame {
 		
 		JPanel menu = new JPanel();
 		menu.setBackground(new Color(30, 144, 255));
-		menu.setBounds(0, 0, 130, 681);
+		menu.setBounds(0, 0, 130, 461);
 		contentPane.add(menu);
 		menu.setLayout(null);
 		
@@ -97,7 +97,7 @@ public class TampilanAwal extends JFrame {
 				JOptionPane.showMessageDialog(null, "Kelompok 4\nDicky Febrian Dwiputra 3411181097\nAde Ridwan Nugraha 3411181117\nIndiarto Aji Begawan 3411181114");
 			}
 		});
-		btnAbout.setBounds(10, 647, 110, 23);
+		btnAbout.setBounds(15, 427, 100, 23);
 		menu.add(btnAbout);
 		
 		JButton btnRGBtoGray = new JButton("RGB to Gray");
@@ -131,7 +131,7 @@ public class TampilanAwal extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setForeground(UIManager.getColor("text"));
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(128, 0, 936, 681);
+		panel.setBounds(128, 0, 856, 461);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -168,7 +168,7 @@ public class TampilanAwal extends JFrame {
 		panel.add(lblRGBtoGray);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(0, 0, 936, 55);
+		panel_1.setBounds(0, 0, 856, 55);
 		panel.add(panel_1);
 		panel_1.setBackground(new Color(0, 191, 255));
 		
