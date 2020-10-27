@@ -176,14 +176,14 @@ public class TampilanAwal extends JFrame {
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(30, 144, 255), 2));
-		panel_1.setBounds(-22, 0, 972, 55);
+		panel_1.setBounds(0, 0, 950, 55);
 		panel.add(panel_1);
 		panel_1.setBackground(Color.WHITE);
 		panel_1.setLayout(null);
 		
 		JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
 		lblRGBtoGray.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRGBtoGray.setBounds(24, 0, 205, 55);
+		lblRGBtoGray.setBounds(0, 0, 229, 55);
 		panel_1.add(lblRGBtoGray);
 		lblRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		

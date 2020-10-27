@@ -81,7 +81,6 @@ public class TampilanAwal extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel menu = new JPanel();
-		menu.setForeground(new Color(0, 0, 0));
 		menu.setBackground(new Color(30, 144, 255));
 		menu.setBounds(0, 0, 150, 681);
 		contentPane.add(menu);
@@ -106,38 +105,31 @@ public class TampilanAwal extends JFrame {
 		menu.add(btnAbout);
 		
 		JButton btnRGBtoGray = new JButton("RGB to Gray");
-		btnRGBtoGray.setForeground(new Color(0, 0, 0));
-		btnRGBtoGray.setBackground(new Color(255, 215, 0));
-		btnRGBtoGray.setBounds(0, 70, 150, 30);
+		btnRGBtoGray.setBackground(new Color(255, 255, 255));
+		btnRGBtoGray.setBounds(0, 82, 150, 25);
 		menu.add(btnRGBtoGray);
-		btnRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnRGBtoGray.setFont(new Font("Arial", Font.PLAIN, 11));
 		
 		JButton btnBrightness = new JButton("Brightness");
-		btnBrightness.setForeground(new Color(0, 0, 0));
-		btnBrightness.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnBrightness.setBackground(new Color(255, 215, 0));
-		btnBrightness.setBounds(0, 100, 150, 30);
+		btnBrightness.setFont(new Font("Arial", Font.PLAIN, 11));
+		btnBrightness.setBackground(new Color(255, 255, 255));
+		btnBrightness.setBounds(10, 163, 110, 25);
 		menu.add(btnBrightness);
 		
 		JButton btnBW = new JButton("B & W");
-		btnBW.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnBW.setForeground(new Color(0, 0, 0));
-		btnBW.setBackground(new Color(255, 215, 0));
-		btnBW.setBounds(0, 160, 150, 30);
+		btnBW.setBackground(new Color(255, 255, 255));
+		btnBW.setBounds(10, 231, 110, 25);
 		menu.add(btnBW);
 		
 		JButton btnNegatif = new JButton("Negatif Film");
-		btnNegatif.setForeground(new Color(0, 0, 0));
-		btnNegatif.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnNegatif.setBackground(new Color(255, 215, 0));
-		btnNegatif.setBounds(0, 130, 150, 30);
+		btnNegatif.setFont(new Font("Arial", Font.PLAIN, 11));
+		btnNegatif.setBackground(new Color(255, 255, 255));
+		btnNegatif.setBounds(10, 197, 110, 25);
 		menu.add(btnNegatif);
 		
 		JButton btnKontras = new JButton("Kontras");
-		btnKontras.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnKontras.setForeground(new Color(0, 0, 0));
-		btnKontras.setBackground(new Color(255, 215, 0));
-		btnKontras.setBounds(0, 190, 150, 30);
+		btnKontras.setBackground(new Color(255, 255, 255));
+		btnKontras.setBounds(10, 265, 110, 25);
 		menu.add(btnKontras);
 		
 		JPanel panel = new JPanel();
@@ -175,15 +167,14 @@ public class TampilanAwal extends JFrame {
 		panel.add(txtFinalAddress);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new LineBorder(new Color(30, 144, 255), 2));
-		panel_1.setBounds(-22, 0, 972, 55);
+		panel_1.setBorder(new LineBorder(new Color(128, 128, 128), 2));
+		panel_1.setBounds(0, 0, 950, 55);
 		panel.add(panel_1);
 		panel_1.setBackground(Color.WHITE);
 		panel_1.setLayout(null);
 		
 		JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
-		lblRGBtoGray.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRGBtoGray.setBounds(24, 0, 205, 55);
+		lblRGBtoGray.setBounds(10, 11, 194, 29);
 		panel_1.add(lblRGBtoGray);
 		lblRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		
@@ -200,7 +191,7 @@ public class TampilanAwal extends JFrame {
 		result.add(LblFS);
 		
 		JButton btnBrowse = new JButton("Browse Image Address");
-		btnBrowse.setBackground(new Color(60, 179, 113));
+		btnBrowse.setBackground(new Color(30, 144, 255));
 		btnBrowse.setForeground(Color.WHITE);
 		btnBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -313,7 +304,7 @@ public class TampilanAwal extends JFrame {
 		
 		JButton btnSave = new JButton("Browse Save Address");
 		btnSave.setForeground(new Color(255, 255, 255));
-		btnSave.setBackground(new Color(60, 179, 113));
+		btnSave.setBackground(new Color(30, 144, 255));
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// create an object of JFileChooser class 
