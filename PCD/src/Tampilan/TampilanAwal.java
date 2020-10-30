@@ -264,22 +264,22 @@ public class TampilanAwal extends JFrame {
 				            for(int j=0; j<width; j++) {
 				            
 				               Color c = new Color(image.getRGB(j, i));
-				               int red = (int)(c.getRed());
+				               int red = c.getRed();
 				               red = red + nilaiBrightness;
 				               if(red>255) {
 				            	   red = 255;  
 				               	   };
-				               int green = (int)(c.getGreen());
+				               int green = c.getGreen();
 				               green = green + nilaiBrightness;
 				               if(green>255) {
 				            	   green = 255;  
 					               };
-				               int blue = (int)(c.getBlue());
+				               int blue = c.getBlue();
 				               blue = blue + nilaiBrightness;
 				               if(blue>255) {
 					            	 blue = 255;  
 					               };
-				               Color newColor = new Color(red+green+blue, red+green+blue,red+green+blue);
+				               Color newColor = new Color(red, green,blue);
 				               
 				               image.setRGB(j,i,newColor.getRGB());
 				            }
@@ -309,11 +309,11 @@ public class TampilanAwal extends JFrame {
 				            for(int j=0; j<width; j++) {
 				            
 				               Color c = new Color(image.getRGB(j, i));
-				               int red = (int)(c.getRed());
-				               int green = (int)(c.getGreen());
-				               int blue = (int)(c.getBlue());
+				               int red = (int)(255 - c.getRed());
+				               int green = (int)(255 - c.getGreen());
+				               int blue = (int)(255 - c.getBlue());
 				               
-				               Color newColor = new Color(red+green+blue, red+green+blue, red+green+blue);
+				               Color newColor = new Color(red, green, blue);
 				               
 				               image.setRGB(j,i,newColor.getRGB());
 				            }
@@ -330,6 +330,89 @@ public class TampilanAwal extends JFrame {
 						 LblFS.setIcon(gambarAkhir);
 				        };
 			        
+				        if(bandw) { 
+							//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
+							
+							 File input = new File(alamat);
+					         image = ImageIO.read(input);
+					         width = image.getWidth();
+					         height = image.getHeight();
+					         int th=127;
+					         
+					         for(int i=0; i<height; i++) {
+					         
+					            for(int j=0; j<width; j++) {
+					            
+					               Color c = new Color(image.getRGB(j, i));
+					               int red = (int)(c.getRed());
+					               int green = (int)(c.getGreen());
+					               int blue = (int)(c.getBlue());
+					               int sum = (red+green+blue)/3;
+					               if(sum>=th) {
+					            	   sum=255;
+					               }else {
+					            	   sum=0;
+					               }
+					               
+					               Color newColor = new Color(sum, sum, sum);
+					               
+					               image.setRGB(j,i,newColor.getRGB());
+					            }
+					         }
+					         
+					         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
+					         File ouptut = new File(simpan);
+					         ImageIO.write(image, "jpg", ouptut);
+					         
+							 ImageIcon gambarAkhir = new ImageIcon (simpan);
+							 Image gak = gambarAkhir.getImage(); // transform it 
+							 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+							 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+							 LblFS.setIcon(gambarAkhir);
+					        };
+					        
+					        
+					        //Kontras
+					        if(kontras) { 
+								//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
+								
+								 File input = new File(alamat);
+						         image = ImageIO.read(input);
+						         width = image.getWidth();
+						         height = image.getHeight();
+						         int th=127;
+						         
+						         for(int i=0; i<height; i++) {
+						         
+						            for(int j=0; j<width; j++) {
+						            
+						               Color c = new Color(image.getRGB(j, i));
+						               int red = (int)(c.getRed());
+						               int green = (int)(c.getGreen());
+						               int blue = (int)(c.getBlue());
+						               int sum = (red+green+blue)/3;
+						               if(sum>=th) {
+						            	   sum=255;
+						               }else {
+						            	   sum=0;
+						               }
+						               
+						               Color newColor = new Color(sum, sum, sum);
+						               
+						               image.setRGB(j,i,newColor.getRGB());
+						            }
+						         }
+						         
+						         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
+						         File ouptut = new File(simpan);
+						         ImageIO.write(image, "jpg", ouptut);
+						         
+								 ImageIcon gambarAkhir = new ImageIcon (simpan);
+								 Image gak = gambarAkhir.getImage(); // transform it 
+								 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+								 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+								 LblFS.setIcon(gambarAkhir);
+						        };
 			        
 			      } catch (Exception e) {}
 			
