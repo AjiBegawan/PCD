@@ -33,6 +33,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 
 
@@ -50,7 +53,9 @@ public class TampilanAwal extends JFrame {
 	private boolean negatif = false;
 	private boolean bandw = false;
 	private boolean kontras = false;
-	
+	private boolean setFinalAddress = false;
+	final JSlider sliderBrightness = new JSlider(0,255,0);
+	int nilaiBrightness;
 
 	JFileChooser fc;
 	
@@ -107,326 +112,7 @@ public class TampilanAwal extends JFrame {
 		panel.add(panel_1);
 		panel_1.setBackground(Color.WHITE);
 		panel_1.setLayout(null);
-		
-		
-		// MENU BEGINS
-		////////////////
-		////////////////
-		
-		JLabel lblmenu = new JLabel("Menu");
-		lblmenu.setHorizontalAlignment(SwingConstants.CENTER);
-		lblmenu.setBackground(UIManager.getColor("text"));
-		lblmenu.setForeground(new Color(255, 255, 255));
-		lblmenu.setFont(new Font("Tahoma", Font.PLAIN, 28));
-		lblmenu.setBounds(0, 0, 150, 60);
-		menu.add(lblmenu);
-		
-		
-		
-		// Button in menu
-		JButton btnAbout = new JButton("About");
-		btnAbout.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		btnAbout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Kelompok 4\nDicky Febrian Dwiputra 3411181097\nAde Ridwan Nugraha 3411181117\nIndiarto Aji Begawan 3411181114");
-			}
-		});
-		btnAbout.setBounds(10, 647, 110, 23);
-		menu.add(btnAbout);
-		
-		JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
-		lblRGBtoGray.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRGBtoGray.setBounds(24, 0, 205, 55);
-		lblRGBtoGray.setVisible(false);
-		lblRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
-		JLabel lblBrightness = new JLabel("Brightness");
-		lblBrightness.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBrightness.setBounds(24, 0, 205, 55);
-		lblBrightness.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
-		JLabel lblNegatif = new JLabel("Negative");
-		lblNegatif.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNegatif.setBounds(24, 0, 205, 55);
-		lblNegatif.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
-		JLabel lblBandW = new JLabel("Black & White");
-		lblBandW.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBandW.setBounds(24, 0, 205, 55);
-		lblBandW.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
-		JLabel lblKontras = new JLabel("Contrast");
-		lblKontras.setHorizontalAlignment(SwingConstants.CENTER);
-		lblKontras.setBounds(24, 0, 205, 55);
-		lblKontras.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
-		
-		
-		JButton btnRGBtoGray = new JButton("RGB to Gray");
-		btnRGBtoGray.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rgbtogray = true;
-				brightness = false;
-				negatif = false;
-				bandw = false;
-				kontras = false;
-				if(rgbtogray) {
-					panel_1.add(lblRGBtoGray);
-					lblRGBtoGray.setVisible(true);
-				}else {
-					panel_1.remove(lblRGBtoGray);
-					lblRGBtoGray.setVisible(false);
-					};
-				if(brightness) {
-					panel_1.add(lblBrightness);
-					lblBrightness.setVisible(true);
-				}else {
-					panel_1.remove(lblBrightness);
-					lblBrightness.setVisible(false);
-					};
-				if(negatif) {
-					panel_1.add(lblNegatif);
-					lblNegatif.setVisible(true);
-				}else {
-					panel_1.remove(lblNegatif);
-					lblNegatif.setVisible(false);
-					};
-				if(bandw) {
-					panel_1.add(lblBandW);
-					lblBandW.setVisible(true);
-				}else {
-					panel_1.remove(lblBandW);
-					lblBandW.setVisible(false);
-					};
-				if(kontras) {
-					panel_1.add(lblKontras);
-					lblKontras.setVisible(true);
-				}else {
-					panel_1.remove(lblKontras);
-					lblKontras.setVisible(false);
-					};
 				
-			}
-		});
-		btnRGBtoGray.setForeground(new Color(0, 0, 0));
-		btnRGBtoGray.setBackground(new Color(255, 215, 0));
-		btnRGBtoGray.setBounds(0, 70, 150, 30);
-		menu.add(btnRGBtoGray);
-		btnRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		
-		JButton btnBrightness = new JButton("Brightness");
-		btnBrightness.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rgbtogray = false;
-				brightness = true;
-				negatif = false;
-				bandw = false;
-				kontras = false;
-				if(rgbtogray) {
-					panel_1.add(lblRGBtoGray);
-					lblRGBtoGray.setVisible(true);
-				}else {
-					panel_1.remove(lblRGBtoGray);
-					lblRGBtoGray.setVisible(false);
-					};
-				if(brightness) {
-					panel_1.add(lblBrightness);
-					lblBrightness.setVisible(true);
-				}else {
-					panel_1.remove(lblBrightness);
-					lblBrightness.setVisible(false);
-					};
-				if(negatif) {
-					panel_1.add(lblNegatif);
-					lblNegatif.setVisible(true);
-				}else {
-					panel_1.remove(lblNegatif);
-					lblNegatif.setVisible(false);
-					};
-				if(bandw) {
-					panel_1.add(lblBandW);
-					lblBandW.setVisible(true);
-				}else {
-					panel_1.remove(lblBandW);
-					lblBandW.setVisible(false);
-					};
-				if(kontras) {
-					panel_1.add(lblKontras);
-					lblKontras.setVisible(true);
-				}else {
-					panel_1.remove(lblKontras);
-					lblKontras.setVisible(false);
-					};
-				
-			}
-		});
-		btnBrightness.setForeground(new Color(0, 0, 0));
-		btnBrightness.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnBrightness.setBackground(new Color(255, 215, 0));
-		btnBrightness.setBounds(0, 100, 150, 30);
-		menu.add(btnBrightness);
-		
-		JButton btnBW = new JButton("B & W");
-		btnBW.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rgbtogray = false;
-				brightness = false;
-				negatif = false;
-				bandw = true;
-				kontras = false;
-				if(rgbtogray) {
-					panel_1.add(lblRGBtoGray);
-					lblRGBtoGray.setVisible(true);
-				}else {
-					panel_1.remove(lblRGBtoGray);
-					lblRGBtoGray.setVisible(false);
-					};
-				if(brightness) {
-					panel_1.add(lblBrightness);
-					lblBrightness.setVisible(true);
-				}else {
-					panel_1.remove(lblBrightness);
-					lblBrightness.setVisible(false);
-					};
-				if(negatif) {
-					panel_1.add(lblNegatif);
-					lblNegatif.setVisible(true);
-				}else {
-					panel_1.remove(lblNegatif);
-					lblNegatif.setVisible(false);
-					};
-				if(bandw) {
-					panel_1.add(lblBandW);
-					lblBandW.setVisible(true);
-				}else {
-					panel_1.remove(lblBandW);
-					lblBandW.setVisible(false);
-					};
-				if(kontras) {
-					panel_1.add(lblKontras);
-					lblKontras.setVisible(true);
-				}else {
-					panel_1.remove(lblKontras);
-					lblKontras.setVisible(false);
-					};
-			}
-		});
-		btnBW.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnBW.setForeground(new Color(0, 0, 0));
-		btnBW.setBackground(new Color(255, 215, 0));
-		btnBW.setBounds(0, 160, 150, 30);
-		menu.add(btnBW);
-		
-		JButton btnNegatif = new JButton("Negatif Film");
-		btnNegatif.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rgbtogray = false;
-				brightness = false;
-				negatif = true;
-				bandw = false;
-				kontras = false;
-				if(rgbtogray) {
-					panel_1.add(lblRGBtoGray);
-					lblRGBtoGray.setVisible(true);
-				}else {
-					panel_1.remove(lblRGBtoGray);
-					lblRGBtoGray.setVisible(false);
-					};
-				if(brightness) {
-					panel_1.add(lblBrightness);
-					lblBrightness.setVisible(true);
-				}else {
-					panel_1.remove(lblBrightness);
-					lblBrightness.setVisible(false);
-					};
-				if(negatif) {
-					panel_1.add(lblNegatif);
-					lblNegatif.setVisible(true);
-				}else {
-					panel_1.remove(lblNegatif);
-					lblNegatif.setVisible(false);
-					};
-				if(bandw) {
-					panel_1.add(lblBandW);
-					lblBandW.setVisible(true);
-				}else {
-					panel_1.remove(lblBandW);
-					lblBandW.setVisible(false);
-					};
-				if(kontras) {
-					panel_1.add(lblKontras);
-					lblKontras.setVisible(true);
-				}else {
-					panel_1.remove(lblKontras);
-					lblKontras.setVisible(false);
-					};
-			}
-		});
-		btnNegatif.setForeground(new Color(0, 0, 0));
-		btnNegatif.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnNegatif.setBackground(new Color(255, 215, 0));
-		btnNegatif.setBounds(0, 130, 150, 30);
-		menu.add(btnNegatif);
-		
-		JButton btnKontras = new JButton("Kontras");
-		btnKontras.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rgbtogray = false;
-				brightness = false;
-				negatif = false;
-				bandw = false;
-				kontras = true;
-				if(rgbtogray) {
-					panel_1.add(lblRGBtoGray);
-					lblRGBtoGray.setVisible(true);
-				}else {
-					panel_1.remove(lblRGBtoGray);
-					lblRGBtoGray.setVisible(false);
-					};
-				if(brightness) {
-					panel_1.add(lblBrightness);
-					lblBrightness.setVisible(true);
-				}else {
-					panel_1.remove(lblBrightness);
-					lblBrightness.setVisible(false);
-					};
-				if(negatif) {
-					panel_1.add(lblNegatif);
-					lblNegatif.setVisible(true);
-				}else {
-					panel_1.remove(lblNegatif);
-					lblNegatif.setVisible(false);
-					};
-				if(bandw) {
-					panel_1.add(lblBandW);
-					lblBandW.setVisible(true);
-				}else {
-					panel_1.remove(lblBandW);
-					lblBandW.setVisible(false);
-					};
-				if(kontras) {
-					panel_1.add(lblKontras);
-					lblKontras.setVisible(true);
-				}else {
-					panel_1.remove(lblKontras);
-					lblKontras.setVisible(false);
-					};
-			}
-		});
-		btnKontras.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnKontras.setForeground(new Color(0, 0, 0));
-		btnKontras.setBackground(new Color(255, 215, 0));
-		btnKontras.setBounds(0, 190, 150, 30);
-		menu.add(btnKontras);
-		
-		
-		// Button in menu end
-		// MENU ENDS
-		////////////////
-		////////////////
-		
-		
-		
 		JLabel l = new JLabel("");
 		
 		JPanel source = new JPanel();
@@ -453,8 +139,6 @@ public class TampilanAwal extends JFrame {
 		txtFinalAddress.setColumns(10);
 		txtFinalAddress.setBounds(475, 604, 400, 45);
 		panel.add(txtFinalAddress);
-		
-		
 		
 		
 		
@@ -488,10 +172,6 @@ public class TampilanAwal extends JFrame {
 			                // set the label to the path of the selected file 
 			            	txtSourceAddress.setText(j.getSelectedFile().getAbsolutePath());
 			            	
-			            	// set the label to the path of the selected file with add string "black" in the end of the filename
-			            	StringBuffer str = new StringBuffer(txtSourceAddress.getText());
-			            	str.insert(str.length()-4,"Black");
-			            	txtFinalAddress.setText(str.toString());
 			            } 
 			            // if the user cancelled the operation 
 			            else
@@ -502,13 +182,33 @@ public class TampilanAwal extends JFrame {
 		btnBrowse.setBounds(40, 540, 175, 35);
 		panel.add(btnBrowse);
 		
-		JButton btnConvert = new JButton("Convert");
+		JButton btnConvert = new JButton("Convert & Save");
 		btnConvert.setForeground(new Color(255, 255, 255));
 		btnConvert.setBackground(new Color(30, 144, 255));
 		btnConvert.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				alamat = txtSourceAddress.getText();			
+				alamat = txtSourceAddress.getText();
+				//set path default
+				if(!setFinalAddress) {
+					StringBuffer str = new StringBuffer(txtSourceAddress.getText());
+	            	if(rgbtogray) {
+	            		str.insert(str.length()-4,"Gray");
+	            	};
+	            	if(brightness) {
+	            		str.insert(str.length()-4,"Brightness");
+	            	};
+	            	if(negatif) {
+	            		str.insert(str.length()-4,"Negative");
+	            	};
+	            	if(bandw) {
+	            		str.insert(str.length()-4,"B&W");
+	            	};
+	            	if(kontras) {
+	            		str.insert(str.length()-4,"Kontras");
+	            	};
+	            	txtFinalAddress.setText(str.toString());
+				};
 				simpan = txtFinalAddress.getText();
 				
 	
@@ -518,10 +218,10 @@ public class TampilanAwal extends JFrame {
 				gambarAwal = new ImageIcon(newimg);  // transform it back
 				LblIS.setIcon(gambarAwal);
 				
-				//RGB to Gray
-				if(rgbtogray) {
+				
 				try {
-			         //File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
+			        if(rgbtogray) { 
+					//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
 					
 					 File input = new File(alamat);
 			         image = ImageIO.read(input);
@@ -536,7 +236,7 @@ public class TampilanAwal extends JFrame {
 			               int red = (int)(c.getRed() * 0.299);
 			               int green = (int)(c.getGreen() * 0.587);
 			               int blue = (int)(c.getBlue() *0.114);
-			               Color newColor = new Color(red+green+blue, red+green+blue,red+green+blue);
+			               Color newColor = new Color(red+green+blue, red+green+blue, red+green+blue);
 			               
 			               image.setRGB(j,i,newColor.getRGB());
 			            }
@@ -551,8 +251,88 @@ public class TampilanAwal extends JFrame {
 					 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 					 gambarAkhir = new ImageIcon(newimg2);  // transform it back
 					 LblFS.setIcon(gambarAkhir);
+			        };
+			        
+			        if(brightness) {
+			        	File input = new File(alamat);
+				         image = ImageIO.read(input);
+				         width = image.getWidth();
+				         height = image.getHeight();
+				         
+				         for(int i=0; i<height; i++) {
+				         
+				            for(int j=0; j<width; j++) {
+				            
+				               Color c = new Color(image.getRGB(j, i));
+				               int red = (int)(c.getRed());
+				               red = red + nilaiBrightness;
+				               if(red>255) {
+				            	   red = 255;  
+				               	   };
+				               int green = (int)(c.getGreen());
+				               green = green + nilaiBrightness;
+				               if(green>255) {
+				            	   green = 255;  
+					               };
+				               int blue = (int)(c.getBlue());
+				               blue = blue + nilaiBrightness;
+				               if(blue>255) {
+					            	 blue = 255;  
+					               };
+				               Color newColor = new Color(red+green+blue, red+green+blue,red+green+blue);
+				               
+				               image.setRGB(j,i,newColor.getRGB());
+				            }
+				         }
+				         
+				         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
+				         File ouptut = new File(simpan);
+				         ImageIO.write(image, "jpg", ouptut);
+				         
+						 ImageIcon gambarAkhir = new ImageIcon (simpan);
+						 Image gak = gambarAkhir.getImage(); // transform it 
+						 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+						 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+						 LblFS.setIcon(gambarAkhir);
+			        };
+			        
+			        if(negatif) { 
+						//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
+						
+						 File input = new File(alamat);
+				         image = ImageIO.read(input);
+				         width = image.getWidth();
+				         height = image.getHeight();
+				         
+				         for(int i=0; i<height; i++) {
+				         
+				            for(int j=0; j<width; j++) {
+				            
+				               Color c = new Color(image.getRGB(j, i));
+				               int red = (int)(c.getRed());
+				               int green = (int)(c.getGreen());
+				               int blue = (int)(c.getBlue());
+				               
+				               Color newColor = new Color(red+green+blue, red+green+blue, red+green+blue);
+				               
+				               image.setRGB(j,i,newColor.getRGB());
+				            }
+				         }
+				         
+				         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
+				         File ouptut = new File(simpan);
+				         ImageIO.write(image, "jpg", ouptut);
+				         
+						 ImageIcon gambarAkhir = new ImageIcon (simpan);
+						 Image gak = gambarAkhir.getImage(); // transform it 
+						 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+						 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+						 LblFS.setIcon(gambarAkhir);
+				        };
+			        
+			        
 			      } catch (Exception e) {}
-				};
+			
 			}
 		});
 		btnConvert.setBounds(700, 540, 175, 35);
@@ -605,7 +385,8 @@ public class TampilanAwal extends JFrame {
 
 				{ 
 					// set the label to the path of the selected file 
-					txtFinalAddress.setText(js.getSelectedFile().getAbsolutePath()); 
+					txtFinalAddress.setText(js.getSelectedFile().getAbsolutePath());
+					setFinalAddress=true;
 				} 
 				// if the user cancelled the operation 
 				else
@@ -614,5 +395,376 @@ public class TampilanAwal extends JFrame {
 		});
 		btnSave.setBounds(477, 540, 175, 35);
 		panel.add(btnSave);
+		
+		JLabel lblSlider = new JLabel("");
+		lblSlider.setBounds(445, 87, 46, 14);
+		sliderBrightness.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				lblSlider.setText(String.valueOf(sliderBrightness.getValue()));
+				nilaiBrightness = Integer.parseInt(lblSlider.getText());
+				//debug
+				//System.out.println(nilaiBrightness);
+			}
+		});
+		sliderBrightness.setBounds(358, 55, 200, 26);
+		
+		
+		
+		
+		// MENU BEGINS
+				////////////////
+				////////////////
+				
+				JLabel lblmenu = new JLabel("Menu");
+				lblmenu.setHorizontalAlignment(SwingConstants.CENTER);
+				lblmenu.setBackground(UIManager.getColor("text"));
+				lblmenu.setForeground(new Color(255, 255, 255));
+				lblmenu.setFont(new Font("Tahoma", Font.PLAIN, 28));
+				lblmenu.setBounds(0, 0, 150, 60);
+				menu.add(lblmenu);
+				
+				
+				
+				// Button in menu
+				JButton btnAbout = new JButton("About");
+				btnAbout.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+				btnAbout.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						JOptionPane.showMessageDialog(null, "Kelompok 4\nDicky Febrian Dwiputra 3411181097\nAde Ridwan Nugraha 3411181117\nIndiarto Aji Begawan 3411181114");
+					}
+				});
+				btnAbout.setBounds(10, 647, 110, 23);
+				menu.add(btnAbout);
+				
+				JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
+				lblRGBtoGray.setHorizontalAlignment(SwingConstants.CENTER);
+				lblRGBtoGray.setBounds(24, 0, 205, 55);
+				lblRGBtoGray.setVisible(false);
+				lblRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				JLabel lblBrightness = new JLabel("Brightness");
+				lblBrightness.setHorizontalAlignment(SwingConstants.CENTER);
+				lblBrightness.setBounds(24, 0, 205, 55);
+				lblBrightness.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				JLabel lblNegatif = new JLabel("Negative");
+				lblNegatif.setHorizontalAlignment(SwingConstants.CENTER);
+				lblNegatif.setBounds(24, 0, 205, 55);
+				lblNegatif.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				JLabel lblBandW = new JLabel("Black & White");
+				lblBandW.setHorizontalAlignment(SwingConstants.CENTER);
+				lblBandW.setBounds(24, 0, 205, 55);
+				lblBandW.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				JLabel lblKontras = new JLabel("Contrast");
+				lblKontras.setHorizontalAlignment(SwingConstants.CENTER);
+				lblKontras.setBounds(24, 0, 205, 55);
+				lblKontras.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				
+				
+				JButton btnRGBtoGray = new JButton("RGB to Gray");
+				btnRGBtoGray.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						rgbtogray = true;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						if(rgbtogray) {
+							panel_1.add(lblRGBtoGray);
+							lblRGBtoGray.setVisible(true);
+						}else {
+							panel_1.remove(lblRGBtoGray);
+							lblRGBtoGray.setVisible(false);
+							};
+						if(brightness) {
+							panel_1.add(lblBrightness);
+							lblBrightness.setVisible(true);
+							panel.add(sliderBrightness);
+							sliderBrightness.setVisible(true);
+							panel.add(lblSlider);
+							lblSlider.setVisible(true);
+						}else {
+							panel_1.remove(lblBrightness);
+							lblBrightness.setVisible(false);
+							panel.remove(sliderBrightness);
+							sliderBrightness.setVisible(false);
+							panel.remove(lblSlider);
+							lblSlider.setVisible(false);
+							};
+						if(negatif) {
+							panel_1.add(lblNegatif);
+							lblNegatif.setVisible(true);
+						}else {
+							panel_1.remove(lblNegatif);
+							lblNegatif.setVisible(false);
+							};
+						if(bandw) {
+							panel_1.add(lblBandW);
+							lblBandW.setVisible(true);
+						}else {
+							panel_1.remove(lblBandW);
+							lblBandW.setVisible(false);
+							};
+						if(kontras) {
+							panel_1.add(lblKontras);
+							lblKontras.setVisible(true);
+						}else {
+							panel_1.remove(lblKontras);
+							lblKontras.setVisible(false);
+							};
+						
+					}
+				});
+				btnRGBtoGray.setForeground(new Color(0, 0, 0));
+				btnRGBtoGray.setBackground(new Color(255, 215, 0));
+				btnRGBtoGray.setBounds(0, 70, 150, 30);
+				menu.add(btnRGBtoGray);
+				btnRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				
+				JButton btnBrightness = new JButton("Brightness");
+				btnBrightness.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						rgbtogray = false;
+						brightness = true;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						if(rgbtogray) {
+							panel_1.add(lblRGBtoGray);
+							lblRGBtoGray.setVisible(true);
+						}else {
+							panel_1.remove(lblRGBtoGray);
+							lblRGBtoGray.setVisible(false);
+							};
+							if(brightness) {
+								panel_1.add(lblBrightness);
+								lblBrightness.setVisible(true);
+								panel.add(sliderBrightness);
+								sliderBrightness.setVisible(true);
+								panel.add(lblSlider);
+								lblSlider.setVisible(true);
+							}else {
+								panel_1.remove(lblBrightness);
+								lblBrightness.setVisible(false);
+								panel.remove(sliderBrightness);
+								sliderBrightness.setVisible(false);
+								panel.remove(lblSlider);
+								lblSlider.setVisible(false);
+								};
+						if(negatif) {
+							panel_1.add(lblNegatif);
+							lblNegatif.setVisible(true);
+						}else {
+							panel_1.remove(lblNegatif);
+							lblNegatif.setVisible(false);
+							};
+						if(bandw) {
+							panel_1.add(lblBandW);
+							lblBandW.setVisible(true);
+						}else {
+							panel_1.remove(lblBandW);
+							lblBandW.setVisible(false);
+							};
+						if(kontras) {
+							panel_1.add(lblKontras);
+							lblKontras.setVisible(true);
+						}else {
+							panel_1.remove(lblKontras);
+							lblKontras.setVisible(false);
+							};
+						
+					}
+				});
+				btnBrightness.setForeground(new Color(0, 0, 0));
+				btnBrightness.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnBrightness.setBackground(new Color(255, 215, 0));
+				btnBrightness.setBounds(0, 100, 150, 30);
+				menu.add(btnBrightness);
+				
+				JButton btnBW = new JButton("B & W");
+				btnBW.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = true;
+						kontras = false;
+						if(rgbtogray) {
+							panel_1.add(lblRGBtoGray);
+							lblRGBtoGray.setVisible(true);
+						}else {
+							panel_1.remove(lblRGBtoGray);
+							lblRGBtoGray.setVisible(false);
+							};
+							if(brightness) {
+								panel_1.add(lblBrightness);
+								lblBrightness.setVisible(true);
+								panel.add(sliderBrightness);
+								sliderBrightness.setVisible(true);
+								panel.add(lblSlider);
+								lblSlider.setVisible(true);
+							}else {
+								panel_1.remove(lblBrightness);
+								lblBrightness.setVisible(false);
+								panel.remove(sliderBrightness);
+								sliderBrightness.setVisible(false);
+								panel.remove(lblSlider);
+								lblSlider.setVisible(false);
+								};
+						if(negatif) {
+							panel_1.add(lblNegatif);
+							lblNegatif.setVisible(true);
+						}else {
+							panel_1.remove(lblNegatif);
+							lblNegatif.setVisible(false);
+							};
+						if(bandw) {
+							panel_1.add(lblBandW);
+							lblBandW.setVisible(true);
+						}else {
+							panel_1.remove(lblBandW);
+							lblBandW.setVisible(false);
+							};
+						if(kontras) {
+							panel_1.add(lblKontras);
+							lblKontras.setVisible(true);
+						}else {
+							panel_1.remove(lblKontras);
+							lblKontras.setVisible(false);
+							};
+					}
+				});
+				btnBW.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnBW.setForeground(new Color(0, 0, 0));
+				btnBW.setBackground(new Color(255, 215, 0));
+				btnBW.setBounds(0, 160, 150, 30);
+				menu.add(btnBW);
+				
+				JButton btnNegatif = new JButton("Negatif Film");
+				btnNegatif.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						rgbtogray = false;
+						brightness = false;
+						negatif = true;
+						bandw = false;
+						kontras = false;
+						if(rgbtogray) {
+							panel_1.add(lblRGBtoGray);
+							lblRGBtoGray.setVisible(true);
+						}else {
+							panel_1.remove(lblRGBtoGray);
+							lblRGBtoGray.setVisible(false);
+							};
+							if(brightness) {
+								panel_1.add(lblBrightness);
+								lblBrightness.setVisible(true);
+								panel.add(sliderBrightness);
+								sliderBrightness.setVisible(true);
+								panel.add(lblSlider);
+								lblSlider.setVisible(true);
+							}else {
+								panel_1.remove(lblBrightness);
+								lblBrightness.setVisible(false);
+								panel.remove(sliderBrightness);
+								sliderBrightness.setVisible(false);
+								panel.remove(lblSlider);
+								lblSlider.setVisible(false);
+								};
+						if(negatif) {
+							panel_1.add(lblNegatif);
+							lblNegatif.setVisible(true);
+						}else {
+							panel_1.remove(lblNegatif);
+							lblNegatif.setVisible(false);
+							};
+						if(bandw) {
+							panel_1.add(lblBandW);
+							lblBandW.setVisible(true);
+						}else {
+							panel_1.remove(lblBandW);
+							lblBandW.setVisible(false);
+							};
+						if(kontras) {
+							panel_1.add(lblKontras);
+							lblKontras.setVisible(true);
+						}else {
+							panel_1.remove(lblKontras);
+							lblKontras.setVisible(false);
+							};
+					}
+				});
+				btnNegatif.setForeground(new Color(0, 0, 0));
+				btnNegatif.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnNegatif.setBackground(new Color(255, 215, 0));
+				btnNegatif.setBounds(0, 130, 150, 30);
+				menu.add(btnNegatif);
+				
+				JButton btnKontras = new JButton("Kontras");
+				btnKontras.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = true;
+						if(rgbtogray) {
+							panel_1.add(lblRGBtoGray);
+							lblRGBtoGray.setVisible(true);
+						}else {
+							panel_1.remove(lblRGBtoGray);
+							lblRGBtoGray.setVisible(false);
+							};
+							if(brightness) {
+								panel_1.add(lblBrightness);
+								lblBrightness.setVisible(true);
+								panel.add(sliderBrightness);
+								sliderBrightness.setVisible(true);
+								panel.add(lblSlider);
+								lblSlider.setVisible(true);
+							}else {
+								panel_1.remove(lblBrightness);
+								lblBrightness.setVisible(false);
+								panel.remove(sliderBrightness);
+								sliderBrightness.setVisible(false);
+								panel.remove(lblSlider);
+								lblSlider.setVisible(false);
+								};
+						if(negatif) {
+							panel_1.add(lblNegatif);
+							lblNegatif.setVisible(true);
+						}else {
+							panel_1.remove(lblNegatif);
+							lblNegatif.setVisible(false);
+							};
+						if(bandw) {
+							panel_1.add(lblBandW);
+							lblBandW.setVisible(true);
+						}else {
+							panel_1.remove(lblBandW);
+							lblBandW.setVisible(false);
+							};
+						if(kontras) {
+							panel_1.add(lblKontras);
+							lblKontras.setVisible(true);
+						}else {
+							panel_1.remove(lblKontras);
+							lblKontras.setVisible(false);
+							};
+					}
+				});
+				btnKontras.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnKontras.setForeground(new Color(0, 0, 0));
+				btnKontras.setBackground(new Color(255, 215, 0));
+				btnKontras.setBounds(0, 190, 150, 30);
+				menu.add(btnKontras);
+				
+				
+				// Button in menu end
+				// MENU ENDS
+				////////////////
+				////////////////
 	}
 }

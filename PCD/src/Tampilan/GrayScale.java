@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.ImageWriter;
@@ -15,7 +14,7 @@ public class GrayScale {
 	public static void toGrayScale (File input, File output) {
 		try {
 			ImageInputStream iis = ImageIO.createImageInputStream(input);
-			Iterator<ImageReader> iterator = (Iterator<ImageReader>) ImageIO.getImageReader((ImageWriter) iis);
+			Iterator<ImageReader> iterator = ImageIO.getImageReaders(iis);
 			ImageReader reader = iterator.next();
 			String imageFormat = reader.getFormatName();
 			
