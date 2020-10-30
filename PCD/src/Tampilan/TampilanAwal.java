@@ -552,6 +552,7 @@ public class TampilanAwal extends JFrame {
 				JButton btnRGBtoGray = new JButton("RGB to Gray");
 				btnRGBtoGray.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
 						rgbtogray = true;
 						brightness = false;
 						negatif = false;
@@ -602,6 +603,7 @@ public class TampilanAwal extends JFrame {
 							};
 						panel.setVisible(false);
 						panel.setVisible(true);
+						setFinalAddress=false;
 					}
 				});
 				btnRGBtoGray.setForeground(new Color(0, 0, 0));
@@ -613,6 +615,7 @@ public class TampilanAwal extends JFrame {
 				JButton btnBrightness = new JButton("Brightness");
 				btnBrightness.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
 						rgbtogray = false;
 						brightness = true;
 						negatif = false;
@@ -663,6 +666,7 @@ public class TampilanAwal extends JFrame {
 							};
 							panel.setVisible(false);
 							panel.setVisible(true);
+							setFinalAddress=false;
 					}
 				});
 				btnBrightness.setForeground(new Color(0, 0, 0));
@@ -674,6 +678,7 @@ public class TampilanAwal extends JFrame {
 				JButton btnBW = new JButton("B & W");
 				btnBW.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
 						rgbtogray = false;
 						brightness = false;
 						negatif = false;
@@ -724,6 +729,7 @@ public class TampilanAwal extends JFrame {
 							};
 							panel.setVisible(false);
 							panel.setVisible(true);
+							setFinalAddress=false;
 					}
 				});
 				btnBW.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -735,6 +741,7 @@ public class TampilanAwal extends JFrame {
 				JButton btnNegatif = new JButton("Negatif Film");
 				btnNegatif.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
 						rgbtogray = false;
 						brightness = false;
 						negatif = true;
@@ -785,6 +792,7 @@ public class TampilanAwal extends JFrame {
 							};
 							panel.setVisible(false);
 							panel.setVisible(true);
+							setFinalAddress=false;
 					}
 				});
 				btnNegatif.setForeground(new Color(0, 0, 0));
@@ -796,6 +804,7 @@ public class TampilanAwal extends JFrame {
 				JButton btnKontras = new JButton("Kontras");
 				btnKontras.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
 						rgbtogray = false;
 						brightness = false;
 						negatif = false;
@@ -846,6 +855,7 @@ public class TampilanAwal extends JFrame {
 							};
 							panel.setVisible(false);
 							panel.setVisible(true);
+							setFinalAddress=false;
 					}
 				});
 				btnKontras.setFont(new Font("Tahoma", Font.PLAIN, 15));
