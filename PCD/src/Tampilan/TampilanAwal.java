@@ -45,6 +45,12 @@ public class TampilanAwal extends JFrame {
 	private JTextField txtFinalAddress;
 	private String alamat = "null";
 	private String simpan = "null";
+	private boolean rgbtogray = false;
+	private boolean brightness = false;
+	private boolean negatif = false;
+	private boolean bandw = false;
+	private boolean kontras = false;
+	
 
 	JFileChooser fc;
 	
@@ -88,6 +94,25 @@ public class TampilanAwal extends JFrame {
 		contentPane.add(menu);
 		menu.setLayout(null);
 		
+		JPanel panel = new JPanel();
+		panel.setForeground(UIManager.getColor("text"));
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(149, 0, 915, 681);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new LineBorder(new Color(30, 144, 255), 2));
+		panel_1.setBounds(-22, 0, 972, 55);
+		panel.add(panel_1);
+		panel_1.setBackground(Color.WHITE);
+		panel_1.setLayout(null);
+		
+		
+		// MENU BEGINS
+		////////////////
+		////////////////
+		
 		JLabel lblmenu = new JLabel("Menu");
 		lblmenu.setHorizontalAlignment(SwingConstants.CENTER);
 		lblmenu.setBackground(UIManager.getColor("text"));
@@ -96,6 +121,9 @@ public class TampilanAwal extends JFrame {
 		lblmenu.setBounds(0, 0, 150, 60);
 		menu.add(lblmenu);
 		
+		
+		
+		// Button in menu
 		JButton btnAbout = new JButton("About");
 		btnAbout.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		btnAbout.addActionListener(new ActionListener() {
@@ -106,7 +134,80 @@ public class TampilanAwal extends JFrame {
 		btnAbout.setBounds(10, 647, 110, 23);
 		menu.add(btnAbout);
 		
+		JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
+		lblRGBtoGray.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRGBtoGray.setBounds(24, 0, 205, 55);
+		lblRGBtoGray.setVisible(false);
+		lblRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		JLabel lblBrightness = new JLabel("Brightness");
+		lblBrightness.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBrightness.setBounds(24, 0, 205, 55);
+		lblBrightness.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		JLabel lblNegatif = new JLabel("Negative");
+		lblNegatif.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNegatif.setBounds(24, 0, 205, 55);
+		lblNegatif.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		JLabel lblBandW = new JLabel("Black & White");
+		lblBandW.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBandW.setBounds(24, 0, 205, 55);
+		lblBandW.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		JLabel lblKontras = new JLabel("Contrast");
+		lblKontras.setHorizontalAlignment(SwingConstants.CENTER);
+		lblKontras.setBounds(24, 0, 205, 55);
+		lblKontras.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		
+		
 		JButton btnRGBtoGray = new JButton("RGB to Gray");
+		btnRGBtoGray.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rgbtogray = true;
+				brightness = false;
+				negatif = false;
+				bandw = false;
+				kontras = false;
+				if(rgbtogray) {
+					panel_1.add(lblRGBtoGray);
+					lblRGBtoGray.setVisible(true);
+				}else {
+					panel_1.remove(lblRGBtoGray);
+					lblRGBtoGray.setVisible(false);
+					};
+				if(brightness) {
+					panel_1.add(lblBrightness);
+					lblBrightness.setVisible(true);
+				}else {
+					panel_1.remove(lblBrightness);
+					lblBrightness.setVisible(false);
+					};
+				if(negatif) {
+					panel_1.add(lblNegatif);
+					lblNegatif.setVisible(true);
+				}else {
+					panel_1.remove(lblNegatif);
+					lblNegatif.setVisible(false);
+					};
+				if(bandw) {
+					panel_1.add(lblBandW);
+					lblBandW.setVisible(true);
+				}else {
+					panel_1.remove(lblBandW);
+					lblBandW.setVisible(false);
+					};
+				if(kontras) {
+					panel_1.add(lblKontras);
+					lblKontras.setVisible(true);
+				}else {
+					panel_1.remove(lblKontras);
+					lblKontras.setVisible(false);
+					};
+				
+			}
+		});
 		btnRGBtoGray.setForeground(new Color(0, 0, 0));
 		btnRGBtoGray.setBackground(new Color(255, 215, 0));
 		btnRGBtoGray.setBounds(0, 70, 150, 30);
@@ -114,6 +215,51 @@ public class TampilanAwal extends JFrame {
 		btnRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
 		JButton btnBrightness = new JButton("Brightness");
+		btnBrightness.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rgbtogray = false;
+				brightness = true;
+				negatif = false;
+				bandw = false;
+				kontras = false;
+				if(rgbtogray) {
+					panel_1.add(lblRGBtoGray);
+					lblRGBtoGray.setVisible(true);
+				}else {
+					panel_1.remove(lblRGBtoGray);
+					lblRGBtoGray.setVisible(false);
+					};
+				if(brightness) {
+					panel_1.add(lblBrightness);
+					lblBrightness.setVisible(true);
+				}else {
+					panel_1.remove(lblBrightness);
+					lblBrightness.setVisible(false);
+					};
+				if(negatif) {
+					panel_1.add(lblNegatif);
+					lblNegatif.setVisible(true);
+				}else {
+					panel_1.remove(lblNegatif);
+					lblNegatif.setVisible(false);
+					};
+				if(bandw) {
+					panel_1.add(lblBandW);
+					lblBandW.setVisible(true);
+				}else {
+					panel_1.remove(lblBandW);
+					lblBandW.setVisible(false);
+					};
+				if(kontras) {
+					panel_1.add(lblKontras);
+					lblKontras.setVisible(true);
+				}else {
+					panel_1.remove(lblKontras);
+					lblKontras.setVisible(false);
+					};
+				
+			}
+		});
 		btnBrightness.setForeground(new Color(0, 0, 0));
 		btnBrightness.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnBrightness.setBackground(new Color(255, 215, 0));
@@ -121,6 +267,50 @@ public class TampilanAwal extends JFrame {
 		menu.add(btnBrightness);
 		
 		JButton btnBW = new JButton("B & W");
+		btnBW.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rgbtogray = false;
+				brightness = false;
+				negatif = false;
+				bandw = true;
+				kontras = false;
+				if(rgbtogray) {
+					panel_1.add(lblRGBtoGray);
+					lblRGBtoGray.setVisible(true);
+				}else {
+					panel_1.remove(lblRGBtoGray);
+					lblRGBtoGray.setVisible(false);
+					};
+				if(brightness) {
+					panel_1.add(lblBrightness);
+					lblBrightness.setVisible(true);
+				}else {
+					panel_1.remove(lblBrightness);
+					lblBrightness.setVisible(false);
+					};
+				if(negatif) {
+					panel_1.add(lblNegatif);
+					lblNegatif.setVisible(true);
+				}else {
+					panel_1.remove(lblNegatif);
+					lblNegatif.setVisible(false);
+					};
+				if(bandw) {
+					panel_1.add(lblBandW);
+					lblBandW.setVisible(true);
+				}else {
+					panel_1.remove(lblBandW);
+					lblBandW.setVisible(false);
+					};
+				if(kontras) {
+					panel_1.add(lblKontras);
+					lblKontras.setVisible(true);
+				}else {
+					panel_1.remove(lblKontras);
+					lblKontras.setVisible(false);
+					};
+			}
+		});
 		btnBW.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnBW.setForeground(new Color(0, 0, 0));
 		btnBW.setBackground(new Color(255, 215, 0));
@@ -128,6 +318,50 @@ public class TampilanAwal extends JFrame {
 		menu.add(btnBW);
 		
 		JButton btnNegatif = new JButton("Negatif Film");
+		btnNegatif.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rgbtogray = false;
+				brightness = false;
+				negatif = true;
+				bandw = false;
+				kontras = false;
+				if(rgbtogray) {
+					panel_1.add(lblRGBtoGray);
+					lblRGBtoGray.setVisible(true);
+				}else {
+					panel_1.remove(lblRGBtoGray);
+					lblRGBtoGray.setVisible(false);
+					};
+				if(brightness) {
+					panel_1.add(lblBrightness);
+					lblBrightness.setVisible(true);
+				}else {
+					panel_1.remove(lblBrightness);
+					lblBrightness.setVisible(false);
+					};
+				if(negatif) {
+					panel_1.add(lblNegatif);
+					lblNegatif.setVisible(true);
+				}else {
+					panel_1.remove(lblNegatif);
+					lblNegatif.setVisible(false);
+					};
+				if(bandw) {
+					panel_1.add(lblBandW);
+					lblBandW.setVisible(true);
+				}else {
+					panel_1.remove(lblBandW);
+					lblBandW.setVisible(false);
+					};
+				if(kontras) {
+					panel_1.add(lblKontras);
+					lblKontras.setVisible(true);
+				}else {
+					panel_1.remove(lblKontras);
+					lblKontras.setVisible(false);
+					};
+			}
+		});
 		btnNegatif.setForeground(new Color(0, 0, 0));
 		btnNegatif.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnNegatif.setBackground(new Color(255, 215, 0));
@@ -135,18 +369,63 @@ public class TampilanAwal extends JFrame {
 		menu.add(btnNegatif);
 		
 		JButton btnKontras = new JButton("Kontras");
+		btnKontras.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rgbtogray = false;
+				brightness = false;
+				negatif = false;
+				bandw = false;
+				kontras = true;
+				if(rgbtogray) {
+					panel_1.add(lblRGBtoGray);
+					lblRGBtoGray.setVisible(true);
+				}else {
+					panel_1.remove(lblRGBtoGray);
+					lblRGBtoGray.setVisible(false);
+					};
+				if(brightness) {
+					panel_1.add(lblBrightness);
+					lblBrightness.setVisible(true);
+				}else {
+					panel_1.remove(lblBrightness);
+					lblBrightness.setVisible(false);
+					};
+				if(negatif) {
+					panel_1.add(lblNegatif);
+					lblNegatif.setVisible(true);
+				}else {
+					panel_1.remove(lblNegatif);
+					lblNegatif.setVisible(false);
+					};
+				if(bandw) {
+					panel_1.add(lblBandW);
+					lblBandW.setVisible(true);
+				}else {
+					panel_1.remove(lblBandW);
+					lblBandW.setVisible(false);
+					};
+				if(kontras) {
+					panel_1.add(lblKontras);
+					lblKontras.setVisible(true);
+				}else {
+					panel_1.remove(lblKontras);
+					lblKontras.setVisible(false);
+					};
+			}
+		});
 		btnKontras.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnKontras.setForeground(new Color(0, 0, 0));
 		btnKontras.setBackground(new Color(255, 215, 0));
 		btnKontras.setBounds(0, 190, 150, 30);
 		menu.add(btnKontras);
 		
-		JPanel panel = new JPanel();
-		panel.setForeground(UIManager.getColor("text"));
-		panel.setBackground(Color.WHITE);
-		panel.setBounds(149, 0, 915, 681);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		
+		// Button in menu end
+		// MENU ENDS
+		////////////////
+		////////////////
+		
+		
 		
 		JLabel l = new JLabel("");
 		
@@ -175,18 +454,9 @@ public class TampilanAwal extends JFrame {
 		txtFinalAddress.setBounds(475, 604, 400, 45);
 		panel.add(txtFinalAddress);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new LineBorder(new Color(30, 144, 255), 2));
-		panel_1.setBounds(-22, 0, 972, 55);
-		panel.add(panel_1);
-		panel_1.setBackground(Color.WHITE);
-		panel_1.setLayout(null);
 		
-		JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
-		lblRGBtoGray.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRGBtoGray.setBounds(24, 0, 205, 55);
-		panel_1.add(lblRGBtoGray);
-		lblRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		
 		
 		JPanel result = new JPanel();
 		result.setBackground(new Color(255, 255, 255));
@@ -221,8 +491,7 @@ public class TampilanAwal extends JFrame {
 			            	// set the label to the path of the selected file with add string "black" in the end of the filename
 			            	StringBuffer str = new StringBuffer(txtSourceAddress.getText());
 			            	str.insert(str.length()-4,"Black");
-			            	String str2 = str.toString();
-			            	txtFinalAddress.setText(str2);
+			            	txtFinalAddress.setText(str.toString());
 			            } 
 			            // if the user cancelled the operation 
 			            else
@@ -249,6 +518,8 @@ public class TampilanAwal extends JFrame {
 				gambarAwal = new ImageIcon(newimg);  // transform it back
 				LblIS.setIcon(gambarAwal);
 				
+				//RGB to Gray
+				if(rgbtogray) {
 				try {
 			         //File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
 					
@@ -281,7 +552,7 @@ public class TampilanAwal extends JFrame {
 					 gambarAkhir = new ImageIcon(newimg2);  // transform it back
 					 LblFS.setIcon(gambarAkhir);
 			      } catch (Exception e) {}
-
+				};
 			}
 		});
 		btnConvert.setBounds(700, 540, 175, 35);
