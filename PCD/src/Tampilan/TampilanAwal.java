@@ -496,7 +496,7 @@ public class TampilanAwal extends JFrame {
 		
 		
 		
-		// MENU BEGINS
+				// MENU BEGINS
 				////////////////
 				////////////////
 				
