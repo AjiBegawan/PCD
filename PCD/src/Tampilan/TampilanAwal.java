@@ -45,6 +45,7 @@ public class TampilanAwal extends JFrame {
 	private JTextField txtFinalAddress;
 	private String alamat = "null";
 	private String simpan = "null";
+
 	JFileChooser fc;
 	
 	 BufferedImage  image;
@@ -215,7 +216,13 @@ public class TampilanAwal extends JFrame {
 			  
 			            { 
 			                // set the label to the path of the selected file 
-			            	txtSourceAddress.setText(j.getSelectedFile().getAbsolutePath()); 
+			            	txtSourceAddress.setText(j.getSelectedFile().getAbsolutePath());
+			            	
+			            	// set the label to the path of the selected file with add string "black" in the end of the filename
+			            	StringBuffer str = new StringBuffer(txtSourceAddress.getText());
+			            	str.insert(str.length()-4,"Black");
+			            	String str2 = str.toString();
+			            	txtFinalAddress.setText(str2);
 			            } 
 			            // if the user cancelled the operation 
 			            else
