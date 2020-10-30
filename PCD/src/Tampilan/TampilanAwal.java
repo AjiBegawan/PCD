@@ -373,6 +373,8 @@ public class TampilanAwal extends JFrame {
 					        
 					        
 					        //Kontras
+					        //masih belum bener
+					        /**
 					        if(kontras) { 
 								//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
 								
@@ -413,7 +415,7 @@ public class TampilanAwal extends JFrame {
 								 gambarAkhir = new ImageIcon(newimg2);  // transform it back
 								 LblFS.setIcon(gambarAkhir);
 						        };
-			        
+			        **/
 			      } catch (Exception e) {}
 			
 			}
@@ -598,7 +600,8 @@ public class TampilanAwal extends JFrame {
 							panel_1.remove(lblKontras);
 							lblKontras.setVisible(false);
 							};
-						
+						panel.setVisible(false);
+						panel.setVisible(true);
 					}
 				});
 				btnRGBtoGray.setForeground(new Color(0, 0, 0));
@@ -658,7 +661,8 @@ public class TampilanAwal extends JFrame {
 							panel_1.remove(lblKontras);
 							lblKontras.setVisible(false);
 							};
-						
+							panel.setVisible(false);
+							panel.setVisible(true);
 					}
 				});
 				btnBrightness.setForeground(new Color(0, 0, 0));
@@ -718,6 +722,8 @@ public class TampilanAwal extends JFrame {
 							panel_1.remove(lblKontras);
 							lblKontras.setVisible(false);
 							};
+							panel.setVisible(false);
+							panel.setVisible(true);
 					}
 				});
 				btnBW.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -777,6 +783,8 @@ public class TampilanAwal extends JFrame {
 							panel_1.remove(lblKontras);
 							lblKontras.setVisible(false);
 							};
+							panel.setVisible(false);
+							panel.setVisible(true);
 					}
 				});
 				btnNegatif.setForeground(new Color(0, 0, 0));
@@ -836,6 +844,8 @@ public class TampilanAwal extends JFrame {
 							panel_1.remove(lblKontras);
 							lblKontras.setVisible(false);
 							};
+							panel.setVisible(false);
+							panel.setVisible(true);
 					}
 				});
 				btnKontras.setFont(new Font("Tahoma", Font.PLAIN, 15));
