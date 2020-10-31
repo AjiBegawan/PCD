@@ -1,0 +1,940 @@
+package Tampilan;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import java.awt.Image;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JTextField;
+import javax.swing.JInternalFrame;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.awt.event.ActionEvent;
+import javax.swing.UIManager;
+import javax.swing.filechooser.*;
+import java.awt.image.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+
+
+
+
+public class TampilanAwal extends JFrame {
+
+	protected static final String GenerateImage = null;
+	private JPanel contentPane;
+	private JTextField txtSourceAddress;
+	private JTextField txtFinalAddress;
+	private String alamat = "null";
+	private String simpan = "null";
+	private boolean rgbtogray = false;
+	private boolean brightness = false;
+	private boolean negatif = false;
+	private boolean bandw = false;
+	private boolean kontras = false;
+	private boolean setFinalAddress = false;
+	final JSlider sliderBrightness = new JSlider(0,510,255);
+	int nilaiBrightness;
+
+	JFileChooser fc;
+	
+	 BufferedImage  image;
+	   int width;
+	   int height;
+	   private JTextField FieldContras;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TampilanAwal frame = new TampilanAwal();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public TampilanAwal() {
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1080, 720);
+		contentPane = new JPanel();
+		contentPane.setBackground(UIManager.getColor("ColorChooser.background"));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel menu = new JPanel();
+		menu.setForeground(new Color(0, 0, 0));
+		menu.setBackground(new Color(30, 144, 255));
+		menu.setBounds(0, 0, 150, 681);
+		contentPane.add(menu);
+		menu.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setForeground(UIManager.getColor("text"));
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(149, 0, 915, 681);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new LineBorder(new Color(30, 144, 255), 2));
+		panel_1.setBounds(-22, 0, 972, 55);
+		panel.add(panel_1);
+		panel_1.setBackground(Color.WHITE);
+		panel_1.setLayout(null);
+				
+		JLabel l = new JLabel("");
+		
+		JPanel source = new JPanel();
+		source.setBackground(new Color(255, 255, 255));
+		source.setBounds(40, 104, 400, 400);
+		panel.add(source);
+		
+		JLabel LblIS = new JLabel("");
+		LblIS.setHorizontalAlignment(SwingConstants.CENTER);
+		LblIS.setBounds(0, 0, 320, 240);
+		source.add(LblIS);
+		
+		txtSourceAddress = new JTextField();
+		txtSourceAddress.addMouseListener(new MouseAdapter() {
+		});
+
+		txtSourceAddress.setHorizontalAlignment(SwingConstants.CENTER);
+		txtSourceAddress.setBounds(40, 604, 400, 45);
+		txtSourceAddress.setColumns(10);
+		panel.add(txtSourceAddress);
+		
+		txtFinalAddress = new JTextField();
+		txtFinalAddress.setHorizontalAlignment(SwingConstants.CENTER);
+		txtFinalAddress.setColumns(10);
+		txtFinalAddress.setBounds(475, 604, 400, 45);
+		panel.add(txtFinalAddress);
+		
+		
+		
+		JPanel result = new JPanel();
+		result.setBackground(new Color(255, 255, 255));
+		result.setBounds(475, 104, 400, 400);
+		panel.add(result);
+		
+		JLabel LblFS = new JLabel("");
+		LblFS.setForeground(new Color(139, 69, 19));
+		LblFS.setBackground(new Color(255, 255, 0));
+		LblFS.setHorizontalAlignment(SwingConstants.CENTER);
+		LblFS.setBounds(0, 0, 320, 240);
+		result.add(LblFS);
+		
+		JButton btnBrowse = new JButton("Browse Image Address");
+		btnBrowse.setBackground(new Color(60, 179, 113));
+		btnBrowse.setForeground(Color.WHITE);
+		btnBrowse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 if (e.getSource() == btnBrowse) {
+					 JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
+					  
+			            // invoke the showsOpenDialog function to show the save dialog 
+			            int r = j.showOpenDialog(null); 
+			  
+			            // if the user selects a file 
+			            if (r == JFileChooser.APPROVE_OPTION) 
+			  
+			            { 
+			                // set the label to the path of the selected file 
+			            	txtSourceAddress.setText(j.getSelectedFile().getAbsolutePath());
+			            	
+			            } 
+			            // if the user cancelled the operation 
+			            else
+			                l.setText("the user cancelled the operation"); 
+			            }
+			}
+		});
+		btnBrowse.setBounds(40, 540, 175, 35);
+		panel.add(btnBrowse);
+		
+		JButton btnConvert = new JButton("Convert & Save");
+		btnConvert.setForeground(new Color(255, 255, 255));
+		btnConvert.setBackground(new Color(30, 144, 255));
+		btnConvert.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				alamat = txtSourceAddress.getText();
+				//set path default
+				if(!setFinalAddress) {
+					StringBuffer str = new StringBuffer(txtSourceAddress.getText());
+	            	if(rgbtogray) {
+	            		str.insert(str.length()-4,"Gray");
+	            	};
+	            	if(brightness) {
+	            		str.insert(str.length()-4,"Brightness");
+	            	};
+	            	if(negatif) {
+	            		str.insert(str.length()-4,"Negative");
+	            	};
+	            	if(bandw) {
+	            		str.insert(str.length()-4,"B&W");
+	            	};
+	            	if(kontras) {
+	            		str.insert(str.length()-4,"Kontras");
+	            	};
+	            	txtFinalAddress.setText(str.toString());
+				};
+				simpan = txtFinalAddress.getText();
+				
+	
+				ImageIcon gambarAwal = new ImageIcon (alamat);				
+				Image ga = gambarAwal.getImage(); // transform it 
+				Image newimg = ga.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+				gambarAwal = new ImageIcon(newimg);  // transform it back
+				LblIS.setIcon(gambarAwal);
+				
+				
+				try {
+			        if(rgbtogray) { 
+					//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
+					
+					 File input = new File(alamat);
+			         image = ImageIO.read(input);
+			         width = image.getWidth();
+			         height = image.getHeight();
+			         
+			         for(int i=0; i<height; i++) {
+			         
+			            for(int j=0; j<width; j++) {
+			            
+			               Color c = new Color(image.getRGB(j, i));
+			               int red = (int)(c.getRed() * 0.299);
+			               int green = (int)(c.getGreen() * 0.587);
+			               int blue = (int)(c.getBlue() *0.114);
+			               Color newColor = new Color(red+green+blue, red+green+blue, red+green+blue);
+			               
+			               image.setRGB(j,i,newColor.getRGB());
+			            }
+			         }
+			         
+			         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
+			         File ouptut = new File(simpan);
+			         ImageIO.write(image, "jpg", ouptut);
+			         
+					 ImageIcon gambarAkhir = new ImageIcon (simpan);
+					 Image gak = gambarAkhir.getImage(); // transform it 
+					 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+					 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+					 LblFS.setIcon(gambarAkhir);
+			        };
+			        
+			        if(brightness) {
+			        	File input = new File(alamat);
+				         image = ImageIO.read(input);
+				         width = image.getWidth();
+				         height = image.getHeight();
+				         
+				         for(int i=0; i<height; i++) {
+				         
+				            for(int j=0; j<width; j++) {
+				            
+				               Color c = new Color(image.getRGB(j, i));
+				               int red = c.getRed();
+				               red = red + nilaiBrightness;
+				               if(red>255) {
+				            	   red = 255;  
+				               	   };
+				               if(red<0) {
+				            	   red = 0;
+				               };
+				               int green = c.getGreen();
+				               green = green + nilaiBrightness;
+				               if(green>255) {
+				            	   green = 255;  
+					               };
+					           if(green<0) {
+					           	   green = 0;  
+						           };
+				               int blue = c.getBlue();
+				               blue = blue + nilaiBrightness;
+				               if(blue>255) {
+					            	 blue = 255;  
+					               };
+					           if(blue<0) {
+					        	     blue = 0;  
+					               };
+					           
+				               Color newColor = new Color(red, green,blue);
+				               
+				               image.setRGB(j,i,newColor.getRGB());
+				            }
+				         }
+				         
+				         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
+				         File ouptut = new File(simpan);
+				         ImageIO.write(image, "jpg", ouptut);
+				         
+						 ImageIcon gambarAkhir = new ImageIcon (simpan);
+						 Image gak = gambarAkhir.getImage(); // transform it 
+						 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+						 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+						 LblFS.setIcon(gambarAkhir);
+			        };
+			        
+			        if(negatif) { 
+						//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
+						
+						 File input = new File(alamat);
+				         image = ImageIO.read(input);
+				         width = image.getWidth();
+				         height = image.getHeight();
+				         
+				         for(int i=0; i<height; i++) {
+				         
+				            for(int j=0; j<width; j++) {
+				            
+				               Color c = new Color(image.getRGB(j, i));
+				               int red = (int)(255 - c.getRed());
+				               int green = (int)(255 - c.getGreen());
+				               int blue = (int)(255 - c.getBlue());
+				               
+				               Color newColor = new Color(red, green, blue);
+				               
+				               image.setRGB(j,i,newColor.getRGB());
+				            }
+				         }
+				         
+				         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
+				         File ouptut = new File(simpan);
+				         ImageIO.write(image, "jpg", ouptut);
+				         
+						 ImageIcon gambarAkhir = new ImageIcon (simpan);
+						 Image gak = gambarAkhir.getImage(); // transform it 
+						 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+						 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+						 LblFS.setIcon(gambarAkhir);
+				        };
+			        
+				        if(bandw) { 
+							//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
+							
+							 File input = new File(alamat);
+					         image = ImageIO.read(input);
+					         width = image.getWidth();
+					         height = image.getHeight();
+					         int th=127;
+					         
+					         for(int i=0; i<height; i++) {
+					         
+					            for(int j=0; j<width; j++) {
+					            
+					               Color c = new Color(image.getRGB(j, i));
+					               int red = (int)(c.getRed());
+					               int green = (int)(c.getGreen());
+					               int blue = (int)(c.getBlue());
+					               int sum = (red+green+blue)/3;
+					               if(sum>=th) {
+					            	   sum=255;
+					               }else {
+					            	   sum=0;
+					               }
+					               
+					               Color newColor = new Color(sum, sum, sum);
+					               
+					               image.setRGB(j,i,newColor.getRGB());
+					            }
+					         }
+					         
+					         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
+					         File ouptut = new File(simpan);
+					         ImageIO.write(image, "jpg", ouptut);
+					         
+							 ImageIcon gambarAkhir = new ImageIcon (simpan);
+							 Image gak = gambarAkhir.getImage(); // transform it 
+							 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+							 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+							 LblFS.setIcon(gambarAkhir);
+					        };
+					        
+					        
+					        //Kontras
+					        //masih belum bener
+					        
+					        if(kontras) { 
+								//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
+								
+								 File input = new File(alamat);
+						         image = ImageIO.read(input);
+						         width = image.getWidth();
+						         height = image.getHeight();
+						         int th=127;
+						         
+//						         for(int i=0; i<height; i++) {
+//						         
+//						            for(int j=0; j<width; j++) {
+//						            
+//						               Color c = new Color(image.getRGB(j, i));
+//						               int red = (int)(c.getRed());
+//						               int green = (int)(c.getGreen());
+//						               int blue = (int)(c.getBlue());
+//						               int sum = (red+green+blue)/3;
+//						               if(sum>=th) {
+//						            	   sum=255;
+//						               }else {
+//						            	   sum=0;
+//						               }
+//						               
+//						               Color newColor = new Color(sum, sum, sum);
+//						               
+//						               image.setRGB(j,i,newColor.getRGB());
+//						            }
+//						         }
+						         
+//						         int w = image.getWidth();
+//						         int h = image.getHeight();
+//						         int k = 0;
+//						         
+//						         
+//
+//						         int[] sbins = new int[256];
+//						         int[] pixel = new int[3];
+//
+//						         Double d = 0.0;
+//						         Double d1;
+//						         for (int x = 0; x < image.getWidth(); x++) {
+//						             for (int y = 0; y < image.getHeight(); y++) {
+//						                 pixel = image.getRaster().getPixel(x, y, new int[3]);
+//						                 k = (int) ((0.2125 * pixel[0]) + (0.7154 * pixel[1]) + (0.072 * pixel[2]));
+//						                 sbins[k]++;
+//						             }
+//						         }    
+						         BufferedImage gambar= (BufferedImage) image;
+						         // image = new Brighten(gambar).brighten(0.3); // for 30%
+	//					         image = new Contrast(gambar);
+	//					         image = new Contrast(gambar).contrast(0.3);
+						         
+						         RescaleOp rescaleOp = new RescaleOp(0.5f, 15, null);
+						         rescaleOp.filter(image, image);  // Source and destination are the same.
+						         
+						         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
+						         File ouptut = new File(simpan);
+						         ImageIO.write(image, "jpg", ouptut);
+						         
+								 ImageIcon gambarAkhir = new ImageIcon (simpan);
+								 Image gak = gambarAkhir.getImage(); // transform it 
+								 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+								 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+								 LblFS.setIcon(gambarAkhir);
+						        };
+			        
+			      } catch (Exception e) {}
+			
+			}
+		});
+		btnConvert.setBounds(700, 540, 175, 35);
+		panel.add(btnConvert);
+		
+		JLabel lblSource = new JLabel("Source Image");
+		lblSource.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblSource.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSource.setBounds(164, 66, 150, 35);
+		panel.add(lblSource);
+		
+		JLabel lblResult = new JLabel("Result Image");
+		lblResult.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblResult.setHorizontalAlignment(SwingConstants.CENTER);
+		lblResult.setBounds(605, 66, 150, 35);
+		panel.add(lblResult);
+		
+		JButton btnLoad = new JButton("Load Image");
+		btnLoad.setForeground(new Color(255, 255, 255));
+		btnLoad.setBackground(new Color(30, 144, 255));
+		btnLoad.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				alamat = txtSourceAddress.getText();			
+				
+				ImageIcon gambarAwal = new ImageIcon (alamat);				
+				Image ga = gambarAwal.getImage(); // transform it 
+				Image newimg = ga.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+				gambarAwal = new ImageIcon(newimg);  // transform it back
+				LblIS.setIcon(gambarAwal);
+							
+			}
+		});
+		btnLoad.setBounds(265, 540, 175, 35);
+		panel.add(btnLoad);
+		
+		JButton btnSave = new JButton("Browse Save Address");
+		btnSave.setForeground(new Color(255, 255, 255));
+		btnSave.setBackground(new Color(60, 179, 113));
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// create an object of JFileChooser class 
+				JFileChooser js = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
+
+				// invoke the showsSaveDialog function to show the save dialog 
+				int r = js.showSaveDialog(null); 
+
+				// if the user selects a file 
+				if (r == JFileChooser.APPROVE_OPTION) 
+
+				{ 
+					// set the label to the path of the selected file 
+					txtFinalAddress.setText(js.getSelectedFile().getAbsolutePath());
+					setFinalAddress=true;
+				} 
+				// if the user cancelled the operation 
+				else
+					l.setText("the user cancelled the operation"); 
+			}
+		});
+		btnSave.setBounds(477, 540, 175, 35);
+		panel.add(btnSave);
+		
+		FieldContras = new JTextField();
+		FieldContras.setEnabled(false);
+		FieldContras.setBounds(700, 509, 75, 20);
+		panel.add(FieldContras);
+		FieldContras.setColumns(10);
+		
+		JLabel lblContrasPer = new JLabel("%");
+		lblContrasPer.setEnabled(false);
+		lblContrasPer.setBounds(800, 509, 20, 20);
+		panel.add(lblContrasPer);
+		
+		JLabel lblContras = new JLabel("Kontras");
+		lblContras.setEnabled(false);
+		lblContras.setHorizontalAlignment(SwingConstants.CENTER);
+		lblContras.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblContras.setBounds(620, 509, 70, 20);
+		panel.add(lblContras);
+		
+		JLabel lblSlider = new JLabel("");
+		lblSlider.setBounds(445, 87, 46, 14);
+		sliderBrightness.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				lblSlider.setText(String.valueOf(sliderBrightness.getValue()-255));
+				nilaiBrightness = Integer.parseInt(lblSlider.getText());
+				//debug
+				//System.out.println(nilaiBrightness);
+			}
+		});
+		sliderBrightness.setBounds(358, 55, 200, 26);
+		
+		
+		
+		
+				// MENU BEGINS
+				////////////////
+				////////////////
+				
+				JLabel lblmenu = new JLabel("Menu");
+				lblmenu.setHorizontalAlignment(SwingConstants.CENTER);
+				lblmenu.setBackground(UIManager.getColor("text"));
+				lblmenu.setForeground(new Color(255, 255, 255));
+				lblmenu.setFont(new Font("Tahoma", Font.PLAIN, 28));
+				lblmenu.setBounds(0, 0, 150, 60);
+				menu.add(lblmenu);
+				
+				
+				
+				// Button in menu
+				JButton btnAbout = new JButton("About");
+				btnAbout.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+				btnAbout.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						JOptionPane.showMessageDialog(null, "Kelompok 4\nDicky Febrian Dwiputra 3411181097\nAde Ridwan Nugraha 3411181117\nIndiarto Aji Begawan 3411181114");
+					}
+				});
+				btnAbout.setBounds(10, 647, 110, 23);
+				menu.add(btnAbout);
+				
+				JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
+				lblRGBtoGray.setHorizontalAlignment(SwingConstants.CENTER);
+				lblRGBtoGray.setBounds(24, 0, 205, 55);
+				lblRGBtoGray.setVisible(false);
+				lblRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				JLabel lblBrightness = new JLabel("Brightness");
+				lblBrightness.setHorizontalAlignment(SwingConstants.CENTER);
+				lblBrightness.setBounds(24, 0, 205, 55);
+				lblBrightness.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				JLabel lblNegatif = new JLabel("Negative");
+				lblNegatif.setHorizontalAlignment(SwingConstants.CENTER);
+				lblNegatif.setBounds(24, 0, 205, 55);
+				lblNegatif.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				JLabel lblBandW = new JLabel("Black & White");
+				lblBandW.setHorizontalAlignment(SwingConstants.CENTER);
+				lblBandW.setBounds(24, 0, 205, 55);
+				lblBandW.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				JLabel lblKontras = new JLabel("Contrast");
+				lblKontras.setHorizontalAlignment(SwingConstants.CENTER);
+				lblKontras.setBounds(24, 0, 205, 55);
+				lblKontras.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				
+				
+				JButton btnRGBtoGray = new JButton("RGB to Gray");
+				btnRGBtoGray.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = true;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						if(rgbtogray) {
+							panel_1.add(lblRGBtoGray);
+							lblRGBtoGray.setVisible(true);
+						}else {
+							panel_1.remove(lblRGBtoGray);
+							lblRGBtoGray.setVisible(false);
+							};
+						if(brightness) {
+							panel_1.add(lblBrightness);
+							lblBrightness.setVisible(true);
+							panel.add(sliderBrightness);
+							sliderBrightness.setVisible(true);
+							panel.add(lblSlider);
+							lblSlider.setVisible(true);
+						}else {
+							panel_1.remove(lblBrightness);
+							lblBrightness.setVisible(false);
+							panel.remove(sliderBrightness);
+							sliderBrightness.setVisible(false);
+							panel.remove(lblSlider);
+							lblSlider.setVisible(false);
+							};
+						if(negatif) {
+							panel_1.add(lblNegatif);
+							lblNegatif.setVisible(true);
+						}else {
+							panel_1.remove(lblNegatif);
+							lblNegatif.setVisible(false);
+							};
+						if(bandw) {
+							panel_1.add(lblBandW);
+							lblBandW.setVisible(true);
+						}else {
+							panel_1.remove(lblBandW);
+							lblBandW.setVisible(false);
+							};
+						if(kontras) {
+							panel_1.add(lblKontras);
+							lblKontras.setVisible(true);
+							panel.add(FieldContras);
+							lblSlider.setVisible(true);
+							panel.add(lblContrasPer);
+							lblSlider.setVisible(true);
+							panel.add(lblContras);
+							lblSlider.setVisible(true);
+						}else {
+							panel_1.remove(lblKontras);
+							lblKontras.setVisible(false);
+							panel.remove(FieldContras);
+							lblSlider.setVisible(false);
+							panel.remove(lblContrasPer);
+							lblSlider.setVisible(false);
+							panel.remove(lblContras);
+							lblSlider.setVisible(false);
+							};
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
+					}
+				});
+				btnRGBtoGray.setForeground(new Color(0, 0, 0));
+				btnRGBtoGray.setBackground(new Color(255, 215, 0));
+				btnRGBtoGray.setBounds(0, 70, 150, 30);
+				menu.add(btnRGBtoGray);
+				btnRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				
+				JButton btnBrightness = new JButton("Brightness");
+				btnBrightness.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = true;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						if(rgbtogray) {
+							panel_1.add(lblRGBtoGray);
+							lblRGBtoGray.setVisible(true);
+						}else {
+							panel_1.remove(lblRGBtoGray);
+							lblRGBtoGray.setVisible(false);
+							};
+							if(brightness) {
+								panel_1.add(lblBrightness);
+								lblBrightness.setVisible(true);
+								panel.add(sliderBrightness);
+								sliderBrightness.setVisible(true);
+								panel.add(lblSlider);
+								lblSlider.setVisible(true);
+							}else {
+								panel_1.remove(lblBrightness);
+								lblBrightness.setVisible(false);
+								panel.remove(sliderBrightness);
+								sliderBrightness.setVisible(false);
+								panel.remove(lblSlider);
+								lblSlider.setVisible(false);
+								};
+						if(negatif) {
+							panel_1.add(lblNegatif);
+							lblNegatif.setVisible(true);
+						}else {
+							panel_1.remove(lblNegatif);
+							lblNegatif.setVisible(false);
+							};
+						if(bandw) {
+							panel_1.add(lblBandW);
+							lblBandW.setVisible(true);
+						}else {
+							panel_1.remove(lblBandW);
+							lblBandW.setVisible(false);
+							};
+						if(kontras) {
+							panel_1.add(lblKontras);
+							lblKontras.setVisible(true);
+						}else {
+							panel_1.remove(lblKontras);
+							lblKontras.setVisible(false);
+							};
+							panel.setVisible(false);
+							panel.setVisible(true);
+							setFinalAddress=false;
+					}
+				});
+				btnBrightness.setForeground(new Color(0, 0, 0));
+				btnBrightness.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnBrightness.setBackground(new Color(255, 215, 0));
+				btnBrightness.setBounds(0, 100, 150, 30);
+				menu.add(btnBrightness);
+				
+				JButton btnBW = new JButton("B & W");
+				btnBW.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = true;
+						kontras = false;
+						if(rgbtogray) {
+							panel_1.add(lblRGBtoGray);
+							lblRGBtoGray.setVisible(true);
+						}else {
+							panel_1.remove(lblRGBtoGray);
+							lblRGBtoGray.setVisible(false);
+							};
+							if(brightness) {
+								panel_1.add(lblBrightness);
+								lblBrightness.setVisible(true);
+								panel.add(sliderBrightness);
+								sliderBrightness.setVisible(true);
+								panel.add(lblSlider);
+								lblSlider.setVisible(true);
+							}else {
+								panel_1.remove(lblBrightness);
+								lblBrightness.setVisible(false);
+								panel.remove(sliderBrightness);
+								sliderBrightness.setVisible(false);
+								panel.remove(lblSlider);
+								lblSlider.setVisible(false);
+								};
+						if(negatif) {
+							panel_1.add(lblNegatif);
+							lblNegatif.setVisible(true);
+						}else {
+							panel_1.remove(lblNegatif);
+							lblNegatif.setVisible(false);
+							};
+						if(bandw) {
+							panel_1.add(lblBandW);
+							lblBandW.setVisible(true);
+						}else {
+							panel_1.remove(lblBandW);
+							lblBandW.setVisible(false);
+							};
+						if(kontras) {
+							panel_1.add(lblKontras);
+							lblKontras.setVisible(true);
+						}else {
+							panel_1.remove(lblKontras);
+							lblKontras.setVisible(false);
+							};
+							panel.setVisible(false);
+							panel.setVisible(true);
+							setFinalAddress=false;
+					}
+				});
+				btnBW.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnBW.setForeground(new Color(0, 0, 0));
+				btnBW.setBackground(new Color(255, 215, 0));
+				btnBW.setBounds(0, 160, 150, 30);
+				menu.add(btnBW);
+				
+				JButton btnNegatif = new JButton("Negatif Film");
+				btnNegatif.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = false;
+						negatif = true;
+						bandw = false;
+						kontras = false;
+						if(rgbtogray) {
+							panel_1.add(lblRGBtoGray);
+							lblRGBtoGray.setVisible(true);
+						}else {
+							panel_1.remove(lblRGBtoGray);
+							lblRGBtoGray.setVisible(false);
+							};
+							if(brightness) {
+								panel_1.add(lblBrightness);
+								lblBrightness.setVisible(true);
+								panel.add(sliderBrightness);
+								sliderBrightness.setVisible(true);
+								panel.add(lblSlider);
+								lblSlider.setVisible(true);
+							}else {
+								panel_1.remove(lblBrightness);
+								lblBrightness.setVisible(false);
+								panel.remove(sliderBrightness);
+								sliderBrightness.setVisible(false);
+								panel.remove(lblSlider);
+								lblSlider.setVisible(false);
+								};
+						if(negatif) {
+							panel_1.add(lblNegatif);
+							lblNegatif.setVisible(true);
+						}else {
+							panel_1.remove(lblNegatif);
+							lblNegatif.setVisible(false);
+							};
+						if(bandw) {
+							panel_1.add(lblBandW);
+							lblBandW.setVisible(true);
+						}else {
+							panel_1.remove(lblBandW);
+							lblBandW.setVisible(false);
+							};
+						if(kontras) {
+							panel_1.add(lblKontras);
+							lblKontras.setVisible(true);
+						}else {
+							panel_1.remove(lblKontras);
+							lblKontras.setVisible(false);
+							};
+							panel.setVisible(false);
+							panel.setVisible(true);
+							setFinalAddress=false;
+					}
+				});
+				btnNegatif.setForeground(new Color(0, 0, 0));
+				btnNegatif.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnNegatif.setBackground(new Color(255, 215, 0));
+				btnNegatif.setBounds(0, 130, 150, 30);
+				menu.add(btnNegatif);
+				
+				JButton btnKontras = new JButton("Kontras");
+				btnKontras.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = true;
+						if(rgbtogray) {
+							panel_1.add(lblRGBtoGray);
+							lblRGBtoGray.setVisible(true);
+						}else {
+							panel_1.remove(lblRGBtoGray);
+							lblRGBtoGray.setVisible(false);
+							};
+							if(brightness) {
+								panel_1.add(lblBrightness);
+								lblBrightness.setVisible(true);
+								panel.add(sliderBrightness);
+								sliderBrightness.setVisible(true);
+								panel.add(lblSlider);
+								lblSlider.setVisible(true);
+							}else {
+								panel_1.remove(lblBrightness);
+								lblBrightness.setVisible(false);
+								panel.remove(sliderBrightness);
+								sliderBrightness.setVisible(false);
+								panel.remove(lblSlider);
+								lblSlider.setVisible(false);
+								};
+						if(negatif) {
+							panel_1.add(lblNegatif);
+							lblNegatif.setVisible(true);
+						}else {
+							panel_1.remove(lblNegatif);
+							lblNegatif.setVisible(false);
+							};
+						if(bandw) {
+							panel_1.add(lblBandW);
+							lblBandW.setVisible(true);
+						}else {
+							panel_1.remove(lblBandW);
+							lblBandW.setVisible(false);
+							};
+						if(kontras) {
+							panel_1.add(lblKontras);
+							lblKontras.setVisible(true);
+						}else {
+							panel_1.remove(lblKontras);
+							lblKontras.setVisible(false);
+							};
+							panel.setVisible(false);
+							panel.setVisible(true);
+							setFinalAddress=false;
+					}
+				});
+				btnKontras.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnKontras.setForeground(new Color(0, 0, 0));
+				btnKontras.setBackground(new Color(255, 215, 0));
+				btnKontras.setBounds(0, 190, 150, 30);
+				menu.add(btnKontras);
+				
+				
+				// Button in menu end
+				// MENU ENDS
+				////////////////
+				////////////////
+	}
+}

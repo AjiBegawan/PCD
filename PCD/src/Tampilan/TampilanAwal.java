@@ -20,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
+import javax.swing.Spring;
 import javax.swing.JInternalFrame;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -62,6 +63,7 @@ public class TampilanAwal extends JFrame {
 	 BufferedImage  image;
 	   int width;
 	   int height;
+	   private JTextField FieldContras;
 
 	/**
 	 * Launch the application.
@@ -384,7 +386,7 @@ public class TampilanAwal extends JFrame {
 					        
 					        //Kontras
 					        //masih belum bener
-					        /**
+					        
 					        if(kontras) { 
 								//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
 								
@@ -393,27 +395,14 @@ public class TampilanAwal extends JFrame {
 						         width = image.getWidth();
 						         height = image.getHeight();
 						         int th=127;
-						         
-						         for(int i=0; i<height; i++) {
-						         
-						            for(int j=0; j<width; j++) {
-						            
-						               Color c = new Color(image.getRGB(j, i));
-						               int red = (int)(c.getRed());
-						               int green = (int)(c.getGreen());
-						               int blue = (int)(c.getBlue());
-						               int sum = (red+green+blue)/3;
-						               if(sum>=th) {
-						            	   sum=255;
-						               }else {
-						            	   sum=0;
-						               }
-						               
-						               Color newColor = new Color(sum, sum, sum);
-						               
-						               image.setRGB(j,i,newColor.getRGB());
-						            }
-						         }
+						         float nilai;
+						         String wadah;
+						         wadah = FieldContras.getText();
+						         nilai = Float.parseFloat(wadah);
+						         nilai = nilai/100;
+						         BufferedImage gambar= (BufferedImage) image;					         
+						         RescaleOp rescaleOp = new RescaleOp(nilai, 15, null);
+						         rescaleOp.filter(image, image);  // Source and destination are the same.
 						         
 						         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
 						         File ouptut = new File(simpan);
@@ -425,7 +414,7 @@ public class TampilanAwal extends JFrame {
 								 gambarAkhir = new ImageIcon(newimg2);  // transform it back
 								 LblFS.setIcon(gambarAkhir);
 						        };
-			        **/
+			        
 			      } catch (Exception e) {}
 			
 			}
@@ -490,6 +479,24 @@ public class TampilanAwal extends JFrame {
 		});
 		btnSave.setBounds(477, 540, 175, 35);
 		panel.add(btnSave);
+		
+		FieldContras = new JTextField();
+		FieldContras.setBounds(700, 509, 75, 20);
+		panel.add(FieldContras);
+		FieldContras.setColumns(10);
+		FieldContras.setVisible(false);
+		
+		JLabel lblContrasPer = new JLabel("%");
+		lblContrasPer.setBounds(800, 509, 20, 20);
+		panel.add(lblContrasPer);
+		lblContrasPer.setVisible(false);
+		
+		JLabel lblContras = new JLabel("Kontras");
+		lblContras.setHorizontalAlignment(SwingConstants.CENTER);
+		lblContras.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblContras.setBounds(620, 509, 70, 20);
+		panel.add(lblContras);
+		lblContras.setVisible(false);
 		
 		JLabel lblSlider = new JLabel("");
 		lblSlider.setBounds(445, 87, 46, 14);
@@ -607,9 +614,21 @@ public class TampilanAwal extends JFrame {
 						if(kontras) {
 							panel_1.add(lblKontras);
 							lblKontras.setVisible(true);
+							panel.add(FieldContras);
+							FieldContras.setVisible(true);
+							panel.add(lblContrasPer);
+							lblContrasPer.setVisible(true);
+							panel.add(lblContras);
+							lblContras.setVisible(true);
 						}else {
 							panel_1.remove(lblKontras);
 							lblKontras.setVisible(false);
+							panel.remove(FieldContras);
+							FieldContras.setVisible(false);
+							panel.remove(lblContrasPer);
+							lblContrasPer.setVisible(false);
+							panel.remove(lblContras);
+							lblContras.setVisible(false);
 							};
 						panel.setVisible(false);
 						panel.setVisible(true);
@@ -667,13 +686,25 @@ public class TampilanAwal extends JFrame {
 							panel_1.remove(lblBandW);
 							lblBandW.setVisible(false);
 							};
-						if(kontras) {
-							panel_1.add(lblKontras);
-							lblKontras.setVisible(true);
-						}else {
-							panel_1.remove(lblKontras);
-							lblKontras.setVisible(false);
-							};
+							if(kontras) {
+								panel_1.add(lblKontras);
+								lblKontras.setVisible(true);
+								panel.add(FieldContras);
+								FieldContras.setVisible(true);
+								panel.add(lblContrasPer);
+								lblContrasPer.setVisible(true);
+								panel.add(lblContras);
+								lblContras.setVisible(true);
+							}else {
+								panel_1.remove(lblKontras);
+								lblKontras.setVisible(false);
+								panel.remove(FieldContras);
+								FieldContras.setVisible(false);
+								panel.remove(lblContrasPer);
+								lblContrasPer.setVisible(false);
+								panel.remove(lblContras);
+								lblContras.setVisible(false);
+								};
 							panel.setVisible(false);
 							panel.setVisible(true);
 							setFinalAddress=false;
@@ -730,13 +761,25 @@ public class TampilanAwal extends JFrame {
 							panel_1.remove(lblBandW);
 							lblBandW.setVisible(false);
 							};
-						if(kontras) {
-							panel_1.add(lblKontras);
-							lblKontras.setVisible(true);
-						}else {
-							panel_1.remove(lblKontras);
-							lblKontras.setVisible(false);
-							};
+							if(kontras) {
+								panel_1.add(lblKontras);
+								lblKontras.setVisible(true);
+								panel.add(FieldContras);
+								FieldContras.setVisible(true);
+								panel.add(lblContrasPer);
+								lblContrasPer.setVisible(true);
+								panel.add(lblContras);
+								lblContras.setVisible(true);
+							}else {
+								panel_1.remove(lblKontras);
+								lblKontras.setVisible(false);
+								panel.remove(FieldContras);
+								FieldContras.setVisible(false);
+								panel.remove(lblContrasPer);
+								lblContrasPer.setVisible(false);
+								panel.remove(lblContras);
+								lblContras.setVisible(false);
+								};
 							panel.setVisible(false);
 							panel.setVisible(true);
 							setFinalAddress=false;
@@ -793,13 +836,25 @@ public class TampilanAwal extends JFrame {
 							panel_1.remove(lblBandW);
 							lblBandW.setVisible(false);
 							};
-						if(kontras) {
-							panel_1.add(lblKontras);
-							lblKontras.setVisible(true);
-						}else {
-							panel_1.remove(lblKontras);
-							lblKontras.setVisible(false);
-							};
+							if(kontras) {
+								panel_1.add(lblKontras);
+								lblKontras.setVisible(true);
+								panel.add(FieldContras);
+								FieldContras.setVisible(true);
+								panel.add(lblContrasPer);
+								lblContrasPer.setVisible(true);
+								panel.add(lblContras);
+								lblContras.setVisible(true);
+							}else {
+								panel_1.remove(lblKontras);
+								lblKontras.setVisible(false);
+								panel.remove(FieldContras);
+								FieldContras.setVisible(false);
+								panel.remove(lblContrasPer);
+								lblContrasPer.setVisible(false);
+								panel.remove(lblContras);
+								lblContras.setVisible(false);
+								};
 							panel.setVisible(false);
 							panel.setVisible(true);
 							setFinalAddress=false;
@@ -856,13 +911,25 @@ public class TampilanAwal extends JFrame {
 							panel_1.remove(lblBandW);
 							lblBandW.setVisible(false);
 							};
-						if(kontras) {
-							panel_1.add(lblKontras);
-							lblKontras.setVisible(true);
-						}else {
-							panel_1.remove(lblKontras);
-							lblKontras.setVisible(false);
-							};
+							if(kontras) {
+								panel_1.add(lblKontras);
+								lblKontras.setVisible(true);
+								panel.add(FieldContras);
+								FieldContras.setVisible(true);
+								panel.add(lblContrasPer);
+								lblContrasPer.setVisible(true);
+								panel.add(lblContras);
+								lblContras.setVisible(true);
+							}else {
+								panel_1.remove(lblKontras);
+								lblKontras.setVisible(false);
+								panel.remove(FieldContras);
+								FieldContras.setVisible(false);
+								panel.remove(lblContrasPer);
+								lblContrasPer.setVisible(false);
+								panel.remove(lblContras);
+								lblContras.setVisible(false);
+								};
 							panel.setVisible(false);
 							panel.setVisible(true);
 							setFinalAddress=false;
