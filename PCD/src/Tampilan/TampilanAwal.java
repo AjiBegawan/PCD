@@ -499,7 +499,8 @@ public class TampilanAwal extends JFrame {
 		lblContras.setVisible(false);
 		
 		JLabel lblSlider = new JLabel("");
-		lblSlider.setBounds(445, 87, 46, 14);
+		lblSlider.setBounds(780, 512, 46, 14);
+		lblSlider.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		sliderBrightness.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				lblSlider.setText(String.valueOf(sliderBrightness.getValue()-255));
@@ -508,7 +509,9 @@ public class TampilanAwal extends JFrame {
 				//System.out.println(nilaiBrightness);
 			}
 		});
-		sliderBrightness.setBounds(358, 55, 200, 26);
+		sliderBrightness.setForeground(new Color(255, 255, 255));
+		sliderBrightness.setBackground(new Color(60, 179, 113));
+		sliderBrightness.setBounds(575, 510, 200, 20);
 		
 		
 		
