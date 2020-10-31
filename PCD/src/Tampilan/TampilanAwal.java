@@ -54,7 +54,7 @@ public class TampilanAwal extends JFrame {
 	private boolean bandw = false;
 	private boolean kontras = false;
 	private boolean setFinalAddress = false;
-	final JSlider sliderBrightness = new JSlider(0,255,0);
+	final JSlider sliderBrightness = new JSlider(0,510,255);
 	int nilaiBrightness;
 
 	JFileChooser fc;
@@ -269,16 +269,26 @@ public class TampilanAwal extends JFrame {
 				               if(red>255) {
 				            	   red = 255;  
 				               	   };
+				               if(red<0) {
+				            	   red = 0;
+				               };
 				               int green = c.getGreen();
 				               green = green + nilaiBrightness;
 				               if(green>255) {
 				            	   green = 255;  
 					               };
+					           if(green<0) {
+					           	   green = 0;  
+						           };
 				               int blue = c.getBlue();
 				               blue = blue + nilaiBrightness;
 				               if(blue>255) {
 					            	 blue = 255;  
 					               };
+					           if(blue<0) {
+					        	     blue = 0;  
+					               };
+					           
 				               Color newColor = new Color(red, green,blue);
 				               
 				               image.setRGB(j,i,newColor.getRGB());
@@ -485,7 +495,7 @@ public class TampilanAwal extends JFrame {
 		lblSlider.setBounds(445, 87, 46, 14);
 		sliderBrightness.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				lblSlider.setText(String.valueOf(sliderBrightness.getValue()));
+				lblSlider.setText(String.valueOf(sliderBrightness.getValue()-255));
 				nilaiBrightness = Integer.parseInt(lblSlider.getText());
 				//debug
 				//System.out.println(nilaiBrightness);
