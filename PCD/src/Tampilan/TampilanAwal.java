@@ -496,6 +496,11 @@ public class TampilanAwal extends JFrame {
 		lblContras.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblContras.setBounds(620, 509, 70, 20);
 		panel.add(lblContras);
+		
+		JLabel lblVersi = new JLabel("ver 0.2 Alpha");
+		lblVersi.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		lblVersi.setBounds(859, 660, 46, 14);
+		panel.add(lblVersi);
 		lblContras.setVisible(false);
 		
 		JLabel lblSlider = new JLabel("");
@@ -538,7 +543,7 @@ public class TampilanAwal extends JFrame {
 						JOptionPane.showMessageDialog(null, "Kelompok 4\nDicky Febrian Dwiputra 3411181097\nAde Ridwan Nugraha 3411181117\nIndiarto Aji Begawan 3411181114");
 					}
 				});
-				btnAbout.setBounds(10, 647, 110, 23);
+				btnAbout.setBounds(20, 647, 110, 23);
 				menu.add(btnAbout);
 				
 				JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
