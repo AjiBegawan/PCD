@@ -220,6 +220,11 @@ public class TampilanAwal extends JFrame {
 				
 				
 				try {
+					
+					//RGB to Gray
+					/////////////
+					/////////////
+					
 			        if(rgbtogray) { 
 					//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
 					
@@ -253,6 +258,10 @@ public class TampilanAwal extends JFrame {
 					 LblFS.setIcon(gambarAkhir);
 			        };
 			        
+			        //Brightness
+			        ////////////
+			        ////////////
+			        
 			        if(brightness) {
 			        	File input = new File(alamat);
 				         image = ImageIO.read(input);
@@ -279,7 +288,15 @@ public class TampilanAwal extends JFrame {
 				               if(blue>255) {
 					            	 blue = 255;  
 					               };
+<<<<<<< Updated upstream
 				               Color newColor = new Color(red, green,blue);
+=======
+					           if(blue<0) {
+					        	     blue = 0;  
+					               };
+					           
+				               Color newColor = new Color(red, green, blue);
+>>>>>>> Stashed changes
 				               
 				               image.setRGB(j,i,newColor.getRGB());
 				            }
@@ -295,6 +312,10 @@ public class TampilanAwal extends JFrame {
 						 gambarAkhir = new ImageIcon(newimg2);  // transform it back
 						 LblFS.setIcon(gambarAkhir);
 			        };
+			        
+			        //Negative
+			        //////////
+			        //////////
 			        
 			        if(negatif) { 
 						//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
@@ -329,7 +350,12 @@ public class TampilanAwal extends JFrame {
 						 gambarAkhir = new ImageIcon(newimg2);  // transform it back
 						 LblFS.setIcon(gambarAkhir);
 				        };
-			        
+				        
+				        
+				        //Black and White
+				        /////////////////
+				        /////////////////
+				        
 				        if(bandw) { 
 							//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
 							
@@ -373,8 +399,14 @@ public class TampilanAwal extends JFrame {
 					        
 					        
 					        //Kontras
+<<<<<<< Updated upstream
 					        //masih belum bener
 					        /**
+=======
+					        ////////////
+					        ////////////
+					        
+>>>>>>> Stashed changes
 					        if(kontras) { 
 								//File input = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.jpg");
 								
@@ -382,6 +414,7 @@ public class TampilanAwal extends JFrame {
 						         image = ImageIO.read(input);
 						         width = image.getWidth();
 						         height = image.getHeight();
+<<<<<<< Updated upstream
 						         int th=127;
 						         
 						         for(int i=0; i<height; i++) {
@@ -404,6 +437,16 @@ public class TampilanAwal extends JFrame {
 						               image.setRGB(j,i,newColor.getRGB());
 						            }
 						         }
+=======
+						         float nilai;
+						         String wadah;
+						         wadah = FieldContras.getText();
+						         nilai = Float.parseFloat(wadah);
+						         nilai = nilai/100;
+						         //BufferedImage gambar= (BufferedImage) image;					         
+						         RescaleOp rescaleOp = new RescaleOp(nilai, 15, null);
+						         rescaleOp.filter(image, image);  // Source and destination are the same.
+>>>>>>> Stashed changes
 						         
 						         //File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra Digital\\TampilanHitamPutih.jpg");
 						         File ouptut = new File(simpan);
