@@ -13,6 +13,7 @@ import java.awt.Component;
 
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.imageio.ImageIO;
@@ -65,6 +66,19 @@ public class TampilanAwal extends JFrame {
 	private boolean sharpening = false;
 	private boolean edge = false;
 	
+	//inisialisasi false untuk flipping
+	private boolean vertikal = true;
+	private boolean horizontal = false;
+	
+	//inisisalisasi false untuk rotate
+	private boolean rotatekanan= true;
+	private boolean rotatekiri= false;
+	
+	//inisisalisasi false untuk rotate
+	private boolean scallingbesar= true;
+	private boolean scallingkecil= false;
+	
+	
 	
 	private boolean setFinalAddress = false;
 	final JSlider sliderBrightness = new JSlider(0,510,255);
@@ -79,6 +93,10 @@ public class TampilanAwal extends JFrame {
 	   private JTextField FieldContras;
 	   private JTextField FieldTranslasiM;
 	   private JTextField FieldTranslasiN;
+	   private JTextField FieldCroppingX;
+	   private JTextField FieldCroppingY;
+	   private JTextField FieldCroppingpixelX;
+	   private JTextField FieldCroppingpixelY;
 
 	/**
 	 * Launch the application.
@@ -203,7 +221,7 @@ public class TampilanAwal extends JFrame {
 					LblIS.setIcon(gambarAwal);
 			}
 		});
-		btnBrowse.setBounds(156, 540, 175, 35);
+		btnBrowse.setBounds(154, 558, 175, 35);
 		panel.add(btnBrowse);
 		
 		JButton btnConvert = new JButton("Convert & Save");
@@ -461,6 +479,7 @@ public class TampilanAwal extends JFrame {
 								 LblFS.setIcon(gambarAkhir);
 						        };
 						        
+						        //translasi
 						        if(translasi) { 
 									 File input = new File(alamat);
 							         image = ImageIO.read(input);
@@ -471,7 +490,7 @@ public class TampilanAwal extends JFrame {
 							         int nilaiM,nilaiN,red,green,blue;
 
 							         wadahM = FieldTranslasiM.getText();
-							         wadahN = FieldTranslasiM.getText();
+							         wadahN = FieldTranslasiN.getText();
 							         nilaiM = Integer.parseInt(wadahM);
 							         nilaiN = Integer.parseInt(wadahN);
 							         
@@ -507,12 +526,204 @@ public class TampilanAwal extends JFrame {
 									 gambarAkhir = new ImageIcon(newimg2);  // transform it back
 									 LblFS.setIcon(gambarAkhir);
 							        };
-			        
+							        
+							        //flip
+							        if(flipping) { 
+										 File input = new File(alamat);
+								         image = ImageIO.read(input);
+								         imagebaru = ImageIO.read(input);
+								         width = image.getWidth();
+								         height = image.getHeight();
+								         int i,j,k;
+								        
+								         
+								         if(vertikal) {
+								        	 k=height-1;
+								        	 for(i=0; i<height; i++) {
+										         
+										            for(j=0; j<width; j++) {
+										            
+										            	Color c = new Color(image.getRGB(j, i));
+										            	int red = (int)(c.getRed());
+										            	int green = (int)(c.getGreen());
+										            	int blue = (int)(c.getBlue());
+										            	Color newColor = new Color(red, green, blue);
+										            	imagebaru.setRGB(j,k,newColor.getRGB());
+										            }
+										            k--;
+										         }
+								         }
+								         if(horizontal) {
+								        	 
+								        	 for(i=0; i<height; i++) {
+								        		 k=width-1;
+										            for(j=0; j<width; j++) {
+										            
+										            	Color c = new Color(image.getRGB(j, i));
+										            	int red = (int)(c.getRed());
+										            	int green = (int)(c.getGreen());
+										            	int blue = (int)(c.getBlue());
+										            	Color newColor = new Color(red, green, blue);
+										            	imagebaru.setRGB(k,i,newColor.getRGB());
+										            	k--;
+										            }
+										            
+										         }
+								         }
+								        
+								         
+								         
+								         File ouptut = new File(simpan);
+								         ImageIO.write(imagebaru, "jpg", ouptut);
+								         
+										 ImageIcon gambarAkhir = new ImageIcon (simpan);
+										 Image gak = gambarAkhir.getImage(); // transform it 
+										 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+										 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+										 LblFS.setIcon(gambarAkhir);
+								        };
+								        
+								        //rotasi
+								        if(rotation) { 
+											 File input = new File(alamat);
+									         image = ImageIO.read(input);
+									         imagebaru = ImageIO.read(input);
+									         width = image.getWidth();
+									         height = image.getHeight();
+									         
+									         int j,k,i,red,green,blue;
+									         if(rotatekanan) {
+									        	 k=height-1;
+										         for( i=0; i<height; i++) {
+										            
+										            for( j=0; j<width; j++) {
+										            
+										               
+										               Color c = new Color(image.getRGB(j, i));
+											           red = (int)(c.getRed());
+											           green = (int)(c.getGreen());
+											           blue = (int)(c.getBlue());
+											               
+										            
+										               Color newColor = new Color(red, green, blue);
+										               imagebaru.setRGB(k,j,newColor.getRGB());
+										               
+										            }
+										            k--;
+										         }
+									         }
+									         if(rotatekiri) {
+									        	 
+										         for( i=0; i<height; i++) {
+										        	 k=height-1;
+										            for( j=0; j<width; j++) {
+										            
+										               
+										               Color c = new Color(image.getRGB(j, i));
+											           red = (int)(c.getRed());
+											           green = (int)(c.getGreen());
+											           blue = (int)(c.getBlue());
+											               
+										            
+										               Color newColor = new Color(red, green, blue);
+										               imagebaru.setRGB(i,k,newColor.getRGB());
+										               k--;
+										            }
+										            
+										         }
+									         }
+									         
+									         
+									         
+									         File ouptut = new File(simpan);
+									         ImageIO.write(imagebaru, "jpg", ouptut);
+									         
+											 ImageIcon gambarAkhir = new ImageIcon (simpan);
+											 Image gak = gambarAkhir.getImage(); // transform it 
+											 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+											 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+											 LblFS.setIcon(gambarAkhir);
+									        };
+									        
+									        //cropping
+									        if(cropping) { 
+												 File input = new File(alamat);
+										         image = ImageIO.read(input);
+										         width = image.getWidth();
+										         height = image.getHeight();
+										         String wadahX,wadahY,wadahpixelX,wadahpixelY;
+										         int nilaiX,nilaiY,nilaipixelX,nilaipixelY;
+
+										         wadahX = FieldCroppingX.getText();
+										         wadahY = FieldCroppingY.getText();
+										         nilaiX = Integer.parseInt(wadahX);
+										         nilaiY = Integer.parseInt(wadahY);
+										         
+										         wadahpixelX = FieldCroppingpixelX.getText();
+										         wadahpixelY = FieldCroppingpixelY.getText();
+										         nilaipixelX = Integer.parseInt(wadahpixelX);
+										         nilaipixelY = Integer.parseInt(wadahpixelY); 
+										         
+										         imagebaru = image.getSubimage(nilaiX,nilaiY,nilaipixelX,nilaipixelY); 
+										         
+										          
+										         
+										         
+										         File ouptut = new File(simpan);
+										         ImageIO.write(imagebaru, "jpg", ouptut);
+										         
+												 ImageIcon gambarAkhir = new ImageIcon (simpan);
+												 Image gak = gambarAkhir.getImage(); // transform it 
+												 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+												 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+												 LblFS.setIcon(gambarAkhir);
+										        };
+										        
+										        //scalling
+										        if(scalling) { 
+													 File input = new File(alamat);
+											         image = ImageIO.read(input);
+											         width = image.getWidth();
+											         height = image.getHeight();
+											       
+											        if(scallingbesar) {
+											        	 ImageIcon scalegambar = new ImageIcon(alamat);
+												         Image amsclagegam = scalegambar.getImage();
+												         Image akhirgambar = amsclagegam.getScaledInstance(4000, 4000, java.awt.Image.SCALE_SMOOTH);
+												         Image akhirscalegambar = new ImageIcon(akhirgambar).getImage();
+												         
+												         imagebaru = new BufferedImage(akhirgambar.getWidth(null),akhirgambar.getHeight(null),BufferedImage.TYPE_INT_RGB);
+												         Graphics gambarakhir = imagebaru.createGraphics();
+												         gambarakhir.drawImage(akhirscalegambar, 0, 0, null);
+												         gambarakhir.dispose();
+											        }
+											        if(scallingkecil) {
+											        	 ImageIcon scalegambar = new ImageIcon(alamat);
+												         Image amsclagegam = scalegambar.getImage();
+												         Image akhirgambar = amsclagegam.getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
+												         Image akhirscalegambar = new ImageIcon(akhirgambar).getImage();
+												         
+												         imagebaru = new BufferedImage(akhirgambar.getWidth(null),akhirgambar.getHeight(null),BufferedImage.TYPE_INT_RGB);
+												         Graphics gambarakhir = imagebaru.createGraphics();
+												         gambarakhir.drawImage(akhirscalegambar, 0, 0, null);
+												         gambarakhir.dispose();
+											        }
+											         
+											         
+											         File ouptut = new File(simpan);
+											         ImageIO.write(imagebaru, "jpg", ouptut);
+											         
+													 ImageIcon gambarAkhir = new ImageIcon (simpan);
+													 Image gak = gambarAkhir.getImage(); // transform it 
+													 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+													 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+													 LblFS.setIcon(gambarAkhir);
+											        };
 			      } catch (Exception e) {}
 			
 			}
 		});
-		btnConvert.setBounds(700, 540, 175, 35);
+		btnConvert.setBounds(700, 558, 175, 35);
 		panel.add(btnConvert);
 		
 		JLabel lblSource = new JLabel("Source Image");
@@ -552,7 +763,7 @@ public class TampilanAwal extends JFrame {
 					l.setText("the user cancelled the operation"); 
 			}
 		});
-		btnSave.setBounds(477, 540, 175, 35);
+		btnSave.setBounds(475, 558, 175, 35);
 		panel.add(btnSave);
 		
 		FieldContras = new JTextField();
@@ -585,10 +796,120 @@ public class TampilanAwal extends JFrame {
 		lblTranslasiN.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblTranslasiN.setBounds(683, 509, 20, 20);
 		
+		FieldCroppingX = new JTextField();
+		FieldCroppingX.setBounds(475,520,75,20);
+		FieldCroppingX.setColumns(10);
+		
+		FieldCroppingY = new JTextField();
+		FieldCroppingY.setBounds(575,520,75,20);
+		FieldCroppingY.setColumns(10);
+		
+		FieldCroppingpixelX = new JTextField();
+		FieldCroppingpixelX.setBounds(700,520,75,20);
+		FieldCroppingpixelX.setColumns(10);
+		
+		FieldCroppingpixelY = new JTextField();
+		FieldCroppingpixelY.setBounds(800,520,75,20);
+		FieldCroppingpixelY.setColumns(10);
+		
+		JLabel lblCroppingX = new JLabel("X");
+		lblCroppingX.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCroppingX.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblCroppingX.setBounds(455, 520, 20, 20);
+		
+		JLabel lblCroppingY = new JLabel("Y");
+		lblCroppingY.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCroppingY.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblCroppingY.setBounds(555, 520, 20, 20);
+		
+		JLabel lblCroppingKali = new JLabel("X");
+		lblCroppingKali.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCroppingKali.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblCroppingKali.setBounds(777, 520, 20, 20);
+		
+		JLabel lblCroppingpixel = new JLabel("PIXEL");
+		lblCroppingpixel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCroppingpixel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblCroppingpixel.setBounds(750, 499, 70, 20);
+		
+		
+		
+		
+		
 		JLabel lblVersi = new JLabel("ver 0.4 Beta");
 		lblVersi.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		lblVersi.setBounds(859, 660, 46, 14);
 		panel.add(lblVersi);
+		
+		JButton btnVertikal = new JButton("Vertikal");
+		btnVertikal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				vertikal = true;
+				horizontal = false;
+			}
+		});
+		btnVertikal.setForeground(Color.WHITE);
+		btnVertikal.setBackground(new Color(60, 179, 113));
+		btnVertikal.setBounds(475, 512, 102, 35);
+		
+		
+		JButton btnHorizontal = new JButton("Horizontal");
+		btnHorizontal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				vertikal = false;
+				horizontal = true;
+			}
+		});
+		btnHorizontal.setForeground(Color.WHITE);
+		btnHorizontal.setBackground(new Color(60, 179, 113));
+		btnHorizontal.setBounds(773, 512, 102, 35);
+		
+		JButton btnRotatekiri = new JButton("Kiri");
+		btnRotatekiri.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rotatekanan = false;
+				rotatekiri = true;
+			}
+		});
+		btnRotatekiri.setForeground(Color.WHITE);
+		btnRotatekiri.setBackground(new Color(60, 179, 113));
+		btnRotatekiri.setBounds(475, 512, 102, 35);
+		
+		
+		JButton btnRotatekanan = new JButton("Kanan");
+		btnRotatekanan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rotatekanan = true;
+				rotatekiri = false;
+			}
+		});
+		btnRotatekanan.setForeground(Color.WHITE);
+		btnRotatekanan.setBackground(new Color(60, 179, 113));
+		btnRotatekanan.setBounds(773, 512, 102, 35);
+		
+		JButton btnScallingBesar = new JButton("Besar");
+		btnScallingBesar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				scallingbesar = true;
+				scallingkecil = false;
+			}
+		});
+		btnScallingBesar.setForeground(Color.WHITE);
+		btnScallingBesar.setBackground(new Color(60, 179, 113));
+		btnScallingBesar.setBounds(475, 512, 102, 35);
+		
+		
+		JButton btnScallingKecil = new JButton("Kecil");
+		btnScallingKecil.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				scallingbesar = false;
+				scallingkecil = true;
+			}
+		});
+		btnScallingKecil.setForeground(Color.WHITE);
+		btnScallingKecil.setBackground(new Color(60, 179, 113));
+		btnScallingKecil.setBounds(773, 512, 102, 35);
+		
 		
 		JLabel lblSlider = new JLabel("");
 		lblSlider.setBounds(780, 512, 46, 14);
@@ -1183,6 +1504,8 @@ public class TampilanAwal extends JFrame {
 						
 						//flipping
 						panel_1.add(lblFlipping);
+						panel.add(btnHorizontal);
+						panel.add(btnVertikal);
 						
 						//cropping
 						panel_1.remove(lblCropping);
@@ -1259,6 +1582,14 @@ public class TampilanAwal extends JFrame {
 						
 						//cropping
 						panel_1.add(lblCropping);
+						panel.add(FieldCroppingX);
+						panel.add(FieldCroppingY);
+						panel.add(FieldCroppingpixelX);
+						panel.add(FieldCroppingpixelY);
+						panel.add(lblCroppingpixel);
+						panel.add(lblCroppingKali);
+						panel.add(lblCroppingY);
+						panel.add(lblCroppingX);
 						
 						//rotation
 						panel_1.remove(lblRotation);
@@ -1335,6 +1666,8 @@ public class TampilanAwal extends JFrame {
 						
 						//rotation
 						panel_1.add(lblRotation);
+						panel.add(btnRotatekanan);
+						panel.add(btnRotatekiri);
 						
 						//scalling
 						panel_1.remove(lblScalling);
@@ -1411,6 +1744,8 @@ public class TampilanAwal extends JFrame {
 						
 						//scalling
 						panel_1.add(lblScalling);
+						panel.add(btnScallingBesar);
+						panel.add(btnScallingKecil);
 						
 						//smoothing
 						panel_1.remove(lblSmoothing);
