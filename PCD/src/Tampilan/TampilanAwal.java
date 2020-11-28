@@ -49,11 +49,23 @@ public class TampilanAwal extends JFrame {
 	private JTextField txtFinalAddress;
 	private String alamat = "null";
 	private String simpan = "null";
+	
+	//Inisialisasi False untuk menu
 	private boolean rgbtogray = false;
 	private boolean brightness = false;
 	private boolean negatif = false;
 	private boolean bandw = false;
 	private boolean kontras = false;
+	private boolean translasi = false;
+	private boolean flipping = false;
+	private boolean cropping = false;
+	private boolean rotation = false;
+	private boolean scalling = false;
+	private boolean smoothing = false;
+	private boolean sharpening = false;
+	private boolean edge = false;
+	
+	
 	private boolean setFinalAddress = false;
 	final JSlider sliderBrightness = new JSlider(0,510,255);
 	int nilaiBrightness;
@@ -61,9 +73,12 @@ public class TampilanAwal extends JFrame {
 	JFileChooser fc;
 	
 	 BufferedImage  image;
+	 BufferedImage	imagebaru;
 	   int width;
 	   int height;
 	   private JTextField FieldContras;
+	   private JTextField FieldTranslasiM;
+	   private JTextField FieldTranslasiN;
 
 	/**
 	 * Launch the application.
@@ -179,9 +194,16 @@ public class TampilanAwal extends JFrame {
 			            else
 			                l.setText("the user cancelled the operation"); 
 			            }
+				 	alamat = txtSourceAddress.getText();			
+					
+					ImageIcon gambarAwal = new ImageIcon (alamat);				
+					Image ga = gambarAwal.getImage(); // transform it 
+					Image newimg = ga.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+					gambarAwal = new ImageIcon(newimg);  // transform it back
+					LblIS.setIcon(gambarAwal);
 			}
 		});
-		btnBrowse.setBounds(40, 540, 175, 35);
+		btnBrowse.setBounds(156, 540, 175, 35);
 		panel.add(btnBrowse);
 		
 		JButton btnConvert = new JButton("Convert & Save");
@@ -208,6 +230,30 @@ public class TampilanAwal extends JFrame {
 	            	};
 	            	if(kontras) {
 	            		str.insert(str.length()-4,"Kontras");
+	            	}
+	            	if(translasi) {
+	            		str.insert(str.length()-4,"Translasi");
+	            	};
+	            	if(flipping) {
+	            		str.insert(str.length()-4,"Flipping");
+	            	};
+	            	if(cropping) {
+	            		str.insert(str.length()-4,"Cropping");
+	            	};
+	            	if(rotation) {
+	            		str.insert(str.length()-4,"Rotation");
+	            	};
+	            	if(scalling) {
+	            		str.insert(str.length()-4,"Scalling");
+	            	};
+	            	if(smoothing) {
+	            		str.insert(str.length()-4,"Smoothing");
+	            	};
+	            	if(sharpening) {
+	            		str.insert(str.length()-4,"Sharpening");
+	            	};
+	            	if(edge) {
+	            		str.insert(str.length()-4,"Edge");
 	            	};
 	            	txtFinalAddress.setText(str.toString());
 				};
@@ -414,6 +460,53 @@ public class TampilanAwal extends JFrame {
 								 gambarAkhir = new ImageIcon(newimg2);  // transform it back
 								 LblFS.setIcon(gambarAkhir);
 						        };
+						        
+						        if(translasi) { 
+									 File input = new File(alamat);
+							         image = ImageIO.read(input);
+							         imagebaru = ImageIO.read(input);
+							         width = image.getWidth();
+							         height = image.getHeight();
+							         String wadahM,wadahN;
+							         int nilaiM,nilaiN,red,green,blue;
+
+							         wadahM = FieldTranslasiM.getText();
+							         wadahN = FieldTranslasiM.getText();
+							         nilaiM = Integer.parseInt(wadahM);
+							         nilaiN = Integer.parseInt(wadahN);
+							         
+							         
+							         for(int i=0; i<height; i++) {
+							         
+							            for(int j=0; j<width; j++) {
+							            
+							               if((j>nilaiN) && (i>nilaiM)) {
+							            	   Color c = new Color(image.getRGB(j-nilaiN, i-nilaiM));
+								               red = (int)(c.getRed());
+								               green = (int)(c.getGreen());
+								               blue = (int)(c.getBlue());
+							               }else {
+							            	   red = 0;
+							            	   green = 0;
+							            	   blue = 0;
+							               }
+							               
+							               
+							               Color newColor = new Color(red, green, blue);
+							               imagebaru.setRGB(j,i,newColor.getRGB());
+							            }
+							         }
+							         
+							         
+							         File ouptut = new File(simpan);
+							         ImageIO.write(imagebaru, "jpg", ouptut);
+							         
+									 ImageIcon gambarAkhir = new ImageIcon (simpan);
+									 Image gak = gambarAkhir.getImage(); // transform it 
+									 Image newimg2 = gak.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+									 gambarAkhir = new ImageIcon(newimg2);  // transform it back
+									 LblFS.setIcon(gambarAkhir);
+							        };
 			        
 			      } catch (Exception e) {}
 			
@@ -434,24 +527,6 @@ public class TampilanAwal extends JFrame {
 		lblResult.setBounds(605, 66, 150, 35);
 		panel.add(lblResult);
 		
-		JButton btnLoad = new JButton("Load Image");
-		btnLoad.setForeground(new Color(255, 255, 255));
-		btnLoad.setBackground(new Color(30, 144, 255));
-		btnLoad.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				alamat = txtSourceAddress.getText();			
-				
-				ImageIcon gambarAwal = new ImageIcon (alamat);				
-				Image ga = gambarAwal.getImage(); // transform it 
-				Image newimg = ga.getScaledInstance(400, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-				gambarAwal = new ImageIcon(newimg);  // transform it back
-				LblIS.setIcon(gambarAwal);
-							
-			}
-		});
-		btnLoad.setBounds(265, 540, 175, 35);
-		panel.add(btnLoad);
 		
 		JButton btnSave = new JButton("Browse Save Address");
 		btnSave.setForeground(new Color(255, 255, 255));
@@ -482,26 +557,38 @@ public class TampilanAwal extends JFrame {
 		
 		FieldContras = new JTextField();
 		FieldContras.setBounds(700, 509, 75, 20);
-		panel.add(FieldContras);
 		FieldContras.setColumns(10);
-		FieldContras.setVisible(false);
 		
 		JLabel lblContrasPer = new JLabel("%");
 		lblContrasPer.setBounds(800, 509, 20, 20);
-		panel.add(lblContrasPer);
-		lblContrasPer.setVisible(false);
 		
 		JLabel lblContras = new JLabel("Kontras");
 		lblContras.setHorizontalAlignment(SwingConstants.CENTER);
 		lblContras.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblContras.setBounds(620, 509, 70, 20);
-		panel.add(lblContras);
 		
-		JLabel lblVersi = new JLabel("ver 0.2 Alpha");
+		FieldTranslasiM = new JTextField();
+		FieldTranslasiM.setBounds(577,509,75,20);
+		FieldTranslasiM.setColumns(10);
+		
+		FieldTranslasiN = new JTextField();
+		FieldTranslasiN.setBounds(700,509,75,20);
+		FieldTranslasiN.setColumns(10);
+		
+		JLabel lblTranslasiM = new JLabel("M");
+		lblTranslasiM.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTranslasiM.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblTranslasiM.setBounds(560, 509, 20, 20);
+		
+		JLabel lblTranslasiN = new JLabel("N");
+		lblTranslasiN.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTranslasiN.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblTranslasiN.setBounds(683, 509, 20, 20);
+		
+		JLabel lblVersi = new JLabel("ver 0.4 Beta");
 		lblVersi.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		lblVersi.setBounds(859, 660, 46, 14);
 		panel.add(lblVersi);
-		lblContras.setVisible(false);
 		
 		JLabel lblSlider = new JLabel("");
 		lblSlider.setBounds(780, 512, 46, 14);
@@ -549,7 +636,6 @@ public class TampilanAwal extends JFrame {
 				JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
 				lblRGBtoGray.setHorizontalAlignment(SwingConstants.CENTER);
 				lblRGBtoGray.setBounds(24, 0, 205, 55);
-				lblRGBtoGray.setVisible(false);
 				lblRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 24));
 				
 				JLabel lblBrightness = new JLabel("Brightness");
@@ -572,11 +658,45 @@ public class TampilanAwal extends JFrame {
 				lblKontras.setBounds(24, 0, 205, 55);
 				lblKontras.setFont(new Font("Tahoma", Font.PLAIN, 24));
 				
+				JLabel lblTranlasi = new JLabel("Translasi");
+				lblTranlasi.setHorizontalAlignment(SwingConstants.CENTER);
+				lblTranlasi.setBounds(24, 0, 205, 55);
+				lblTranlasi.setFont(new Font("Tahoma", Font.PLAIN, 24));
 				
+				JLabel lblFlipping = new JLabel("Flipping");
+				lblFlipping.setHorizontalAlignment(SwingConstants.CENTER);
+				lblFlipping.setBounds(24, 0, 205, 55);
+				lblFlipping.setFont(new Font("Tahoma", Font.PLAIN, 24));
 				
+				JLabel lblCropping = new JLabel("Cropping");
+				lblCropping.setHorizontalAlignment(SwingConstants.CENTER);
+				lblCropping.setBounds(24, 0, 205, 55);
+				lblCropping.setFont(new Font("Tahoma", Font.PLAIN, 24));
 				
+				JLabel lblRotation = new JLabel("Rotation");
+				lblRotation.setHorizontalAlignment(SwingConstants.CENTER);
+				lblRotation.setBounds(24, 0, 205, 55);
+				lblRotation.setFont(new Font("Tahoma", Font.PLAIN, 24));
 				
+				JLabel lblScalling = new JLabel("Scalling");
+				lblScalling.setHorizontalAlignment(SwingConstants.CENTER);
+				lblScalling.setBounds(24, 0, 205, 55);
+				lblScalling.setFont(new Font("Tahoma", Font.PLAIN, 24));
 				
+				JLabel lblSmoothing = new JLabel("Smoothing");
+				lblSmoothing.setHorizontalAlignment(SwingConstants.CENTER);
+				lblSmoothing.setBounds(24, 0, 205, 55);
+				lblSmoothing.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				JLabel lblSharpening = new JLabel("Sharpening");
+				lblSharpening.setHorizontalAlignment(SwingConstants.CENTER);
+				lblSharpening.setBounds(24, 0, 205, 55);
+				lblSharpening.setFont(new Font("Tahoma", Font.PLAIN, 24));
+				
+				JLabel lblEdge = new JLabel("Edge Detection");
+				lblEdge.setHorizontalAlignment(SwingConstants.CENTER);
+				lblEdge.setBounds(24, 0, 205, 55);
+				lblEdge.setFont(new Font("Tahoma", Font.PLAIN, 24));
 				
 				JButton btnRGBtoGray = new JButton("RGB to Gray");
 				btnRGBtoGray.addActionListener(new ActionListener() {
@@ -587,10 +707,17 @@ public class TampilanAwal extends JFrame {
 						negatif = false;
 						bandw = false;
 						kontras = false;
+						translasi = false;
+						flipping = false;
+						cropping = false;
+						rotation = false;
+						scalling = false;
+						smoothing = false;
+						sharpening = false;
+						edge = false;
 						
 						//Gray
 						panel_1.add(lblRGBtoGray);
-						lblRGBtoGray.setVisible(true);
 						
 						//Brightness
 						panel_1.remove(lblBrightness);
@@ -608,6 +735,30 @@ public class TampilanAwal extends JFrame {
 						panel.remove(FieldContras);
 						panel.remove(lblContras);
 						panel.remove(lblContrasPer);
+						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
 						
 						panel.setVisible(false);
 						panel.setVisible(true);
@@ -629,6 +780,15 @@ public class TampilanAwal extends JFrame {
 						negatif = false;
 						bandw = false;
 						kontras = false;
+						translasi = false;
+						flipping = false;
+						cropping = false;
+						rotation = false;
+						scalling = false;
+						smoothing = false;
+						sharpening = false;
+						edge = false;
+						
 						//Gray
 						panel_1.remove(lblRGBtoGray);
 						
@@ -649,6 +809,29 @@ public class TampilanAwal extends JFrame {
 						panel.remove(lblContras);
 						panel.remove(lblContrasPer);
 						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
 						
 						panel.setVisible(false);
 						panel.setVisible(true);
@@ -670,6 +853,15 @@ public class TampilanAwal extends JFrame {
 						negatif = false;
 						bandw = true;
 						kontras = false;
+						translasi = false;
+						flipping = false;
+						cropping = false;
+						rotation = false;
+						scalling = false;
+						smoothing = false;
+						sharpening = false;
+						edge = false;
+						
 						//Gray
 						panel_1.remove(lblRGBtoGray);
 						
@@ -690,6 +882,29 @@ public class TampilanAwal extends JFrame {
 						panel.remove(lblContras);
 						panel.remove(lblContrasPer);
 						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
 						
 						panel.setVisible(false);
 						panel.setVisible(true);
@@ -711,6 +926,15 @@ public class TampilanAwal extends JFrame {
 						negatif = true;
 						bandw = false;
 						kontras = false;
+						translasi = false;
+						flipping = false;
+						cropping = false;
+						rotation = false;
+						scalling = false;
+						smoothing = false;
+						sharpening = false;
+						edge = false;
+						
 						//Gray
 						panel_1.remove(lblRGBtoGray);
 						
@@ -731,6 +955,29 @@ public class TampilanAwal extends JFrame {
 						panel.remove(lblContras);
 						panel.remove(lblContrasPer);
 						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
 						
 						panel.setVisible(false);
 						panel.setVisible(true);
@@ -752,6 +999,15 @@ public class TampilanAwal extends JFrame {
 						negatif = false;
 						bandw = false;
 						kontras = true;
+						translasi = false;
+						flipping = false;
+						cropping = false;
+						rotation = false;
+						scalling = false;
+						smoothing = false;
+						sharpening = false;
+						edge = false;
+						
 						//Gray
 						panel_1.remove(lblRGBtoGray);
 						
@@ -772,6 +1028,29 @@ public class TampilanAwal extends JFrame {
 						panel.add(lblContras);
 						panel.add(lblContrasPer);
 						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
 						
 						panel.setVisible(false);
 						panel.setVisible(true);
@@ -785,6 +1064,76 @@ public class TampilanAwal extends JFrame {
 				menu.add(btnKontras);
 				
 				JButton btnTranslasi = new JButton("Translasi");
+				btnTranslasi.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						translasi = true;
+						flipping = false;
+						cropping = false;
+						rotation = false;
+						scalling = false;
+						smoothing = false;
+						sharpening = false;
+						edge = false;
+						
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
+						//translasi
+						panel_1.add(lblTranlasi);
+						panel.add(FieldTranslasiM);
+						panel.add(FieldTranslasiN);
+						panel.add(lblTranslasiM);
+						panel.add(lblTranslasiN);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
+					}
+				});
 				btnTranslasi.setForeground(Color.BLACK);
 				btnTranslasi.setFont(new Font("Tahoma", Font.PLAIN, 15));
 				btnTranslasi.setBackground(new Color(255, 215, 0));
@@ -792,6 +1141,72 @@ public class TampilanAwal extends JFrame {
 				menu.add(btnTranslasi);
 				
 				JButton btnFlipping = new JButton("Flipping");
+				btnFlipping.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						translasi = false;
+						flipping = true;
+						cropping = false;
+						rotation = false;
+						scalling = false;
+						smoothing = false;
+						sharpening = false;
+						edge = false;
+						
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.add(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
+					}
+				});
 				btnFlipping.setForeground(Color.BLACK);
 				btnFlipping.setFont(new Font("Tahoma", Font.PLAIN, 15));
 				btnFlipping.setBackground(new Color(255, 215, 0));
@@ -799,6 +1214,72 @@ public class TampilanAwal extends JFrame {
 				menu.add(btnFlipping);
 				
 				JButton btnCropping = new JButton("Cropping");
+				btnCropping.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						translasi = false;
+						flipping = false;
+						cropping = true;
+						rotation = false;
+						scalling = false;
+						smoothing = false;
+						sharpening = false;
+						edge = false;
+						
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.add(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
+					}
+				});
 				btnCropping.setForeground(Color.BLACK);
 				btnCropping.setFont(new Font("Tahoma", Font.PLAIN, 15));
 				btnCropping.setBackground(new Color(255, 215, 0));
@@ -806,6 +1287,72 @@ public class TampilanAwal extends JFrame {
 				menu.add(btnCropping);
 				
 				JButton btnRotation = new JButton("Rotation");
+				btnRotation.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						translasi = false;
+						flipping = false;
+						cropping = false;
+						rotation = true;
+						scalling = false;
+						smoothing = false;
+						sharpening = false;
+						edge = false;
+						
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.add(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
+					}
+				});
 				btnRotation.setForeground(Color.BLACK);
 				btnRotation.setFont(new Font("Tahoma", Font.PLAIN, 15));
 				btnRotation.setBackground(new Color(255, 215, 0));
@@ -813,20 +1360,218 @@ public class TampilanAwal extends JFrame {
 				menu.add(btnRotation);
 				
 				JButton btnScalling = new JButton("Scalling");
+				btnScalling.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						translasi = false;
+						flipping = false;
+						cropping = false;
+						rotation = false;
+						scalling = true;
+						smoothing = false;
+						sharpening = false;
+						edge = false;
+						
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.add(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
+					}
+				});
 				btnScalling.setForeground(Color.BLACK);
 				btnScalling.setFont(new Font("Tahoma", Font.PLAIN, 15));
 				btnScalling.setBackground(new Color(255, 215, 0));
 				btnScalling.setBounds(0, 355, 150, 30);
 				menu.add(btnScalling);
 				
-				JButton btnSmooting = new JButton("Smooting");
-				btnSmooting.setForeground(Color.BLACK);
-				btnSmooting.setFont(new Font("Tahoma", Font.PLAIN, 15));
-				btnSmooting.setBackground(new Color(255, 215, 0));
-				btnSmooting.setBounds(0, 399, 150, 30);
-				menu.add(btnSmooting);
+				JButton btnSmoothing = new JButton("Smoothing");
+				btnSmoothing.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						translasi = false;
+						flipping = false;
+						cropping = false;
+						rotation = false;
+						scalling = false;
+						smoothing = true;
+						sharpening = false;
+						edge = false;
+						
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.add(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
+					}
+				});
+				btnSmoothing.setForeground(Color.BLACK);
+				btnSmoothing.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnSmoothing.setBackground(new Color(255, 215, 0));
+				btnSmoothing.setBounds(0, 399, 150, 30);
+				menu.add(btnSmoothing);
 				
 				JButton btnSharpening = new JButton("Sharpening");
+				btnSharpening.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						translasi = false;
+						flipping = false;
+						cropping = false;
+						rotation = false;
+						scalling = false;
+						smoothing = false;
+						sharpening = true;
+						edge = false;
+						
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.add(lblSharpening);
+						
+						//edge
+						panel_1.remove(lblEdge);
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
+					}
+				});
 				btnSharpening.setForeground(Color.BLACK);
 				btnSharpening.setFont(new Font("Tahoma", Font.PLAIN, 15));
 				btnSharpening.setBackground(new Color(255, 215, 0));
@@ -834,6 +1579,72 @@ public class TampilanAwal extends JFrame {
 				menu.add(btnSharpening);
 				
 				JButton btnEdgeDetection = new JButton("Edge Detection");
+				btnEdgeDetection.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtFinalAddress.setText("");
+						rgbtogray = false;
+						brightness = false;
+						negatif = false;
+						bandw = false;
+						kontras = false;
+						translasi = false;
+						flipping = false;
+						cropping = false;
+						rotation = false;
+						scalling = false;
+						smoothing = false;
+						sharpening = false;
+						edge = true;
+						
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
+						//translasi
+						panel_1.remove(lblTranlasi);
+						
+						//flipping
+						panel_1.remove(lblFlipping);
+						
+						//cropping
+						panel_1.remove(lblCropping);
+						
+						//rotation
+						panel_1.remove(lblRotation);
+						
+						//scalling
+						panel_1.remove(lblScalling);
+						
+						//smoothing
+						panel_1.remove(lblSmoothing);
+						
+						//sharpening
+						panel_1.remove(lblSharpening);
+						
+						//edge
+						panel_1.add(lblEdge);
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
+					}
+				});
 				btnEdgeDetection.setForeground(Color.BLACK);
 				btnEdgeDetection.setFont(new Font("Tahoma", Font.PLAIN, 15));
 				btnEdgeDetection.setBackground(new Color(255, 215, 0));
