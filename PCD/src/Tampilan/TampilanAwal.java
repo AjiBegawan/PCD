@@ -574,6 +574,10 @@ public class TampilanAwal extends JFrame {
 				
 				
 				
+				
+				
+				
+				
 				JButton btnRGBtoGray = new JButton("RGB to Gray");
 				btnRGBtoGray.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -583,61 +587,28 @@ public class TampilanAwal extends JFrame {
 						negatif = false;
 						bandw = false;
 						kontras = false;
-						if(rgbtogray) {
-							panel_1.add(lblRGBtoGray);
-							lblRGBtoGray.setVisible(true);
-						}else {
-							panel_1.remove(lblRGBtoGray);
-							lblRGBtoGray.setVisible(false);
-							};
-						if(brightness) {
-							panel_1.add(lblBrightness);
-							lblBrightness.setVisible(true);
-							panel.add(sliderBrightness);
-							sliderBrightness.setVisible(true);
-							panel.add(lblSlider);
-							lblSlider.setVisible(true);
-						}else {
-							panel_1.remove(lblBrightness);
-							lblBrightness.setVisible(false);
-							panel.remove(sliderBrightness);
-							sliderBrightness.setVisible(false);
-							panel.remove(lblSlider);
-							lblSlider.setVisible(false);
-							};
-						if(negatif) {
-							panel_1.add(lblNegatif);
-							lblNegatif.setVisible(true);
-						}else {
-							panel_1.remove(lblNegatif);
-							lblNegatif.setVisible(false);
-							};
-						if(bandw) {
-							panel_1.add(lblBandW);
-							lblBandW.setVisible(true);
-						}else {
-							panel_1.remove(lblBandW);
-							lblBandW.setVisible(false);
-							};
-						if(kontras) {
-							panel_1.add(lblKontras);
-							lblKontras.setVisible(true);
-							panel.add(FieldContras);
-							FieldContras.setVisible(true);
-							panel.add(lblContrasPer);
-							lblContrasPer.setVisible(true);
-							panel.add(lblContras);
-							lblContras.setVisible(true);
-						}else {
-							panel_1.remove(lblKontras);
-							lblKontras.setVisible(false);
-							panel.remove(FieldContras);
-							FieldContras.setVisible(false);
-							panel.remove(lblContrasPer);
-							lblContrasPer.setVisible(false);
-							panel.remove(lblContras);
-							lblContras.setVisible(false);
-							};
+						
+						//Gray
+						panel_1.add(lblRGBtoGray);
+						lblRGBtoGray.setVisible(true);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
 						panel.setVisible(false);
 						panel.setVisible(true);
 						setFinalAddress=false;
@@ -658,64 +629,30 @@ public class TampilanAwal extends JFrame {
 						negatif = false;
 						bandw = false;
 						kontras = false;
-						if(rgbtogray) {
-							panel_1.add(lblRGBtoGray);
-							lblRGBtoGray.setVisible(true);
-						}else {
-							panel_1.remove(lblRGBtoGray);
-							lblRGBtoGray.setVisible(false);
-							};
-							if(brightness) {
-								panel_1.add(lblBrightness);
-								lblBrightness.setVisible(true);
-								panel.add(sliderBrightness);
-								sliderBrightness.setVisible(true);
-								panel.add(lblSlider);
-								lblSlider.setVisible(true);
-							}else {
-								panel_1.remove(lblBrightness);
-								lblBrightness.setVisible(false);
-								panel.remove(sliderBrightness);
-								sliderBrightness.setVisible(false);
-								panel.remove(lblSlider);
-								lblSlider.setVisible(false);
-								};
-						if(negatif) {
-							panel_1.add(lblNegatif);
-							lblNegatif.setVisible(true);
-						}else {
-							panel_1.remove(lblNegatif);
-							lblNegatif.setVisible(false);
-							};
-						if(bandw) {
-							panel_1.add(lblBandW);
-							lblBandW.setVisible(true);
-						}else {
-							panel_1.remove(lblBandW);
-							lblBandW.setVisible(false);
-							};
-							if(kontras) {
-								panel_1.add(lblKontras);
-								lblKontras.setVisible(true);
-								panel.add(FieldContras);
-								FieldContras.setVisible(true);
-								panel.add(lblContrasPer);
-								lblContrasPer.setVisible(true);
-								panel.add(lblContras);
-								lblContras.setVisible(true);
-							}else {
-								panel_1.remove(lblKontras);
-								lblKontras.setVisible(false);
-								panel.remove(FieldContras);
-								FieldContras.setVisible(false);
-								panel.remove(lblContrasPer);
-								lblContrasPer.setVisible(false);
-								panel.remove(lblContras);
-								lblContras.setVisible(false);
-								};
-							panel.setVisible(false);
-							panel.setVisible(true);
-							setFinalAddress=false;
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.add(lblBrightness);
+						panel.add(sliderBrightness);
+						panel.add(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
 					}
 				});
 				btnBrightness.setForeground(new Color(0, 0, 0));
@@ -733,64 +670,30 @@ public class TampilanAwal extends JFrame {
 						negatif = false;
 						bandw = true;
 						kontras = false;
-						if(rgbtogray) {
-							panel_1.add(lblRGBtoGray);
-							lblRGBtoGray.setVisible(true);
-						}else {
-							panel_1.remove(lblRGBtoGray);
-							lblRGBtoGray.setVisible(false);
-							};
-							if(brightness) {
-								panel_1.add(lblBrightness);
-								lblBrightness.setVisible(true);
-								panel.add(sliderBrightness);
-								sliderBrightness.setVisible(true);
-								panel.add(lblSlider);
-								lblSlider.setVisible(true);
-							}else {
-								panel_1.remove(lblBrightness);
-								lblBrightness.setVisible(false);
-								panel.remove(sliderBrightness);
-								sliderBrightness.setVisible(false);
-								panel.remove(lblSlider);
-								lblSlider.setVisible(false);
-								};
-						if(negatif) {
-							panel_1.add(lblNegatif);
-							lblNegatif.setVisible(true);
-						}else {
-							panel_1.remove(lblNegatif);
-							lblNegatif.setVisible(false);
-							};
-						if(bandw) {
-							panel_1.add(lblBandW);
-							lblBandW.setVisible(true);
-						}else {
-							panel_1.remove(lblBandW);
-							lblBandW.setVisible(false);
-							};
-							if(kontras) {
-								panel_1.add(lblKontras);
-								lblKontras.setVisible(true);
-								panel.add(FieldContras);
-								FieldContras.setVisible(true);
-								panel.add(lblContrasPer);
-								lblContrasPer.setVisible(true);
-								panel.add(lblContras);
-								lblContras.setVisible(true);
-							}else {
-								panel_1.remove(lblKontras);
-								lblKontras.setVisible(false);
-								panel.remove(FieldContras);
-								FieldContras.setVisible(false);
-								panel.remove(lblContrasPer);
-								lblContrasPer.setVisible(false);
-								panel.remove(lblContras);
-								lblContras.setVisible(false);
-								};
-							panel.setVisible(false);
-							panel.setVisible(true);
-							setFinalAddress=false;
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.add(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
 					}
 				});
 				btnBW.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -808,64 +711,30 @@ public class TampilanAwal extends JFrame {
 						negatif = true;
 						bandw = false;
 						kontras = false;
-						if(rgbtogray) {
-							panel_1.add(lblRGBtoGray);
-							lblRGBtoGray.setVisible(true);
-						}else {
-							panel_1.remove(lblRGBtoGray);
-							lblRGBtoGray.setVisible(false);
-							};
-							if(brightness) {
-								panel_1.add(lblBrightness);
-								lblBrightness.setVisible(true);
-								panel.add(sliderBrightness);
-								sliderBrightness.setVisible(true);
-								panel.add(lblSlider);
-								lblSlider.setVisible(true);
-							}else {
-								panel_1.remove(lblBrightness);
-								lblBrightness.setVisible(false);
-								panel.remove(sliderBrightness);
-								sliderBrightness.setVisible(false);
-								panel.remove(lblSlider);
-								lblSlider.setVisible(false);
-								};
-						if(negatif) {
-							panel_1.add(lblNegatif);
-							lblNegatif.setVisible(true);
-						}else {
-							panel_1.remove(lblNegatif);
-							lblNegatif.setVisible(false);
-							};
-						if(bandw) {
-							panel_1.add(lblBandW);
-							lblBandW.setVisible(true);
-						}else {
-							panel_1.remove(lblBandW);
-							lblBandW.setVisible(false);
-							};
-							if(kontras) {
-								panel_1.add(lblKontras);
-								lblKontras.setVisible(true);
-								panel.add(FieldContras);
-								FieldContras.setVisible(true);
-								panel.add(lblContrasPer);
-								lblContrasPer.setVisible(true);
-								panel.add(lblContras);
-								lblContras.setVisible(true);
-							}else {
-								panel_1.remove(lblKontras);
-								lblKontras.setVisible(false);
-								panel.remove(FieldContras);
-								FieldContras.setVisible(false);
-								panel.remove(lblContrasPer);
-								lblContrasPer.setVisible(false);
-								panel.remove(lblContras);
-								lblContras.setVisible(false);
-								};
-							panel.setVisible(false);
-							panel.setVisible(true);
-							setFinalAddress=false;
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.add(lblBandW);
+						
+						//Kontras
+						panel_1.remove(lblKontras);
+						panel.remove(FieldContras);
+						panel.remove(lblContras);
+						panel.remove(lblContrasPer);
+						
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
 					}
 				});
 				btnNegatif.setForeground(new Color(0, 0, 0));
@@ -883,64 +752,30 @@ public class TampilanAwal extends JFrame {
 						negatif = false;
 						bandw = false;
 						kontras = true;
-						if(rgbtogray) {
-							panel_1.add(lblRGBtoGray);
-							lblRGBtoGray.setVisible(true);
-						}else {
-							panel_1.remove(lblRGBtoGray);
-							lblRGBtoGray.setVisible(false);
-							};
-							if(brightness) {
-								panel_1.add(lblBrightness);
-								lblBrightness.setVisible(true);
-								panel.add(sliderBrightness);
-								sliderBrightness.setVisible(true);
-								panel.add(lblSlider);
-								lblSlider.setVisible(true);
-							}else {
-								panel_1.remove(lblBrightness);
-								lblBrightness.setVisible(false);
-								panel.remove(sliderBrightness);
-								sliderBrightness.setVisible(false);
-								panel.remove(lblSlider);
-								lblSlider.setVisible(false);
-								};
-						if(negatif) {
-							panel_1.add(lblNegatif);
-							lblNegatif.setVisible(true);
-						}else {
-							panel_1.remove(lblNegatif);
-							lblNegatif.setVisible(false);
-							};
-						if(bandw) {
-							panel_1.add(lblBandW);
-							lblBandW.setVisible(true);
-						}else {
-							panel_1.remove(lblBandW);
-							lblBandW.setVisible(false);
-							};
-							if(kontras) {
-								panel_1.add(lblKontras);
-								lblKontras.setVisible(true);
-								panel.add(FieldContras);
-								FieldContras.setVisible(true);
-								panel.add(lblContrasPer);
-								lblContrasPer.setVisible(true);
-								panel.add(lblContras);
-								lblContras.setVisible(true);
-							}else {
-								panel_1.remove(lblKontras);
-								lblKontras.setVisible(false);
-								panel.remove(FieldContras);
-								FieldContras.setVisible(false);
-								panel.remove(lblContrasPer);
-								lblContrasPer.setVisible(false);
-								panel.remove(lblContras);
-								lblContras.setVisible(false);
-								};
-							panel.setVisible(false);
-							panel.setVisible(true);
-							setFinalAddress=false;
+						//Gray
+						panel_1.remove(lblRGBtoGray);
+						
+						//Brightness
+						panel_1.remove(lblBrightness);
+						panel.remove(sliderBrightness);
+						panel.remove(lblSlider);
+						
+						//negatif
+						panel_1.remove(lblNegatif);
+						
+						//Black and White
+						panel_1.remove(lblBandW);
+						
+						//Kontras
+						panel_1.add(lblKontras);
+						panel.add(FieldContras);
+						panel.add(lblContras);
+						panel.add(lblContrasPer);
+						
+						
+						panel.setVisible(false);
+						panel.setVisible(true);
+						setFinalAddress=false;
 					}
 				});
 				btnKontras.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -948,6 +783,62 @@ public class TampilanAwal extends JFrame {
 				btnKontras.setBackground(new Color(255, 215, 0));
 				btnKontras.setBounds(0, 190, 150, 30);
 				menu.add(btnKontras);
+				
+				JButton btnTranslasi = new JButton("Translasi");
+				btnTranslasi.setForeground(Color.BLACK);
+				btnTranslasi.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnTranslasi.setBackground(new Color(255, 215, 0));
+				btnTranslasi.setBounds(0, 235, 150, 30);
+				menu.add(btnTranslasi);
+				
+				JButton btnFlipping = new JButton("Flipping");
+				btnFlipping.setForeground(Color.BLACK);
+				btnFlipping.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnFlipping.setBackground(new Color(255, 215, 0));
+				btnFlipping.setBounds(0, 265, 150, 30);
+				menu.add(btnFlipping);
+				
+				JButton btnCropping = new JButton("Cropping");
+				btnCropping.setForeground(Color.BLACK);
+				btnCropping.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnCropping.setBackground(new Color(255, 215, 0));
+				btnCropping.setBounds(0, 295, 150, 30);
+				menu.add(btnCropping);
+				
+				JButton btnRotation = new JButton("Rotation");
+				btnRotation.setForeground(Color.BLACK);
+				btnRotation.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnRotation.setBackground(new Color(255, 215, 0));
+				btnRotation.setBounds(0, 325, 150, 30);
+				menu.add(btnRotation);
+				
+				JButton btnScalling = new JButton("Scalling");
+				btnScalling.setForeground(Color.BLACK);
+				btnScalling.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnScalling.setBackground(new Color(255, 215, 0));
+				btnScalling.setBounds(0, 355, 150, 30);
+				menu.add(btnScalling);
+				
+				JButton btnSmooting = new JButton("Smooting");
+				btnSmooting.setForeground(Color.BLACK);
+				btnSmooting.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnSmooting.setBackground(new Color(255, 215, 0));
+				btnSmooting.setBounds(0, 399, 150, 30);
+				menu.add(btnSmooting);
+				
+				JButton btnSharpening = new JButton("Sharpening");
+				btnSharpening.setForeground(Color.BLACK);
+				btnSharpening.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnSharpening.setBackground(new Color(255, 215, 0));
+				btnSharpening.setBounds(0, 429, 150, 30);
+				menu.add(btnSharpening);
+				
+				JButton btnEdgeDetection = new JButton("Edge Detection");
+				btnEdgeDetection.setForeground(Color.BLACK);
+				btnEdgeDetection.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				btnEdgeDetection.setBackground(new Color(255, 215, 0));
+				btnEdgeDetection.setBounds(0, 459, 150, 30);
+				menu.add(btnEdgeDetection);
 				
 				
 				// Button in menu end
