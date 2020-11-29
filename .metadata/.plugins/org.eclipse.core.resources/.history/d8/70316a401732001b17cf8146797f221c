@@ -750,6 +750,9 @@ public class TampilanAwal extends JFrame {
 					            for (x1 = x - radius; x1 <= x + radius; x1++) {
 					                for (y1 = y - radius; y1 <= y + radius; y1++) {
 					                    c[i] = new Color(im.getRGB(y1, x1));
+					                    //System.out.println(i);
+					                    //ll+=xx[i];
+					                    //System.out.println(ll);
 					                    i++;
 					                }
 					            }
@@ -808,10 +811,12 @@ public class TampilanAwal extends JFrame {
 						        BufferedImage.TYPE_BYTE_INDEXED);
 
 						    // Kernel for Sharping
-						    Kernel kernel = new Kernel(3, 3, 
-						    				new float[] { 	-1, -1, -1, 
-						    								-1, 9, -1, 
-						    								-1, -1, -1 });
+//						    Kernel kernel = new Kernel(3, 3, 
+//						    				new float[] { 	-1, -1, -1, 
+//						    								-1, 7, -1, 
+//						    								-1, -1, -1 });
+//						    BufferedImageOp op = new ConvolveOp(kernel);
+//						    bufferedImage = op.filter(image, null);
 						
 						    // Kernal for Edge Detection
 //						    Kernel kernel = new Kernel(3, 3, 
@@ -819,8 +824,34 @@ public class TampilanAwal extends JFrame {
 //				    								-1, 8, -1, 
 //				    								-1, -1, -1 });
 						    
-						    BufferedImageOp op = new ConvolveOp(kernel);
-						    bufferedImage = op.filter(image, null);				        
+//						     Kernal for Smoothing
+						    Kernel kernel = new Kernel(3, 3, 
+				    				new double[] { 	0.111, 0.111, 0.111, 
+				    								0.111, 0.111, 0.111, 
+				    								0.111, 0.111, 0.111 });
+						
+					 						 
+//				        String imageURL = alamat;
+//				        Image sourceImage = Toolkit.getDefaultToolkit().getImage(imageURL);			 				
+//				 
+//				        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();			 
+//				        GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();			 
+//				        GraphicsConfiguration graphicsConfiguration = graphicsDevice.getDefaultConfiguration();
+//				 
+//				        image = graphicsConfiguration.createCompatibleImage(sourceImage.getWidth(null), sourceImage.getHeight(null), Transparency.BITMASK);
+//				        Graphics graphics = image.createGraphics();
+//				        graphics.drawImage(sourceImage, 0, 0, null);			 
+//				        graphics.dispose();
+//				        
+//				        Kernel kernel = new Kernel(3, 3,
+//				                new float[]{
+//				                    -1, -1, -1,
+//				                    -1, 9, -1,
+//				                    -1, -1, -1});				        
+//				        
+//				        BufferedImageOp op = new ConvolveOp(kernel);			 
+//				        image = op.filter(image, null);	
+				        
 						File ouptut = new File(simpan);
 						ImageIO.write(bufferedImage, "jpg", ouptut);
 

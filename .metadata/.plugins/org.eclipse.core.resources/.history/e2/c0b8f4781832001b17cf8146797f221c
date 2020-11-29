@@ -810,14 +810,37 @@ public class TampilanAwal extends JFrame {
 						    // Kernel for Sharping
 						    Kernel kernel = new Kernel(3, 3, 
 						    				new float[] { 	-1, -1, -1, 
-						    								-1, 9, -1, 
+						    								-1, 7, -1, 
 						    								-1, -1, -1 });
+
 						
 						    // Kernal for Edge Detection
 //						    Kernel kernel = new Kernel(3, 3, 
 //				    				new float[] { 	-1, -1, -1, 
 //				    								-1, 8, -1, 
 //				    								-1, -1, -1 });
+						    
+				    						
+						
+					 						 
+//				        String imageURL = alamat;
+//				        Image sourceImage = Toolkit.getDefaultToolkit().getImage(imageURL);			 				
+//				 
+//				        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();			 
+//				        GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();			 
+//				        GraphicsConfiguration graphicsConfiguration = graphicsDevice.getDefaultConfiguration();
+//				 
+//				        image = graphicsConfiguration.createCompatibleImage(sourceImage.getWidth(null), sourceImage.getHeight(null), Transparency.BITMASK);
+//				        Graphics graphics = image.createGraphics();
+//				        graphics.drawImage(sourceImage, 0, 0, null);			 
+//				        graphics.dispose();
+//				        
+//				        Kernel kernel = new Kernel(3, 3,
+//				                new float[]{
+//				                    -1, -1, -1,
+//				                    -1, 9, -1,
+//				                    -1, -1, -1});				        
+//				        
 						    
 						    BufferedImageOp op = new ConvolveOp(kernel);
 						    bufferedImage = op.filter(image, null);				        
