@@ -490,11 +490,13 @@ public class TampilanAwal extends JFrame {
 						image = ImageIO.read(input);
 						width = image.getWidth();
 						height = image.getHeight();
+						int th = 127;
 						float nilai;
 						String wadah;
 						wadah = FieldContras.getText();
 						nilai = Float.parseFloat(wadah);
 						nilai = nilai / 100;
+						BufferedImage gambar = (BufferedImage) image;
 						RescaleOp rescaleOp = new RescaleOp(nilai, 15, null);
 						rescaleOp.filter(image, image); // Source and destination are the same.
 

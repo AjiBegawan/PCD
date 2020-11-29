@@ -9,9 +9,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -24,6 +27,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
+import javax.swing.Spring;
+import javax.swing.JInternalFrame;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -31,9 +36,10 @@ import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.UIManager;
 import javax.swing.filechooser.*;
-
-
 import java.awt.image.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
@@ -41,10 +47,6 @@ import javax.swing.event.ChangeEvent;
 
 public class TampilanAwal extends JFrame {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	protected static final String GenerateImage = null;
 	private JPanel contentPane;
 	private JTextField txtSourceAddress;
@@ -490,11 +492,13 @@ public class TampilanAwal extends JFrame {
 						image = ImageIO.read(input);
 						width = image.getWidth();
 						height = image.getHeight();
+						int th = 127;
 						float nilai;
 						String wadah;
 						wadah = FieldContras.getText();
 						nilai = Float.parseFloat(wadah);
 						nilai = nilai / 100;
+						BufferedImage gambar = (BufferedImage) image;
 						RescaleOp rescaleOp = new RescaleOp(nilai, 15, null);
 						rescaleOp.filter(image, image); // Source and destination are the same.
 
@@ -754,74 +758,71 @@ public class TampilanAwal extends JFrame {
 						image = ImageIO.read(input);
 						width = image.getWidth();
 						height = image.getHeight();
-						Color c[];
 						
-						BufferedImage im = ImageIO.read(input);
+						Graphics gi = null;
 						
-					    BufferedImage bi = new BufferedImage(im.getWidth(), im.getHeight(), BufferedImage.TYPE_INT_RGB);
-					    int i = 0;
-					    int max = 49, radius = 3;
-					    int a1 = 0, r1 = 0, g1 = 0, b1 = 0,t=0;
-					    c = new Color[max];
-					    float xx[] = {1,1,1,1,1,1,1,
-					                  1,3,3,3,3,3,1,
-					                  1,3,4,4,4,3,1,
-					                  1,3,4,15,4,3,1,
-					                  1,3,4,4,4,3,1,
-					                  1,3,3,3,3,3,1,
-					                  1,1,1,1,1,1,1,
-					    };			    
-					    float h=0;
-					    for(t=0;t<xx.length;t++){
-					        h+=xx[t];
-					    }
-					    int x = 1, y = 1, x1, y1, ex = 5, d = 0, ll = 0;
-					    for (x = radius;x < im.getHeight()- radius; x++) {
-					        for (y = radius; y < im.getWidth() - radius; y++) {
-
-					            for (x1 = x - radius; x1 <= x + radius; x1++) {
-					                for (y1 = y - radius; y1 <= y + radius; y1++) {
-					                    c[i] = new Color(im.getRGB(y1, x1));
-					                    //System.out.println(i);
-					                    //ll+=xx[i];
-					                    //System.out.println(ll);
-					                    i++;
-					                }
-					            }
-					            i = 0;
-					            ll = 0;
-					            for (d = 0; d < max; d++) {
-					                float o = xx[d] * c[d].getAlpha();
-					                a1 = (int) (a1 + o);
-					            }
-					            a1 = (int) (a1 / h);
-
-					            for (d = 0; d < max; d++) {
-					                float o = xx[d] * c[d].getRed();
-					                r1 = (int) (r1 + o);
-					            }
-					            r1 = (int) (r1 / h);
-
-					            for (d = 0; d < max; d++) {
-					                float o = xx[d] * c[d].getGreen();
-					                g1 = (int) (g1 + o);
-					            }
-					            g1 = (int) (g1 / h);
-					            //System.out.println(g1);
-					            for (d = 0; d < max; d++) {
-					                float o = xx[d] * c[d].getBlue();
-					                //System.out.println(o);
-					                b1 = (int) (b1 + o);
-					            }
-					            b1 = (int) (b1 / h);
-					            int sum1 = (r1 << 16) + (g1 << 8) + b1;
-					            bi.setRGB(y, x, sum1);
-					            r1 = g1 = b1 = 0;
-					        }
-					    }
+						gi.drawImage(image, 0, 0, null);
+						rgb_buffer=new int[3][image.getHeight()][image.getWidth()];
+					
+						for(int row=0;row<height;row++) {
+							for(int col=0;col<width;col++) {
+								Color c= new Color(image.getRGB(col, row));
+								rgb_buffer[0][row][col]=c.getRed();
+								rgb_buffer[1][row][col]=c.getGreen();
+								rgb_buffer[2][row][col]=c.getBlue();
+							}
+						}
+						
+						for(int row=1;row<height-1;row++) {
+							for(int col=1;col<width-1;col++) {
+								int r=
+										rgb_buffer[0][row-1][col-1]+
+										rgb_buffer[0][row-1][col]+
+										rgb_buffer[0][row-1][col+1]+
+										
+										rgb_buffer[0][row][col-1]+
+										rgb_buffer[0][row][col]+
+										rgb_buffer[0][row][col+1]+
+										
+										rgb_buffer[0][row+1][col-1]+
+										rgb_buffer[0][row+1][col]+
+										rgb_buffer[0][row+1][col+1];
 								
+								int g=
+										rgb_buffer[1][row-1][col-1]+
+										rgb_buffer[1][row-1][col]+
+										rgb_buffer[1][row-1][col+1]+
+										
+										rgb_buffer[1][row][col-1]+
+										rgb_buffer[1][row][col]+
+										rgb_buffer[1][row][col+1]+
+										
+										rgb_buffer[1][row+1][col-1]+
+										rgb_buffer[1][row+1][col]+
+										rgb_buffer[1][row+1][col+1];
+								
+								int b=
+										rgb_buffer[2][row-1][col-1]+
+										rgb_buffer[2][row-1][col]+
+										rgb_buffer[2][row-1][col+1]+
+										
+										rgb_buffer[2][row][col-1]+
+										rgb_buffer[2][row][col]+
+										rgb_buffer[2][row][col+1]+
+										
+										rgb_buffer[2][row+1][col-1]+
+										rgb_buffer[2][row+1][col]+
+										rgb_buffer[2][row+1][col+1];
+								
+								Color c=new Color(r/9,g/9,b/9);
+								imagebaru.setRGB(col, row, c.getRGB());
+							}
+						}
+						
+						
+
 						File ouptut = new File(simpan);
-						ImageIO.write(bi, "jpg", ouptut);
+						ImageIO.write(imagebaru, "jpg", ouptut);
 
 						ImageIcon gambarAkhir = new ImageIcon(simpan);
 						Image gak = gambarAkhir.getImage(); // transform it
@@ -854,9 +855,9 @@ public class TampilanAwal extends JFrame {
 				        
 				        Kernel kernel = new Kernel(3, 3,
 				                new float[]{
-				                    1, 2, 1,
-				                    0, 0, 0,
-				                    -1, -2, -1});				        
+				                    -1, -1, -1,
+				                    -1, 9, -1,
+				                    -1, -1, -1});				        
 				        
 				        BufferedImageOp op = new ConvolveOp(kernel);			 
 				        image = op.filter(image, null);				
