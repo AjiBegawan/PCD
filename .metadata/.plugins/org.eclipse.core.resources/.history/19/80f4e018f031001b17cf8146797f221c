@@ -853,11 +853,17 @@ public class TampilanAwal extends JFrame {
 				        graphics.drawImage(sourceImage, 0, 0, null);			 
 				        graphics.dispose();
 				        
+//				        Kernel kernel = new Kernel(3, 3,
+//				                new float[]{
+//				                    -1, -1, -1,
+//				                    -1, 9, -1,
+//				                    -1, -1, -1});
+				        
 				        Kernel kernel = new Kernel(3, 3,
 				                new float[]{
-				                    -1, -1, -1,
-				                    -1, 9, -1,
-				                    -1, -1, -1});				        
+				                    1, 1, 1,
+				                    -1, 8, -1,
+				                    -1, -1, -1});
 				        
 				        BufferedImageOp op = new ConvolveOp(kernel);			 
 				        image = op.filter(image, null);				
@@ -881,61 +887,56 @@ public class TampilanAwal extends JFrame {
 						width = image.getWidth();
 						height = image.getHeight();
 						
-				        BufferedImage image = ImageIO.read(input);
-		     			        
-				        int x = image.getWidth();
-				        int y = image.getHeight();
-
-				        int[][] edgeColors = new int[x][y];
-				        int maxGradient = -1;
+						int [][] filter1 = {
+								{-1,0,1},
+								{-2,0,2},
+								{-1,0,1}
+						};
+						int [][] filter2 = {
+								{1,2,1},
+								{0,0,0},
+								{-1,-2,-1}
+						};
 						
-				        for (int i = 1; i < x - 1; i++) {
-				            for (int j = 1; j < y - 1; j++) {
+						for (int y = 1; y < height - 1; y++) {
+				            for (int x = 1; x < width - 1; x++) {
 
-				                int val00 = getGrayScale(image.getRGB(i - 1, j - 1));
-				                int val01 = getGrayScale(image.getRGB(i - 1, j));
-				                int val02 = getGrayScale(image.getRGB(i - 1, j + 1));
-
-				                int val10 = getGrayScale(image.getRGB(i, j - 1));
-				                int val11 = getGrayScale(image.getRGB(i, j));
-				                int val12 = getGrayScale(image.getRGB(i, j + 1));
-
-				                int val20 = getGrayScale(image.getRGB(i + 1, j - 1));
-				                int val21 = getGrayScale(image.getRGB(i + 1, j));
-				                int val22 = getGrayScale(image.getRGB(i + 1, j + 1));
-
-				                int gx =  ((-1 * val00) + (0 * val01) + (1 * val02)) 
-				                        + ((-2 * val10) + (0 * val11) + (2 * val12))
-				                        + ((-1 * val20) + (0 * val21) + (1 * val22));
-
-				                int gy =  ((-1 * val00) + (-2 * val01) + (-1 * val02))
-				                        + ((0 * val10) + (0 * val11) + (0 * val12))
-				                        + ((1 * val20) + (2 * val21) + (1 * val22));
-
-				                double gval = Math.sqrt((gx * gx) + (gy * gy));
-				                int g = (int) gval;
-
-				                if(maxGradient < g) {
-				                    maxGradient = g;
+				                // get 3-by-3 array of colors in neighborhood
+				                int[][] gray = new int[width][height];
+				                for (int i = 0; i < width; i++) {
+				                    for (int j = 0; j < height; j++) {
+				                        Color c = new Color(image.getRGB(j, i));
+				                    	gray[i][j] = (int) ((c.getRed()*0.299)+(c.getGreen()*0.587)+(c.getBlue()*0.114));
+				                    }
 				                }
 
-				                edgeColors[i][j] = g;
+				                // apply filter
+				                int gray1 = 0, gray2 = 0;
+				                for (int i = 0; i < width; i++) {
+				                    for (int j = 0; j < height; j++) {
+				                        gray1 += gray[i][j] * filter1[i][j];
+				                        gray2 += gray[i][j] * filter2[i][j];
+				                    }
+				                }
+				                // int magnitude = 255 - truncate(Math.abs(gray1) + Math.abs(gray2));
+				                int tampunglagi;
+				                int tampung = (int) Math.sqrt(gray1*gray1 + gray2*gray2);
+				                if(tampung<0) {
+				                	tampunglagi=0;
+				                }else if(tampung>255) {
+				                	tampunglagi=255;
+				                }else {
+				                	tampunglagi=tampung;
+				                }
+				                
+				                int magnitude = 255 - tampunglagi;
+				                Color grayscale = new Color(magnitude, magnitude, magnitude);
+				                image.setRGB(y, x, grayscale.getRed());
 				            }
-						
 				        }
 						
-				        double scale = 255.0 / maxGradient;
 						
-				        for (int i = 1; i < x - 1; i++) {
-				            for (int j = 1; j < y - 1; j++) {
-				                int edgeColor = edgeColors[i][j];
-				                edgeColor = (int)(edgeColor * scale);
-				                edgeColor = 0xff000000 | (edgeColor << 16) | (edgeColor << 8) | edgeColor;
-
-				                image.setRGB(i, j, edgeColor);
-				            }
-				        }
-				        					
+						
 						File ouptut = new File(simpan);
 						ImageIO.write(image, "jpg", ouptut);
 
@@ -954,19 +955,6 @@ public class TampilanAwal extends JFrame {
 				}
 
 			}
-
-			private int getGrayScale(int rgb) {
-				int r = (rgb >> 16) & 0xff;
-		        int g = (rgb >> 8) & 0xff;
-		        int b = (rgb) & 0xff;
-
-		        int gray = (int)(0.2126 * r + 0.7152 * g + 0.0722 * b);
-
-		        return gray;
-
-			}
-
-			
 		});
 		btnConvert.setBounds(700, 558, 175, 35);
 		panel.add(btnConvert);

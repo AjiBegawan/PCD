@@ -1,12 +1,10 @@
-package Test;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Test {
+public class SobelTest {
     public static void main(String args[]) throws IOException {
 
         System.out.println("Started");
@@ -14,7 +12,7 @@ public class Test {
         Scanner ne1 = new Scanner(System.in);
         String filename = ne1.nextLine();*/
 
-        String filename = "F:\\College\\5th Semester\\Pengolahan Citra Digital\\Coklat.png";
+        String filename = "engine.png";
 
         File file = new File(filename);
         BufferedImage image = ImageIO.read(file);
