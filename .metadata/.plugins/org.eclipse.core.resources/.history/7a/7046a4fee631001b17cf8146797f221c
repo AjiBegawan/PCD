@@ -861,25 +861,25 @@ public class TampilanAwal extends JFrame {
 //				 
 //				            }
 //				        };
-				        // The image URL - change to where your image file is located!
-						 
-				        String imageURL = alamat;
-				 
-				        /**
-				         *
-				         * This call returns immediately and pixels are loaded in the background
-				         *
-				         * We use an ImageObserver to be notified when the loading of the image
-				         *
-				         * is complete
-				         *
-				         */
-				        Image sourceImage = Toolkit.getDefaultToolkit().getImage(imageURL);
-				 
+//				        // The image URL - change to where your image file is located!
+//						 
+//				        String imageURL = "image.png";
+//				 
+//				        /**
+//				         *
+//				         * This call returns immediately and pixels are loaded in the background
+//				         *
+//				         * We use an ImageObserver to be notified when the loading of the image
+//				         *
+//				         * is complete
+//				         *
+//				         */
+//				        Image sourceImage = Toolkit.getDefaultToolkit().getImage(imageURL);
+//				 
 //				        sourceImage.getWidth(myImageObserver);
-				 
-				        // We wait until the image is fully loaded
-				 
+//				 
+//				        // We wait until the image is fully loaded
+//				 
 //				        while (!imageLoaded) {
 //				 
 //				            try {
@@ -889,7 +889,7 @@ public class TampilanAwal extends JFrame {
 //				            }
 //				 
 //				        }
-				 
+//				 
 				        // Create a buffered image from the source image with a format that's compatible with the screen
 				 
 				        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -919,12 +919,14 @@ public class TampilanAwal extends JFrame {
 				                    -1, -1, -1,
 				                    -1, 9, -1,
 				                    -1, -1, -1});
-				        
-
-				        BufferedImageOp op = new ConvolveOp(kernel);			 
-				        image = op.filter(image, null);				
+				 
+				        BufferedImageOp op = new ConvolveOp(kernel);
+				 
+				        image = op.filter(image, null);
+						
+						
 						File ouptut = new File(simpan);
-						ImageIO.write(image, "jpg", ouptut);
+						ImageIO.write(imagebaru, "jpg", ouptut);
 
 						ImageIcon gambarAkhir = new ImageIcon(simpan);
 						Image gak = gambarAkhir.getImage(); // transform it

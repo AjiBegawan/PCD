@@ -921,8 +921,12 @@ public class TampilanAwal extends JFrame {
 				                    -1, -1, -1});
 				        
 
-				        BufferedImageOp op = new ConvolveOp(kernel);			 
-				        image = op.filter(image, null);				
+				 
+				        BufferedImageOp op = new ConvolveOp(kernel);
+				 
+				        image = op.filter(image, null);
+						
+						
 						File ouptut = new File(simpan);
 						ImageIO.write(image, "jpg", ouptut);
 

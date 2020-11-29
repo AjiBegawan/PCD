@@ -919,12 +919,14 @@ public class TampilanAwal extends JFrame {
 				                    -1, -1, -1,
 				                    -1, 9, -1,
 				                    -1, -1, -1});
-				        
-
-				        BufferedImageOp op = new ConvolveOp(kernel);			 
-				        image = op.filter(image, null);				
+				 
+				        BufferedImageOp op = new ConvolveOp(kernel);
+				 
+				        image = op.filter(image, null);
+						
+						
 						File ouptut = new File(simpan);
-						ImageIO.write(image, "jpg", ouptut);
+						ImageIO.write(imagebaru, "jpg", ouptut);
 
 						ImageIcon gambarAkhir = new ImageIcon(simpan);
 						Image gak = gambarAkhir.getImage(); // transform it
