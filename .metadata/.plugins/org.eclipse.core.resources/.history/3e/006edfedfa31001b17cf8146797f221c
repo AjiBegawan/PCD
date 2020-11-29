@@ -1,22 +1,15 @@
 package Tampilan;
 
+import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.UIManager;
-import javax.swing.filechooser.*;
 
+import java.awt.Color;
+import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
@@ -25,16 +18,26 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Transparency;
-import java.awt.EventQueue;
-import java.awt.Color;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.*;
-
 import java.io.File;
 import java.awt.event.ActionEvent;
-import javax.imageio.ImageIO;
+import javax.swing.UIManager;
+import javax.swing.filechooser.*;
+
+
+import java.awt.image.*;
+import javax.swing.border.LineBorder;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class TampilanAwal extends JFrame {
 
@@ -87,7 +90,6 @@ public class TampilanAwal extends JFrame {
 
 	BufferedImage image;
 	BufferedImage imagebaru;
-	
 	int width;
 	int height;
 	private JTextField FieldContras;
@@ -296,6 +298,9 @@ public class TampilanAwal extends JFrame {
 
 				try {
 					if (rgbtogray) {
+						// File input = new File("F:\\College\\5th Semester\\Pengolahan Citra
+						// Digital\\Coklat.jpg");
+
 						File input = new File(alamat);
 						image = ImageIO.read(input);
 						width = image.getWidth();
@@ -314,6 +319,9 @@ public class TampilanAwal extends JFrame {
 								image.setRGB(j, i, newColor.getRGB());
 							}
 						}
+
+						// File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra
+						// Digital\\TampilanHitamPutih.jpg");
 						File ouptut = new File(simpan);
 						ImageIO.write(image, "jpg", ouptut);
 
@@ -373,6 +381,9 @@ public class TampilanAwal extends JFrame {
 								image.setRGB(j, i, newColor.getRGB());
 							}
 						}
+
+						// File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra
+						// Digital\\TampilanHitamPutih.jpg");
 						File ouptut = new File(simpan);
 						ImageIO.write(image, "jpg", ouptut);
 
@@ -386,6 +397,8 @@ public class TampilanAwal extends JFrame {
 					;
 
 					if (negatif) {
+						// File input = new File("F:\\College\\5th Semester\\Pengolahan Citra
+						// Digital\\Coklat.jpg");
 
 						File input = new File(alamat);
 						image = ImageIO.read(input);
@@ -406,6 +419,9 @@ public class TampilanAwal extends JFrame {
 								image.setRGB(j, i, newColor.getRGB());
 							}
 						}
+
+						// File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra
+						// Digital\\TampilanHitamPutih.jpg");
 						File ouptut = new File(simpan);
 						ImageIO.write(image, "jpg", ouptut);
 
@@ -419,6 +435,8 @@ public class TampilanAwal extends JFrame {
 					;
 
 					if (bandw) {
+						// File input = new File("F:\\College\\5th Semester\\Pengolahan Citra
+						// Digital\\Coklat.jpg");
 
 						File input = new File(alamat);
 						image = ImageIO.read(input);
@@ -427,7 +445,9 @@ public class TampilanAwal extends JFrame {
 						int th = 127;
 
 						for (int i = 0; i < height; i++) {
+
 							for (int j = 0; j < width; j++) {
+
 								Color c = new Color(image.getRGB(j, i));
 								int red = (int) (c.getRed());
 								int green = (int) (c.getGreen());
@@ -444,6 +464,9 @@ public class TampilanAwal extends JFrame {
 								image.setRGB(j, i, newColor.getRGB());
 							}
 						}
+
+						// File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra
+						// Digital\\TampilanHitamPutih.jpg");
 						File ouptut = new File(simpan);
 						ImageIO.write(image, "jpg", ouptut);
 
@@ -455,7 +478,14 @@ public class TampilanAwal extends JFrame {
 						LblFS.setIcon(gambarAkhir);
 					}
 					;
+
+					// Kontras
+					// masih belum bener
+
 					if (kontras) {
+						// File input = new File("F:\\College\\5th Semester\\Pengolahan Citra
+						// Digital\\Coklat.jpg");
+
 						File input = new File(alamat);
 						image = ImageIO.read(input);
 						width = image.getWidth();
@@ -466,8 +496,10 @@ public class TampilanAwal extends JFrame {
 						nilai = Float.parseFloat(wadah);
 						nilai = nilai / 100;
 						RescaleOp rescaleOp = new RescaleOp(nilai, 15, null);
-						
 						rescaleOp.filter(image, image); // Source and destination are the same.
+
+						// File ouptut = new File("F:\\College\\5th Semester\\Pengolahan Citra
+						// Digital\\TampilanHitamPutih.jpg");
 						File ouptut = new File(simpan);
 						ImageIO.write(image, "jpg", ouptut);
 
@@ -716,7 +748,7 @@ public class TampilanAwal extends JFrame {
 						LblFS.setIcon(gambarAkhir);
 					}
 					;
-					//Smoothing
+					//Smoothing(Masih gagal)
 					if (smoothing) {
 						File input = new File(alamat);
 						image = ImageIO.read(input);
@@ -743,7 +775,7 @@ public class TampilanAwal extends JFrame {
 					    for(t=0;t<xx.length;t++){
 					        h+=xx[t];
 					    }
-					    int x = 1, y = 1, x1, y1, d = 0;
+					    int x = 1, y = 1, x1, y1, ex = 5, d = 0, ll = 0;
 					    for (x = radius;x < im.getHeight()- radius; x++) {
 					        for (y = radius; y < im.getWidth() - radius; y++) {
 
@@ -757,6 +789,7 @@ public class TampilanAwal extends JFrame {
 					                }
 					            }
 					            i = 0;
+					            ll = 0;
 					            for (d = 0; d < max; d++) {
 					                float o = xx[d] * c[d].getAlpha();
 					                a1 = (int) (a1 + o);
@@ -821,9 +854,9 @@ public class TampilanAwal extends JFrame {
 				        
 				        Kernel kernel = new Kernel(3, 3,
 				                new float[]{
-				                    -1, -1, -1,
-				                    -1, 9, -1,
-				                    -1, -1, -1});				        
+				                    1, 2, 1,
+				                    0, 0, 0,
+				                    -1, -2, -1});				        
 				        
 				        BufferedImageOp op = new ConvolveOp(kernel);			 
 				        image = op.filter(image, null);				
@@ -910,11 +943,17 @@ public class TampilanAwal extends JFrame {
 						Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
 																										// smooth way
 						gambarAkhir = new ImageIcon(newimg2); // transform it back
-						LblFS.setIcon(gambarAkhir);								
-					};									
+						LblFS.setIcon(gambarAkhir);
+						
+						
+					};
+					
+					
 				} catch (Exception e) {
 				}
+
 			}
+
 			private int getGrayScale(int rgb) {
 				int r = (rgb >> 16) & 0xff;
 		        int g = (rgb >> 8) & 0xff;
@@ -923,6 +962,7 @@ public class TampilanAwal extends JFrame {
 		        int gray = (int)(0.2126 * r + 0.7152 * g + 0.0722 * b);
 
 		        return gray;
+
 			}
 
 			
@@ -2395,5 +2435,7 @@ public class TampilanAwal extends JFrame {
 
 		// Button in menu end
 		// MENU ENDS
+		////////////////
+		////////////////
 	}
 }

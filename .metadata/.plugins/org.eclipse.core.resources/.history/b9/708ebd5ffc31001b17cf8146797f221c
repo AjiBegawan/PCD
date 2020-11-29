@@ -87,7 +87,6 @@ public class TampilanAwal extends JFrame {
 
 	BufferedImage image;
 	BufferedImage imagebaru;
-	
 	int width;
 	int height;
 	private JTextField FieldContras;
