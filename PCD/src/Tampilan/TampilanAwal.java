@@ -120,7 +120,7 @@ public class TampilanAwal extends JFrame {
 	public TampilanAwal() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1080, 720);
+		setBounds(100, 100, 1350, 720);
 		contentPane = new JPanel();
 		contentPane.setBackground(UIManager.getColor("ColorChooser.background"));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -137,13 +137,13 @@ public class TampilanAwal extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setForeground(UIManager.getColor("text"));
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(149, 0, 915, 681);
+		panel.setBounds(149, 0, 1185, 681);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(30, 144, 255), 2));
-		panel_1.setBounds(-22, 0, 972, 55);
+		panel_1.setBounds(-22, 0, 1207, 55);
 		panel.add(panel_1);
 		panel_1.setBackground(Color.WHITE);
 		panel_1.setLayout(null);
@@ -1029,9 +1029,9 @@ public class TampilanAwal extends JFrame {
 		lblCroppingpixel.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblCroppingpixel.setBounds(750, 499, 70, 20);
 
-		JLabel lblVersi = new JLabel("ver 0.4 Beta");
+		JLabel lblVersi = new JLabel("ver 0.5 Beta");
 		lblVersi.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		lblVersi.setBounds(859, 660, 46, 14);
+		lblVersi.setBounds(1129, 656, 46, 14);
 		panel.add(lblVersi);
 
 		JButton btnVertikal = new JButton("Vertikal");
