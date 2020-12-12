@@ -36,6 +36,13 @@ import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.imageio.ImageIO;
 
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+
 public class TampilanAwal extends JFrame {
 
 	/**
@@ -48,6 +55,7 @@ public class TampilanAwal extends JFrame {
 	private JTextField txtFinalAddress;
 	private String alamat = "null";
 	private String simpan = "null";
+	private String simpanHRed = "null";
 
 	// Inisialisasi False untuk menu
 	private boolean rgbtogray = false;
@@ -120,7 +128,7 @@ public class TampilanAwal extends JFrame {
 	public TampilanAwal() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1350, 720);
+		setBounds(100, 100, 1335, 720);
 		contentPane = new JPanel();
 		contentPane.setBackground(UIManager.getColor("ColorChooser.background"));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -137,7 +145,7 @@ public class TampilanAwal extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setForeground(UIManager.getColor("text"));
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(149, 0, 1185, 681);
+		panel.setBounds(151, 0, 1168, 681);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -1031,8 +1039,99 @@ public class TampilanAwal extends JFrame {
 
 		JLabel lblVersi = new JLabel("ver 0.5 Beta");
 		lblVersi.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		lblVersi.setBounds(1129, 656, 46, 14);
+		lblVersi.setBounds(1107, 656, 46, 14);
 		panel.add(lblVersi);
+		
+		JPanel histogram = new JPanel();
+		histogram.setBackground(Color.WHITE);
+		histogram.setBounds(885, 104, 268, 489);
+		panel.add(histogram);
+		histogram.setLayout(null);
+		
+		JLabel LblHistogramRed = new JLabel("");
+		LblHistogramRed.setHorizontalAlignment(SwingConstants.CENTER);
+		LblHistogramRed.setForeground(new Color(139, 69, 19));
+		LblHistogramRed.setBackground(Color.YELLOW);
+		LblHistogramRed.setBounds(129, 0, 0, 0);
+		histogram.add(LblHistogramRed);
+		
+		JLabel LblHistogramGreen = new JLabel("");
+		LblHistogramGreen.setHorizontalAlignment(SwingConstants.CENTER);
+		LblHistogramGreen.setForeground(new Color(139, 69, 19));
+		LblHistogramGreen.setBackground(Color.YELLOW);
+		LblHistogramGreen.setBounds(129, 163, 0, 0);
+		histogram.add(LblHistogramGreen);
+		
+		JLabel LblHistogramBlue = new JLabel("");
+		LblHistogramBlue.setHorizontalAlignment(SwingConstants.CENTER);
+		LblHistogramBlue.setForeground(new Color(139, 69, 19));
+		LblHistogramBlue.setBackground(Color.YELLOW);
+		LblHistogramBlue.setBounds(129, 326, 0, 0);
+		histogram.add(LblHistogramBlue);
+		
+		JButton btnSource = new JButton("Source");
+		/**
+		btnSource.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					File input = new File(alamat);
+					StringBuffer simpanRed = new StringBuffer(txtSourceAddress.getText());
+					simpanRed.insert(simpanRed.length() - 4, "Histogram Red");
+					simpanHRed = simpanRed.toString();
+					
+					image = ImageIO.read(input);
+					width = image.getWidth();
+					height = image.getHeight();
+					int HRed[] = new int[0x100];
+					int HGreen[] = new int[0x100];
+					int HBlue[] = new int[0x100];
+					int i,j;
+					for(i=0;i<height;i++) {
+						for(j=0;j<width;j++) {
+							Color c = new Color(image.getRGB(j, i));
+							int red = (int) (c.getRed());
+							int green = (int) (c.getGreen());
+							int blue = (int) (c.getBlue());
+							
+							HRed[red]++;
+							HGreen[green]++;
+							HBlue[blue]++;
+						}
+					}
+					DefaultCategoryDataset cDataSet = new DefaultCategoryDataset();
+					for (j=0; j<0x100;j++) {
+						cDataSet.addValue(HRed[j], "Red", new Integer(j));
+					}
+					JFreeChart histogramRed = ChartFactory.createLineChart("Red", "Value Red", "F", cDataSet);
+					ChartUtilities.saveChartAsJPEG(new File(simpanHRed),histogramRed,163,268);
+					ChartPanel jpHRed = new ChartPanel(histogramRed);
+					ImageIcon icon = new ImageIcon(simpanHRed);
+					LblHistogramRed.setIcon(icon);
+					
+				}catch (Exception ee) {
+					
+				}
+				
+				
+			}
+		});
+		*/
+		btnSource.setForeground(Color.WHITE);
+		btnSource.setBackground(new Color(60, 179, 113));
+		btnSource.setBounds(885, 609, 92, 35);
+		panel.add(btnSource);
+		
+		JButton btnResult = new JButton("Result");
+		btnResult.setForeground(Color.WHITE);
+		btnResult.setBackground(new Color(30, 144, 255));
+		btnResult.setBounds(1061, 609, 92, 35);
+		panel.add(btnResult);
+		
+		JLabel lblHistogramImage = new JLabel("Histogram Image");
+		lblHistogramImage.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHistogramImage.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblHistogramImage.setBounds(944, 66, 150, 35);
+		panel.add(lblHistogramImage);
 
 		JButton btnVertikal = new JButton("Vertikal");
 		btnVertikal.addActionListener(new ActionListener() {
