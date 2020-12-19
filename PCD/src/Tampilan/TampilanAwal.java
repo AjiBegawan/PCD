@@ -6,8 +6,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
@@ -23,18 +25,34 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Paint;
 import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.EventQueue;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.imageio.ImageIO;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.DefaultDrawingSupplier;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
+import org.jfree.data.statistics.HistogramDataset;
+
+//import pcd.Histogram.VisibleAction;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ChartUtilities;
@@ -71,6 +89,7 @@ public class TampilanAwal extends JFrame {
 	private boolean smoothing = false;
 	private boolean sharpening = false;
 	private boolean edge = false;
+	private boolean histogrameq = false;
 
 	// inisialisasi false untuk flipping
 	private boolean vertikal = true;
@@ -105,6 +124,12 @@ public class TampilanAwal extends JFrame {
 	private JTextField FieldCroppingY;
 	private JTextField FieldCroppingpixelX;
 	private JTextField FieldCroppingpixelY;
+	
+	private static final int BINS = 256;
+	protected static final Component NullPointerException = null;
+    private HistogramDataset dataset;
+    private XYBarRenderer renderer;
+    ChartPanel panel;
 
 	/**
 	 * Launch the application.
@@ -121,14 +146,19 @@ public class TampilanAwal extends JFrame {
 			}
 		});
 	}
+	
+	
 
+    
 	/**
 	 * Create the frame.
 	 */
 	public TampilanAwal() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("E:\\UNJANI\\Gambar\\lunjani.png"));
+		setTitle("KELOMPOK 4 (PCD)");
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1335, 720);
+		setBounds(100, 100, 1370, 742);
 		contentPane = new JPanel();
 		contentPane.setBackground(UIManager.getColor("ColorChooser.background"));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -138,20 +168,20 @@ public class TampilanAwal extends JFrame {
 		JPanel menu = new JPanel();
 		menu.setForeground(new Color(0, 0, 0));
 		menu.setBackground(new Color(30, 144, 255));
-		menu.setBounds(0, 0, 150, 681);
+		menu.setBounds(0, 0, 150, 703);
 		contentPane.add(menu);
 		menu.setLayout(null);
 
 		JPanel panel = new JPanel();
 		panel.setForeground(UIManager.getColor("text"));
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(151, 0, 1168, 681);
+		panel.setBounds(151, 0, 1199, 703);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(30, 144, 255), 2));
-		panel_1.setBounds(-22, 0, 1207, 55);
+		panel_1.setBounds(-22, 0, 1221, 55);
 		panel.add(panel_1);
 		panel_1.setBackground(Color.WHITE);
 		panel_1.setLayout(null);
@@ -943,6 +973,12 @@ public class TampilanAwal extends JFrame {
 		lblResult.setHorizontalAlignment(SwingConstants.CENTER);
 		lblResult.setBounds(605, 66, 150, 35);
 		panel.add(lblResult);
+		
+		JLabel lblHisEq = new JLabel("Histogram EQ");
+		lblHisEq.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblHisEq.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHisEq.setBounds(605, 66, 150, 35);
+		
 
 		JButton btnSave = new JButton("Browse Save Address");
 		btnSave.setForeground(new Color(255, 255, 255));
@@ -1039,12 +1075,12 @@ public class TampilanAwal extends JFrame {
 
 		JLabel lblVersi = new JLabel("ver 0.5 Beta");
 		lblVersi.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		lblVersi.setBounds(1107, 656, 46, 14);
+		lblVersi.setBounds(1145, 675, 54, 17);
 		panel.add(lblVersi);
 		
 		JPanel histogram = new JPanel();
 		histogram.setBackground(Color.WHITE);
-		histogram.setBounds(885, 104, 268, 489);
+		histogram.setBounds(885, 104, 300, 400);
 		panel.add(histogram);
 		histogram.setLayout(null);
 		
@@ -1069,69 +1105,95 @@ public class TampilanAwal extends JFrame {
 		LblHistogramBlue.setBounds(129, 326, 0, 0);
 		histogram.add(LblHistogramBlue);
 		
-		JButton btnSource = new JButton("Source");
-		/**
-		btnSource.addActionListener(new ActionListener() {
+		JPanel redh = new JPanel();
+		redh.setBackground(Color.WHITE);
+		redh.setBounds(0, 56, 300, 300);
+		histogram.add(redh);
+		
+		JButton btnResult = new JButton("HISTOGRAM");
+		btnResult.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					File input = new File(alamat);
-					StringBuffer simpanRed = new StringBuffer(txtSourceAddress.getText());
-					simpanRed.insert(simpanRed.length() - 4, "Histogram Red");
-					simpanHRed = simpanRed.toString();
-					
-					image = ImageIO.read(input);
-					width = image.getWidth();
-					height = image.getHeight();
-					int HRed[] = new int[0x100];
-					int HGreen[] = new int[0x100];
-					int HBlue[] = new int[0x100];
-					int i,j;
-					for(i=0;i<height;i++) {
-						for(j=0;j<width;j++) {
-							Color c = new Color(image.getRGB(j, i));
-							int red = (int) (c.getRed());
-							int green = (int) (c.getGreen());
-							int blue = (int) (c.getBlue());
-							
-							HRed[red]++;
-							HGreen[green]++;
-							HBlue[blue]++;
-						}
-					}
-					DefaultCategoryDataset cDataSet = new DefaultCategoryDataset();
-					for (j=0; j<0x100;j++) {
-						cDataSet.addValue(HRed[j], "Red", new Integer(j));
-					}
-					JFreeChart histogramRed = ChartFactory.createLineChart("Red", "Value Red", "F", cDataSet);
-					ChartUtilities.saveChartAsJPEG(new File(simpanHRed),histogramRed,163,268);
-					ChartPanel jpHRed = new ChartPanel(histogramRed);
-					ImageIcon icon = new ImageIcon(simpanHRed);
-					LblHistogramRed.setIcon(icon);
-					
-				}catch (Exception ee) {
-					
-				}
-				
+						
 				
 			}
 		});
-		*/
-		btnSource.setForeground(Color.WHITE);
-		btnSource.setBackground(new Color(60, 179, 113));
-		btnSource.setBounds(885, 609, 92, 35);
-		panel.add(btnSource);
+		btnResult.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					File input = new File(simpan);
+			    	image = ImageIO.read(input);
+			        dataset = new HistogramDataset();
+			        Raster raster = image.getRaster();
+			        final int w = image.getWidth();
+			        final int h = image.getHeight();
+			        double[] r = new double[w * h];
+			        r = raster.getSamples(0, 0, w, h, 0, r);
+			        dataset.addSeries("Red", r, BINS);
+			        r = raster.getSamples(0, 0, w, h, 1, r);
+			        dataset.addSeries("Green", r, BINS);
+			        r = raster.getSamples(0, 0, w, h, 2, r);
+			        dataset.addSeries("Blue", r, BINS);
+			        // chart
+			        JFreeChart chart = ChartFactory.createHistogram("Histogram", "Value",
+			            "Count", dataset, PlotOrientation.VERTICAL, true, true, false);
+			        XYPlot plot = (XYPlot) chart.getPlot();
+			        renderer = (XYBarRenderer) plot.getRenderer();
+			        renderer.setBarPainter(new StandardXYBarPainter());
+			        // translucent red, green & blue
+			        Paint[] paintArray = {
+			            new Color(0x80ff0000, true),
+			            new Color(0x8000ff00, true),
+			            new Color(0x800000ff, true)
+			        };
+			        plot.setDrawingSupplier(new DefaultDrawingSupplier(
+			            paintArray,
+			            DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE,
+			            DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE,
+			            DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE,
+			            DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE,
+			            DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE));
+			        TampilanAwal.this.panel = new ChartPanel(chart);
+			        
+//			        renderer.setSeriesVisible(2, true);
+//			        renderer.setSeriesVisible(1, !renderer.getSeriesVisible(1));
+			        TampilanAwal.this.panel.setMouseWheelEnabled(true);
+			        
+			        redh.setLayout(new java.awt.BorderLayout());
+			        redh.add(TampilanAwal.this.panel,BorderLayout.CENTER);
+			        redh.validate();
+				}catch (Exception e1) {
+					// TODO: handle exception
+				}
+				
+//							
+				
+			}
+		});
 		
-		JButton btnResult = new JButton("Result");
+		
+		
 		btnResult.setForeground(Color.WHITE);
-		btnResult.setBackground(new Color(30, 144, 255));
-		btnResult.setBounds(1061, 609, 92, 35);
+		btnResult.setBackground(Color.ORANGE);
+		btnResult.setBounds(987, 558, 107, 35);
 		panel.add(btnResult);
 		
 		JLabel lblHistogramImage = new JLabel("Histogram Image");
 		lblHistogramImage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHistogramImage.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblHistogramImage.setBounds(944, 66, 150, 35);
+		lblHistogramImage.setBounds(958, 66, 150, 35);
 		panel.add(lblHistogramImage);
+		
+		JButton btnHistogramEqualization = new JButton("HISTOGRAM EQUALIZATION");
+		btnHistogramEqualization.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnHistogramEqualization.setForeground(Color.WHITE);
+		btnHistogramEqualization.setBackground(Color.ORANGE);
+		btnHistogramEqualization.setBounds(570, 558, 200, 35);
+		
+		
 
 		JButton btnVertikal = new JButton("Vertikal");
 		btnVertikal.addActionListener(new ActionListener() {
@@ -1228,6 +1290,7 @@ public class TampilanAwal extends JFrame {
 
 		// Button in menu
 		JButton btnAbout = new JButton("About");
+		btnAbout.setBackground(Color.PINK);
 		btnAbout.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		btnAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1235,7 +1298,7 @@ public class TampilanAwal extends JFrame {
 						"Kelompok 4\nDicky Febrian Dwiputra 3411181097\nAde Ridwan Nugraha 3411181117\nIndiarto Aji Begawan 3411181114");
 			}
 		});
-		btnAbout.setBounds(20, 647, 110, 23);
+		btnAbout.setBounds(10, 610, 130, 30);
 		menu.add(btnAbout);
 
 		JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
@@ -1302,10 +1365,16 @@ public class TampilanAwal extends JFrame {
 		lblEdge.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEdge.setBounds(24, 0, 205, 55);
 		lblEdge.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		JLabel lblHistogramEq = new JLabel("Histogram Equalization");
+		lblHistogramEq.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHistogramEq.setBounds(24, 0, 205, 55);
+		lblHistogramEq.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
 		JButton btnRGBtoGray = new JButton("RGB to Gray");
 		btnRGBtoGray.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = true;
 				brightness = false;
@@ -1320,6 +1389,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = false;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.add(lblRGBtoGray);
@@ -1382,7 +1452,17 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
+				
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -1397,6 +1477,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnBrightness = new JButton("Brightness");
 		btnBrightness.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = true;
@@ -1411,6 +1492,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = false;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1473,6 +1555,16 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1488,6 +1580,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnBW = new JButton("B & W");
 		btnBW.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = false;
@@ -1502,6 +1595,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = false;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1564,6 +1658,16 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1579,6 +1683,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnNegatif = new JButton("Negatif Film");
 		btnNegatif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = false;
@@ -1593,6 +1698,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = false;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1655,7 +1761,16 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -1670,6 +1785,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnKontras = new JButton("Kontras");
 		btnKontras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = false;
@@ -1684,6 +1800,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = false;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1746,6 +1863,16 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1761,6 +1888,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnTranslasi = new JButton("Translasi");
 		btnTranslasi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = false;
@@ -1775,6 +1903,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = false;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1837,6 +1966,16 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1852,6 +1991,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnFlipping = new JButton("Flipping");
 		btnFlipping.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = false;
@@ -1866,6 +2006,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = false;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1928,6 +2069,16 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1943,6 +2094,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnCropping = new JButton("Cropping");
 		btnCropping.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = false;
@@ -1957,6 +2109,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = false;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2019,6 +2172,16 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2034,6 +2197,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnRotation = new JButton("Rotation");
 		btnRotation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = false;
@@ -2048,6 +2212,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = false;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2110,6 +2275,16 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2125,6 +2300,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnScalling = new JButton("Scalling");
 		btnScalling.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = false;
@@ -2139,6 +2315,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = false;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2201,6 +2378,16 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2216,6 +2403,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnSmoothing = new JButton("Smoothing");
 		btnSmoothing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = false;
@@ -2230,6 +2418,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = true;
 				sharpening = false;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2292,6 +2481,16 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2307,6 +2506,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnSharpening = new JButton("Sharpening");
 		btnSharpening.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = false;
@@ -2321,6 +2521,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = true;
 				edge = false;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2383,7 +2584,18 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 
+				
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -2398,6 +2610,7 @@ public class TampilanAwal extends JFrame {
 		JButton btnEdgeDetection = new JButton("Edge Detection");
 		btnEdgeDetection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
 				txtFinalAddress.setText("");
 				rgbtogray = false;
 				brightness = false;
@@ -2412,6 +2625,7 @@ public class TampilanAwal extends JFrame {
 				smoothing = false;
 				sharpening = false;
 				edge = true;
+				histogrameq = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2474,6 +2688,16 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.add(lblEdge);
+				
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				panel.remove(btnHistogramEqualization);
+				panel.remove(lblHisEq);
+				
+				panel.add(lblResult);	
+				panel.add(btnConvert);
+				panel.add(btnSave);
+				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2485,8 +2709,112 @@ public class TampilanAwal extends JFrame {
 		btnEdgeDetection.setBackground(new Color(255, 215, 0));
 		btnEdgeDetection.setBounds(0, 459, 150, 30);
 		menu.add(btnEdgeDetection);
+		
+		JButton btnHistogramEq = new JButton("Histogram EQ");
+		btnHistogramEq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
+				txtFinalAddress.setText("");
+				rgbtogray = false;
+				brightness = false;
+				negatif = false;
+				bandw = false;
+				kontras = false;
+				translasi = false;
+				flipping = false;
+				cropping = false;
+				rotation = false;
+				scalling = false;
+				smoothing = false;
+				sharpening = false;
+				edge = false;
+				histogrameq = true;
+
+				// Gray
+				panel_1.remove(lblRGBtoGray);
+
+				// Brightness
+				panel_1.remove(lblBrightness);
+				panel.remove(sliderBrightness);
+				panel.remove(lblSlider);
+
+				// negatif
+				panel_1.remove(lblNegatif);
+
+				// Black and White
+				panel_1.remove(lblBandW);
+
+				// Kontras
+				panel_1.remove(lblKontras);
+				panel.remove(FieldContras);
+				panel.remove(lblContras);
+				panel.remove(lblContrasPer);
+
+				// translasi
+				panel_1.remove(lblTranlasi);
+				panel.remove(FieldTranslasiM);
+				panel.remove(FieldTranslasiN);
+				panel.remove(lblTranslasiM);
+				panel.remove(lblTranslasiN);
+
+				// flipping
+				panel_1.remove(lblFlipping);
+				panel.remove(btnHorizontal);
+				panel.remove(btnVertikal);
+
+				// cropping
+				panel_1.remove(lblCropping);
+				panel.remove(FieldCroppingX);
+				panel.remove(FieldCroppingY);
+				panel.remove(FieldCroppingpixelX);
+				panel.remove(FieldCroppingpixelY);
+				panel.remove(lblCroppingpixel);
+				panel.remove(lblCroppingKali);
+				panel.remove(lblCroppingY);
+				panel.remove(lblCroppingX);
+
+				// rotation
+				panel_1.remove(lblRotation);
+				panel.remove(btnRotatekanan);
+				panel.remove(btnRotatekiri);
+
+				// scalling
+				panel_1.remove(lblScalling);
+				panel.remove(btnScallingBesar);
+				panel.remove(btnScallingKecil);
+
+				// smoothing
+				panel_1.remove(lblSmoothing);
+
+				// sharpening
+				panel_1.remove(lblSharpening);
+
+				// edge
+				panel_1.remove(lblEdge);
+				
+				// histogram eq
+				panel_1.add(lblHistogramEq);
+				panel.add(btnHistogramEqualization);
+				panel.add(lblHisEq);
+				
+				panel.remove(lblResult);
+				panel.remove(btnConvert);
+				panel.remove(btnSave);
+				panel.remove(txtFinalAddress);
+				panel.setVisible(false);
+				panel.setVisible(true);
+				setFinalAddress = false;
+			}
+		});
+		btnHistogramEq.setForeground(Color.BLACK);
+		btnHistogramEq.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnHistogramEq.setBackground(new Color(255, 215, 0));
+		btnHistogramEq.setBounds(0, 500, 150, 30);
+		menu.add(btnHistogramEq);
 
 		// Button in menu end
 		// MENU ENDS
+		
+		
 	}
 }
