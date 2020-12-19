@@ -321,6 +321,10 @@ public class TampilanAwal extends JFrame {
 						str.insert(str.length() - 4, "Edge");
 					}
 					;
+					if (histogrameq) {
+						str.insert(str.length() - 4, "Equalization");
+					}
+					;
 					txtFinalAddress.setText(str.toString());
 				}
 				;
@@ -974,11 +978,6 @@ public class TampilanAwal extends JFrame {
 		lblResult.setBounds(605, 66, 150, 35);
 		panel.add(lblResult);
 		
-		JLabel lblHisEq = new JLabel("Histogram EQ");
-		lblHisEq.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblHisEq.setHorizontalAlignment(SwingConstants.CENTER);
-		lblHisEq.setBounds(605, 66, 150, 35);
-		
 
 		JButton btnSave = new JButton("Browse Save Address");
 		btnSave.setForeground(new Color(255, 255, 255));
@@ -1084,31 +1083,15 @@ public class TampilanAwal extends JFrame {
 		panel.add(histogram);
 		histogram.setLayout(null);
 		
-		JLabel LblHistogramRed = new JLabel("");
-		LblHistogramRed.setHorizontalAlignment(SwingConstants.CENTER);
-		LblHistogramRed.setForeground(new Color(139, 69, 19));
-		LblHistogramRed.setBackground(Color.YELLOW);
-		LblHistogramRed.setBounds(129, 0, 0, 0);
-		histogram.add(LblHistogramRed);
+		JPanel histogramBiasa = new JPanel();
+		histogramBiasa.setBackground(Color.WHITE);
+		histogramBiasa.setBounds(0, 0, 300, 200);
+		histogram.add(histogramBiasa);
 		
-		JLabel LblHistogramGreen = new JLabel("");
-		LblHistogramGreen.setHorizontalAlignment(SwingConstants.CENTER);
-		LblHistogramGreen.setForeground(new Color(139, 69, 19));
-		LblHistogramGreen.setBackground(Color.YELLOW);
-		LblHistogramGreen.setBounds(129, 163, 0, 0);
-		histogram.add(LblHistogramGreen);
-		
-		JLabel LblHistogramBlue = new JLabel("");
-		LblHistogramBlue.setHorizontalAlignment(SwingConstants.CENTER);
-		LblHistogramBlue.setForeground(new Color(139, 69, 19));
-		LblHistogramBlue.setBackground(Color.YELLOW);
-		LblHistogramBlue.setBounds(129, 326, 0, 0);
-		histogram.add(LblHistogramBlue);
-		
-		JPanel redh = new JPanel();
-		redh.setBackground(Color.WHITE);
-		redh.setBounds(0, 56, 300, 300);
-		histogram.add(redh);
+		JPanel histogramEq = new JPanel();
+		histogramEq.setBackground(Color.WHITE);
+		histogramEq.setBounds(0, 200, 300, 200);
+		histogram.add(histogramEq);
 		
 		JButton btnResult = new JButton("HISTOGRAM");
 		btnResult.addActionListener(new ActionListener() {
@@ -1159,9 +1142,9 @@ public class TampilanAwal extends JFrame {
 //			        renderer.setSeriesVisible(1, !renderer.getSeriesVisible(1));
 			        TampilanAwal.this.panel.setMouseWheelEnabled(true);
 			        
-			        redh.setLayout(new java.awt.BorderLayout());
-			        redh.add(TampilanAwal.this.panel,BorderLayout.CENTER);
-			        redh.validate();
+			        histogramBiasa.setLayout(new java.awt.BorderLayout());
+			        histogramBiasa.add(TampilanAwal.this.panel,BorderLayout.CENTER);
+			        histogramBiasa.validate();
 				}catch (Exception e1) {
 					// TODO: handle exception
 				}
@@ -1183,16 +1166,6 @@ public class TampilanAwal extends JFrame {
 		lblHistogramImage.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblHistogramImage.setBounds(958, 66, 150, 35);
 		panel.add(lblHistogramImage);
-		
-		JButton btnHistogramEqualization = new JButton("HISTOGRAM EQUALIZATION");
-		btnHistogramEqualization.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnHistogramEqualization.setForeground(Color.WHITE);
-		btnHistogramEqualization.setBackground(Color.ORANGE);
-		btnHistogramEqualization.setBounds(570, 558, 200, 35);
-		
 		
 
 		JButton btnVertikal = new JButton("Vertikal");
@@ -1368,7 +1341,7 @@ public class TampilanAwal extends JFrame {
 		
 		JLabel lblHistogramEq = new JLabel("Histogram Equalization");
 		lblHistogramEq.setHorizontalAlignment(SwingConstants.CENTER);
-		lblHistogramEq.setBounds(24, 0, 205, 55);
+		lblHistogramEq.setBounds(24, 0, 250, 55);
 		lblHistogramEq.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
 		JButton btnRGBtoGray = new JButton("RGB to Gray");
@@ -1455,13 +1428,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
-				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
+
 				
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1558,13 +1525,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1661,13 +1622,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1764,13 +1719,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -1866,13 +1815,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1969,13 +1912,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2072,13 +2009,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2175,13 +2106,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2278,13 +2203,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2381,13 +2300,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2484,13 +2397,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2587,13 +2494,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 
 				
 				panel.setVisible(false);
@@ -2691,13 +2592,7 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				panel.remove(btnHistogramEqualization);
-				panel.remove(lblHisEq);
 				
-				panel.add(lblResult);	
-				panel.add(btnConvert);
-				panel.add(btnSave);
-				panel.add(txtFinalAddress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2794,13 +2689,9 @@ public class TampilanAwal extends JFrame {
 				
 				// histogram eq
 				panel_1.add(lblHistogramEq);
-				panel.add(btnHistogramEqualization);
-				panel.add(lblHisEq);
 				
-				panel.remove(lblResult);
-				panel.remove(btnConvert);
-				panel.remove(btnSave);
-				panel.remove(txtFinalAddress);
+				
+				
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
