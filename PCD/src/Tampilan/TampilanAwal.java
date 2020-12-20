@@ -1191,7 +1191,7 @@ public class TampilanAwal extends JFrame {
 		lblCroppingpixel.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblCroppingpixel.setBounds(750, 499, 70, 20);
 
-		JLabel lblVersi = new JLabel("ver 0.5 Beta");
+		JLabel lblVersi = new JLabel("ver 0.6 Beta");
 		lblVersi.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		lblVersi.setBounds(1145, 675, 54, 17);
 		panel.add(lblVersi);
