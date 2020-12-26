@@ -104,8 +104,11 @@ public class TampilanAwal extends JFrame {
 	// inisisalisasi false untuk rotate
 	private boolean scallingbesar = true;
 	private boolean scallingkecil = false;
-	
-	//smoothing
+
+	// inisialisasi false untuk edge detection
+	private boolean edgeCanny = false;
+
+	// smoothing
 	int[][][] rgb_buffer;
 
 	private boolean setFinalAddress = false;
@@ -116,7 +119,7 @@ public class TampilanAwal extends JFrame {
 
 	BufferedImage image;
 	BufferedImage imagebaru;
-	
+
 	int width;
 	int height;
 	private JTextField FieldContras;
@@ -126,12 +129,12 @@ public class TampilanAwal extends JFrame {
 	private JTextField FieldCroppingY;
 	private JTextField FieldCroppingpixelX;
 	private JTextField FieldCroppingpixelY;
-	
+
 	private static final int BINS = 256;
 	protected static final Component NullPointerException = null;
-    private HistogramDataset dataset;
-    private XYBarRenderer renderer;
-    ChartPanel panel;
+	private HistogramDataset dataset;
+	private XYBarRenderer renderer;
+	ChartPanel panel;
 
 	/**
 	 * Launch the application.
@@ -148,10 +151,7 @@ public class TampilanAwal extends JFrame {
 			}
 		});
 	}
-	
-	
 
-    
 	/**
 	 * Create the frame.
 	 */
@@ -319,8 +319,12 @@ public class TampilanAwal extends JFrame {
 						str.insert(str.length() - 4, "Sharpening");
 					}
 					;
-					if (edge) {
-						str.insert(str.length() - 4, "Edge");
+					if (edge && !edgeCanny) {
+						str.insert(str.length() - 4, "EdgeSobel");
+					}
+					;
+					if (edge && edgeCanny) {
+						str.insert(str.length() - 4, "EdgeCanny");
 					}
 					;
 					if (histogrameq) {
@@ -510,7 +514,7 @@ public class TampilanAwal extends JFrame {
 						nilai = Float.parseFloat(wadah);
 						nilai = nilai / 100;
 						RescaleOp rescaleOp = new RescaleOp(nilai, 15, null);
-						
+
 						rescaleOp.filter(image, image); // Source and destination are the same.
 						File ouptut = new File(simpan);
 						ImageIO.write(image, "jpg", ouptut);
@@ -760,74 +764,68 @@ public class TampilanAwal extends JFrame {
 						LblFS.setIcon(gambarAkhir);
 					}
 					;
-					//Smoothing
+					// Smoothing
 					if (smoothing) {
 						File input = new File(alamat);
 						image = ImageIO.read(input);
 						width = image.getWidth();
 						height = image.getHeight();
 						Color c[];
-						
+
 						BufferedImage im = ImageIO.read(input);
-						
-					    BufferedImage bi = new BufferedImage(im.getWidth(), im.getHeight(), BufferedImage.TYPE_INT_RGB);
-					    int i = 0;
-					    int max = 49, radius = 3;
-					    int a1 = 0, r1 = 0, g1 = 0, b1 = 0,t=0;
-					    c = new Color[max];
-					    float xx[] = {1,1,1,1,1,1,1,
-					                  1,3,3,3,3,3,1,
-					                  1,3,4,4,4,3,1,
-					                  1,3,4,15,4,3,1,
-					                  1,3,4,4,4,3,1,
-					                  1,3,3,3,3,3,1,
-					                  1,1,1,1,1,1,1,
-					    };			    
-					    float h=0;
-					    for(t=0;t<xx.length;t++){
-					        h+=xx[t];
-					    }
-					    int x = 1, y = 1, x1, y1, d = 0;
-					    for (x = radius;x < im.getHeight()- radius; x++) {
-					        for (y = radius; y < im.getWidth() - radius; y++) {
 
-					            for (x1 = x - radius; x1 <= x + radius; x1++) {
-					                for (y1 = y - radius; y1 <= y + radius; y1++) {
-					                    c[i] = new Color(im.getRGB(y1, x1));
-					                    i++;
-					                }
-					            }
-					            i = 0;
-					            for (d = 0; d < max; d++) {
-					                float o = xx[d] * c[d].getAlpha();
-					                a1 = (int) (a1 + o);
-					            }
-					            a1 = (int) (a1 / h);
+						BufferedImage bi = new BufferedImage(im.getWidth(), im.getHeight(), BufferedImage.TYPE_INT_RGB);
+						int i = 0;
+						int max = 49, radius = 3;
+						int a1 = 0, r1 = 0, g1 = 0, b1 = 0, t = 0;
+						c = new Color[max];
+						float xx[] = { 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 1, 1, 3, 4, 4, 4, 3, 1, 1, 3, 4, 15, 4, 3,
+								1, 1, 3, 4, 4, 4, 3, 1, 1, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, };
+						float h = 0;
+						for (t = 0; t < xx.length; t++) {
+							h += xx[t];
+						}
+						int x = 1, y = 1, x1, y1, d = 0;
+						for (x = radius; x < im.getHeight() - radius; x++) {
+							for (y = radius; y < im.getWidth() - radius; y++) {
 
-					            for (d = 0; d < max; d++) {
-					                float o = xx[d] * c[d].getRed();
-					                r1 = (int) (r1 + o);
-					            }
-					            r1 = (int) (r1 / h);
+								for (x1 = x - radius; x1 <= x + radius; x1++) {
+									for (y1 = y - radius; y1 <= y + radius; y1++) {
+										c[i] = new Color(im.getRGB(y1, x1));
+										i++;
+									}
+								}
+								i = 0;
+								for (d = 0; d < max; d++) {
+									float o = xx[d] * c[d].getAlpha();
+									a1 = (int) (a1 + o);
+								}
+								a1 = (int) (a1 / h);
 
-					            for (d = 0; d < max; d++) {
-					                float o = xx[d] * c[d].getGreen();
-					                g1 = (int) (g1 + o);
-					            }
-					            g1 = (int) (g1 / h);
-					            //System.out.println(g1);
-					            for (d = 0; d < max; d++) {
-					                float o = xx[d] * c[d].getBlue();
-					                //System.out.println(o);
-					                b1 = (int) (b1 + o);
-					            }
-					            b1 = (int) (b1 / h);
-					            int sum1 = (r1 << 16) + (g1 << 8) + b1;
-					            bi.setRGB(y, x, sum1);
-					            r1 = g1 = b1 = 0;
-					        }
-					    }
-								
+								for (d = 0; d < max; d++) {
+									float o = xx[d] * c[d].getRed();
+									r1 = (int) (r1 + o);
+								}
+								r1 = (int) (r1 / h);
+
+								for (d = 0; d < max; d++) {
+									float o = xx[d] * c[d].getGreen();
+									g1 = (int) (g1 + o);
+								}
+								g1 = (int) (g1 / h);
+								// System.out.println(g1);
+								for (d = 0; d < max; d++) {
+									float o = xx[d] * c[d].getBlue();
+									// System.out.println(o);
+									b1 = (int) (b1 + o);
+								}
+								b1 = (int) (b1 / h);
+								int sum1 = (r1 << 16) + (g1 << 8) + b1;
+								bi.setRGB(y, x, sum1);
+								r1 = g1 = b1 = 0;
+							}
+						}
+
 						File ouptut = new File(simpan);
 						ImageIO.write(bi, "jpg", ouptut);
 
@@ -837,34 +835,31 @@ public class TampilanAwal extends JFrame {
 																										// smooth way
 						gambarAkhir = new ImageIcon(newimg2); // transform it back
 						LblFS.setIcon(gambarAkhir);
-					};
-					
-					//Sharpening
+					}
+					;
+
+					// Sharpening
 					if (sharpening) {
 						File input = new File(alamat);
 						image = ImageIO.read(input);
 						width = image.getWidth();
 						height = image.getHeight();
-						
-						BufferedImage image = ImageIO.read(input);
-						
-						BufferedImage bufferedImage = new BufferedImage(200, 200,
-						        BufferedImage.TYPE_BYTE_INDEXED);
 
-						    // Kernel for Sharping
-						    Kernel kernel = new Kernel(3, 3, 
-						    				new float[] { 	-1, -1, -1, 
-						    								-1, 9, -1, 
-						    								-1, -1, -1 });
-						
-						    // Kernal for Edge Detection
+						BufferedImage image = ImageIO.read(input);
+
+						BufferedImage bufferedImage = new BufferedImage(200, 200, BufferedImage.TYPE_BYTE_INDEXED);
+
+						// Kernel for Sharping
+						Kernel kernel = new Kernel(3, 3, new float[] { -1, -1, -1, -1, 9, -1, -1, -1, -1 });
+
+						// Kernal for Edge Detection
 //						    Kernel kernel = new Kernel(3, 3, 
 //				    				new float[] { 	-1, -1, -1, 
 //				    								-1, 8, -1, 
 //				    								-1, -1, -1 });
-						    
-						    BufferedImageOp op = new ConvolveOp(kernel);
-						    bufferedImage = op.filter(image, null);				        
+
+						BufferedImageOp op = new ConvolveOp(kernel);
+						bufferedImage = op.filter(image, null);
 						File ouptut = new File(simpan);
 						ImageIO.write(bufferedImage, "jpg", ouptut);
 
@@ -874,189 +869,210 @@ public class TampilanAwal extends JFrame {
 																										// smooth way
 						gambarAkhir = new ImageIcon(newimg2); // transform it back
 						LblFS.setIcon(gambarAkhir);
-					};
-					
-					//Edge Detection
-					if(edge) {
+					}
+					;
+
+					// Edge Detection
+					if (edge) {
 						File input = new File(alamat);
-						image = ImageIO.read(input);
-						imagebaru = ImageIO.read(input);
-						width = image.getWidth();
-						height = image.getHeight();
+						BufferedImage image = ImageIO.read(input);
+						BufferedImage baruimage;
+						int x = image.getWidth();
+						int y = image.getHeight();
+
+						if (edgeCanny) {
+							
+							CannyEdge detector = new CannyEdge();
+							//adjust its parameters as desired
+							detector.setLowThreshold(0.5f);
+							detector.setHighThreshold(1f);
+							//apply it to an image
+							detector.setSourceImage(image);
+							detector.process();
+							baruimage = detector.getEdgesImage();
+							
+							
+							//save file masih gagal
+							File output = new File(simpan);
+							ImageIO.write(baruimage, "jpg", output);
+							
+							Image dImg = baruimage.getScaledInstance(400,400, java.awt.Image.SCALE_SMOOTH);
+							ImageIcon AkhirGambar = new ImageIcon(dImg);
+							LblFS.setIcon(AkhirGambar);
+							
+						} else {
+							int[][] edgeColors = new int[x][y];
+							int maxGradient = -1;
+
+							for (int i = 1; i < x - 1; i++) {
+								for (int j = 1; j < y - 1; j++) {
+
+									int val00 = getGrayScale(image.getRGB(i - 1, j - 1));
+									int val01 = getGrayScale(image.getRGB(i - 1, j));
+									int val02 = getGrayScale(image.getRGB(i - 1, j + 1));
+
+									int val10 = getGrayScale(image.getRGB(i, j - 1));
+									int val11 = getGrayScale(image.getRGB(i, j));
+									int val12 = getGrayScale(image.getRGB(i, j + 1));
+
+									int val20 = getGrayScale(image.getRGB(i + 1, j - 1));
+									int val21 = getGrayScale(image.getRGB(i + 1, j));
+									int val22 = getGrayScale(image.getRGB(i + 1, j + 1));
+
+									int gx = ((-1 * val00) + (0 * val01) + (1 * val02))
+											+ ((-2 * val10) + (0 * val11) + (2 * val12))
+											+ ((-1 * val20) + (0 * val21) + (1 * val22));
+
+									int gy = ((-1 * val00) + (-2 * val01) + (-1 * val02))
+											+ ((0 * val10) + (0 * val11) + (0 * val12))
+											+ ((1 * val20) + (2 * val21) + (1 * val22));
+
+									double gval = Math.sqrt((gx * gx) + (gy * gy));
+									int g = (int) gval;
+
+									if (maxGradient < g) {
+										maxGradient = g;
+									}
+
+									edgeColors[i][j] = g;
+								}
+
+							}
+
+							double scale = 255.0 / maxGradient;
+
+							for (int i = 1; i < x - 1; i++) {
+								for (int j = 1; j < y - 1; j++) {
+									int edgeColor = edgeColors[i][j];
+									edgeColor = (int) (edgeColor * scale);
+									edgeColor = 0xff000000 | (edgeColor << 16) | (edgeColor << 8) | edgeColor;
+
+									image.setRGB(i, j, edgeColor);
+								}
+							}
+							File ouptut = new File(simpan);
+							ImageIO.write(image, "jpg", ouptut);
+
+							ImageIcon gambarAkhir = new ImageIcon(simpan);
+							Image gak = gambarAkhir.getImage(); // transform it
+							Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
+																											// smooth way
+							gambarAkhir = new ImageIcon(newimg2); // transform it back
+							LblFS.setIcon(gambarAkhir);
+						}
+
 						
-				        BufferedImage image = ImageIO.read(input);
-		     			        
-				        int x = image.getWidth();
-				        int y = image.getHeight();
+					}
+					;
 
-				        int[][] edgeColors = new int[x][y];
-				        int maxGradient = -1;
-						
-				        for (int i = 1; i < x - 1; i++) {
-				            for (int j = 1; j < y - 1; j++) {
-
-				                int val00 = getGrayScale(image.getRGB(i - 1, j - 1));
-				                int val01 = getGrayScale(image.getRGB(i - 1, j));
-				                int val02 = getGrayScale(image.getRGB(i - 1, j + 1));
-
-				                int val10 = getGrayScale(image.getRGB(i, j - 1));
-				                int val11 = getGrayScale(image.getRGB(i, j));
-				                int val12 = getGrayScale(image.getRGB(i, j + 1));
-
-				                int val20 = getGrayScale(image.getRGB(i + 1, j - 1));
-				                int val21 = getGrayScale(image.getRGB(i + 1, j));
-				                int val22 = getGrayScale(image.getRGB(i + 1, j + 1));
-
-				                int gx =  ((-1 * val00) + (0 * val01) + (1 * val02)) 
-				                        + ((-2 * val10) + (0 * val11) + (2 * val12))
-				                        + ((-1 * val20) + (0 * val21) + (1 * val22));
-
-				                int gy =  ((-1 * val00) + (-2 * val01) + (-1 * val02))
-				                        + ((0 * val10) + (0 * val11) + (0 * val12))
-				                        + ((1 * val20) + (2 * val21) + (1 * val22));
-
-				                double gval = Math.sqrt((gx * gx) + (gy * gy));
-				                int g = (int) gval;
-
-				                if(maxGradient < g) {
-				                    maxGradient = g;
-				                }
-
-				                edgeColors[i][j] = g;
-				            }
-						
-				        }
-						
-				        double scale = 255.0 / maxGradient;
-						
-				        for (int i = 1; i < x - 1; i++) {
-				            for (int j = 1; j < y - 1; j++) {
-				                int edgeColor = edgeColors[i][j];
-				                edgeColor = (int)(edgeColor * scale);
-				                edgeColor = 0xff000000 | (edgeColor << 16) | (edgeColor << 8) | edgeColor;
-
-				                image.setRGB(i, j, edgeColor);
-				            }
-				        }
-				        					
-						File ouptut = new File(simpan);
-						ImageIO.write(image, "jpg", ouptut);
-
-						ImageIcon gambarAkhir = new ImageIcon(simpan);
-						Image gak = gambarAkhir.getImage(); // transform it
-						Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
-																										// smooth way
-						gambarAkhir = new ImageIcon(newimg2); // transform it back
-						LblFS.setIcon(gambarAkhir);								
-					};		
-					
-					//histogrameque
+					// histogrameque
 					if (histogrameq) {
 						File input = new File(alamat);
 						image = ImageIO.read(input);
-						double[] count = new double[256];//Number of gray values recorded
-					    double[] Count = new double[256];//Statistical gray value of new graph
-					    double[] NSK=new double[256];//Transformation function
-					   
-					        double H,S,I;
-					        int width = image.getWidth();
-					        int height = image.getHeight();
-					        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-					        for (int j = 0; j < height; j++) {
-					            for(int i=0; i<width; i++) {
-					                Object data=image.getRaster().getDataElements(i,j,null);
-					                int red = image.getColorModel().getRed(data);
-					                int blue = image.getColorModel().getBlue(data);
-					                int green = image.getColorModel().getGreen(data);
-					                I= ((double)(red+green+blue)/(double)3);
-					                if (count[(int)I]==0){
-					                    count[(int)I]=1;
-					                }else {
-					                    count[(int)I]+=1;
-					                }
-					            }
-					        }
-					        double[] Pr=new double[256];//Calculate the occurrence probability of each gray value
-					        for (int i=0;i<256;i++){
-					            Pr[i]=(double)count[i]/(double)(width*height);
-					        }
-					        double[] sk = new double[256];//Cumulative probability
-					        for (int i=0;i<256;i++){
-					            for (int j=0;j<=i;j++){
-					                sk[i]+=Pr[j];
-					            }
-					        }
-					        for (int i=0;i<256;i++){
-					            NSK[i]=(255*sk[i]+0.5);
-					        }
-					        int[] rgb=new int[3];
-					        for (int j=0;j<height;j++){
-					            for(int i=0;i<width;i++){
-					                Object data=image.getRaster().getDataElements(i,j,null);//Get rgb value of image points
-					                int red = image.getColorModel().getRed(data);
-					                int blue = image.getColorModel().getBlue(data);
-					                int green = image.getColorModel().getGreen(data);
-					                int Alpha = image.getColorModel().getAlpha(data);
-					                if (green>blue){//Set of formula calculation H
-					                    H=Math.acos((red-green+red-blue)
-					                            /(2.0*Math.sqrt((red-green)*(red-green)+(red-blue)*(green-blue))));
-					                }else{
-					                    H=2.0*Math.PI-Math.acos((red-green+red-blue)
-					                            /(2.0*Math.sqrt((red-green)*(red-green)+(red-blue)*(green-blue))));
-					                }
-					                I= ((double)(red+green+blue)/(double)3);
-					                I=NSK[(int)I];//I transformed i
+						double[] count = new double[256];// Number of gray values recorded
+						double[] Count = new double[256];// Statistical gray value of new graph
+						double[] NSK = new double[256];// Transformation function
 
-					                if (Count[(int)I]==0){
-					                    Count[(int)I]=1;
-					                }else {
-					                    Count[(int)I]+=1;
-					                }
-					                if (red==green&&green==blue){//Processing of black and white image
-					                    rgb[0]=(int)I;
-					                    rgb[1]=(int)I;
-					                    rgb[2]=(int)I;
-					                }else {     //Processing of color image
-					                    S = 1 - ((double) 3 / (double) (red + green + blue)) * (double) red;//Calculate S
-					                    if(H<=2.09){
-					                        rgb[0]=(int)(I*(1.0+(S*Math.cos(H))/Math.cos((Math.PI/3.0)-H)));
-					                        rgb[0]=rgb[0]>255?255:rgb[0];
-					                        rgb[0]=rgb[0]<0?0:rgb[0];
-					                        rgb[2]=(int)(I*(1.0-S));
-					                        rgb[2]=rgb[2]<0?0:rgb[2];
-					                        rgb[2]=rgb[2]>255?255:rgb[2];
-					                        rgb[1]=(int)(3.0*I-rgb[0]-rgb[2]);
-					                        rgb[1]=rgb[1]>255?255:rgb[1];
-					                        rgb[1]=rgb[1]<0?0:rgb[1];
-					                    }else if(H>2.09&&H<=4.18){
-					                        rgb[1]=(int)(I*(1.0+(S*Math.cos(H-(Math.PI*2.0/3.0)))/Math.cos((Math.PI)-H)));
-					                        rgb[1]=rgb[1]>255?255:rgb[1];
-					                        rgb[1]=rgb[1]<0?0:rgb[1];
-					                        rgb[0]=(int)(I*(1.0-S));
-					                        rgb[0]=rgb[0]>255?255:rgb[0];
-					                        rgb[0]=rgb[0]<0?0:rgb[0];
-					                        rgb[2]=(int)(3.0*I-rgb[0]-rgb[1]);
-					                        rgb[2]=rgb[2]>255?255:rgb[2];
-					                        rgb[2]=rgb[2]<0?0:rgb[2];
-					                    }else if(H>4.18){
-					                        rgb[2]=(int)(I*(1.0+(S*Math.cos(H-(Math.PI*4.0/3.0)))/Math.cos((Math.PI*5.0/3.0)-H)));
-					                        rgb[2]=rgb[2]>255?255:rgb[2];
-					                        rgb[2]=rgb[2]<0?0:rgb[2];
-					                        rgb[1]=(int)(I*(1.0-S));
-					                        rgb[1]=rgb[1]>255?255:rgb[1];
-					                        rgb[1]=rgb[1]<0?0:rgb[1];
-					                        rgb[0]=(int)(3.0*I-rgb[1]-rgb[2]);
-					                        rgb[0]=rgb[0]>255?255:rgb[0];
-					                        rgb[0]=rgb[0]<0?0:rgb[0];
-					                    }
-					                }
-					                int srgb=Alpha<<24|rgb[2]<<16|rgb[1]<<8|rgb[0];
-					                result.setRGB(i,j, srgb);
-					            }
-					        }
-						
-						    
-						    				        
+						double H, S, I;
+						int width = image.getWidth();
+						int height = image.getHeight();
+						BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+						for (int j = 0; j < height; j++) {
+							for (int i = 0; i < width; i++) {
+								Object data = image.getRaster().getDataElements(i, j, null);
+								int red = image.getColorModel().getRed(data);
+								int blue = image.getColorModel().getBlue(data);
+								int green = image.getColorModel().getGreen(data);
+								I = ((double) (red + green + blue) / (double) 3);
+								if (count[(int) I] == 0) {
+									count[(int) I] = 1;
+								} else {
+									count[(int) I] += 1;
+								}
+							}
+						}
+						double[] Pr = new double[256];// Calculate the occurrence probability of each gray value
+						for (int i = 0; i < 256; i++) {
+							Pr[i] = (double) count[i] / (double) (width * height);
+						}
+						double[] sk = new double[256];// Cumulative probability
+						for (int i = 0; i < 256; i++) {
+							for (int j = 0; j <= i; j++) {
+								sk[i] += Pr[j];
+							}
+						}
+						for (int i = 0; i < 256; i++) {
+							NSK[i] = (255 * sk[i] + 0.5);
+						}
+						int[] rgb = new int[3];
+						for (int j = 0; j < height; j++) {
+							for (int i = 0; i < width; i++) {
+								Object data = image.getRaster().getDataElements(i, j, null);// Get rgb value of image
+																							// points
+								int red = image.getColorModel().getRed(data);
+								int blue = image.getColorModel().getBlue(data);
+								int green = image.getColorModel().getGreen(data);
+								int Alpha = image.getColorModel().getAlpha(data);
+								if (green > blue) {// Set of formula calculation H
+									H = Math.acos((red - green + red - blue) / (2.0 * Math
+											.sqrt((red - green) * (red - green) + (red - blue) * (green - blue))));
+								} else {
+									H = 2.0 * Math.PI - Math.acos((red - green + red - blue) / (2.0 * Math
+											.sqrt((red - green) * (red - green) + (red - blue) * (green - blue))));
+								}
+								I = ((double) (red + green + blue) / (double) 3);
+								I = NSK[(int) I];// I transformed i
+
+								if (Count[(int) I] == 0) {
+									Count[(int) I] = 1;
+								} else {
+									Count[(int) I] += 1;
+								}
+								if (red == green && green == blue) {// Processing of black and white image
+									rgb[0] = (int) I;
+									rgb[1] = (int) I;
+									rgb[2] = (int) I;
+								} else { // Processing of color image
+									S = 1 - ((double) 3 / (double) (red + green + blue)) * (double) red;// Calculate S
+									if (H <= 2.09) {
+										rgb[0] = (int) (I * (1.0 + (S * Math.cos(H)) / Math.cos((Math.PI / 3.0) - H)));
+										rgb[0] = rgb[0] > 255 ? 255 : rgb[0];
+										rgb[0] = rgb[0] < 0 ? 0 : rgb[0];
+										rgb[2] = (int) (I * (1.0 - S));
+										rgb[2] = rgb[2] < 0 ? 0 : rgb[2];
+										rgb[2] = rgb[2] > 255 ? 255 : rgb[2];
+										rgb[1] = (int) (3.0 * I - rgb[0] - rgb[2]);
+										rgb[1] = rgb[1] > 255 ? 255 : rgb[1];
+										rgb[1] = rgb[1] < 0 ? 0 : rgb[1];
+									} else if (H > 2.09 && H <= 4.18) {
+										rgb[1] = (int) (I * (1.0
+												+ (S * Math.cos(H - (Math.PI * 2.0 / 3.0))) / Math.cos((Math.PI) - H)));
+										rgb[1] = rgb[1] > 255 ? 255 : rgb[1];
+										rgb[1] = rgb[1] < 0 ? 0 : rgb[1];
+										rgb[0] = (int) (I * (1.0 - S));
+										rgb[0] = rgb[0] > 255 ? 255 : rgb[0];
+										rgb[0] = rgb[0] < 0 ? 0 : rgb[0];
+										rgb[2] = (int) (3.0 * I - rgb[0] - rgb[1]);
+										rgb[2] = rgb[2] > 255 ? 255 : rgb[2];
+										rgb[2] = rgb[2] < 0 ? 0 : rgb[2];
+									} else if (H > 4.18) {
+										rgb[2] = (int) (I * (1.0 + (S * Math.cos(H - (Math.PI * 4.0 / 3.0)))
+												/ Math.cos((Math.PI * 5.0 / 3.0) - H)));
+										rgb[2] = rgb[2] > 255 ? 255 : rgb[2];
+										rgb[2] = rgb[2] < 0 ? 0 : rgb[2];
+										rgb[1] = (int) (I * (1.0 - S));
+										rgb[1] = rgb[1] > 255 ? 255 : rgb[1];
+										rgb[1] = rgb[1] < 0 ? 0 : rgb[1];
+										rgb[0] = (int) (3.0 * I - rgb[1] - rgb[2]);
+										rgb[0] = rgb[0] > 255 ? 255 : rgb[0];
+										rgb[0] = rgb[0] < 0 ? 0 : rgb[0];
+									}
+								}
+								int srgb = Alpha << 24 | rgb[2] << 16 | rgb[1] << 8 | rgb[0];
+								result.setRGB(i, j, srgb);
+							}
+						}
+
 						File ouptut = new File(simpan);
 						ImageIO.write(result, "jpg", ouptut);
 
@@ -1065,22 +1081,23 @@ public class TampilanAwal extends JFrame {
 						Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
 																										// smooth way
 						gambarAkhir = new ImageIcon(newimg2); // transform it back
-						LblFS.setIcon(gambarAkhir);		
-					};
+						LblFS.setIcon(gambarAkhir);
+					}
+					;
 				} catch (Exception e) {
 				}
 			}
+
 			private int getGrayScale(int rgb) {
 				int r = (rgb >> 16) & 0xff;
-		        int g = (rgb >> 8) & 0xff;
-		        int b = (rgb) & 0xff;
+				int g = (rgb >> 8) & 0xff;
+				int b = (rgb) & 0xff;
 
-		        int gray = (int)(0.2126 * r + 0.7152 * g + 0.0722 * b);
+				int gray = (int) (0.2126 * r + 0.7152 * g + 0.0722 * b);
 
-		        return gray;
+				return gray;
 			}
 
-			
 		});
 		btnConvert.setBounds(700, 558, 175, 35);
 		panel.add(btnConvert);
@@ -1096,7 +1113,6 @@ public class TampilanAwal extends JFrame {
 		lblResult.setHorizontalAlignment(SwingConstants.CENTER);
 		lblResult.setBounds(605, 66, 150, 35);
 		panel.add(lblResult);
-		
 
 		JButton btnSave = new JButton("Browse Save Address");
 		btnSave.setForeground(new Color(255, 255, 255));
@@ -1191,33 +1207,32 @@ public class TampilanAwal extends JFrame {
 		lblCroppingpixel.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblCroppingpixel.setBounds(750, 499, 70, 20);
 
-		JLabel lblVersi = new JLabel("ver 0.6 Beta");
+		JLabel lblVersi = new JLabel("ver 0.7 Beta");
 		lblVersi.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		lblVersi.setBounds(1145, 675, 54, 17);
 		panel.add(lblVersi);
-		
+
 		JPanel histogram = new JPanel();
 		histogram.setBorder(null);
 		histogram.setBackground(Color.WHITE);
 		histogram.setBounds(885, 104, 300, 443);
 		panel.add(histogram);
 		histogram.setLayout(null);
-		
+
 		JPanel histogramBiasa = new JPanel();
 		histogramBiasa.setBackground(Color.WHITE);
 		histogramBiasa.setBounds(0, 0, 300, 200);
 		histogram.add(histogramBiasa);
-		
+
 		JPanel histogramEq = new JPanel();
 		histogramEq.setBackground(Color.WHITE);
 		histogramEq.setBounds(0, 221, 300, 200);
 		histogram.add(histogramEq);
-		
+
 		JButton btnResult = new JButton("HISTOGRAM");
 		btnResult.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-						
-				
+
 			}
 		});
 		btnResult.addMouseListener(new MouseAdapter() {
@@ -1225,113 +1240,122 @@ public class TampilanAwal extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				try {
 					File input = new File(alamat);
-			    	image = ImageIO.read(input);
-			        dataset = new HistogramDataset();
-			        Raster raster = image.getRaster();
-			        final int w = image.getWidth();
-			        final int h = image.getHeight();
-			        double[] r = new double[w * h];
-			        r = raster.getSamples(0, 0, w, h, 0, r);
-			        dataset.addSeries("Red", r, BINS);
-			        r = raster.getSamples(0, 0, w, h, 1, r);
-			        dataset.addSeries("Green", r, BINS);
-			        r = raster.getSamples(0, 0, w, h, 2, r);
-			        dataset.addSeries("Blue", r, BINS);
-			        // chart
-			        JFreeChart chart = ChartFactory.createHistogram("Histogram", "Value",
-			            "Count", dataset, PlotOrientation.VERTICAL, true, true, false);
-			        XYPlot plot = (XYPlot) chart.getPlot();
-			        renderer = (XYBarRenderer) plot.getRenderer();
-			        renderer.setBarPainter(new StandardXYBarPainter());
-			        // translucent red, green & blue
-			        Paint[] paintArray = {
-			            new Color(0x80ff0000, true),
-			            new Color(0x8000ff00, true),
-			            new Color(0x800000ff, true)
-			        };
-			        plot.setDrawingSupplier(new DefaultDrawingSupplier(
-			            paintArray,
-			            DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE,
-			            DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE,
-			            DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE,
-			            DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE,
-			            DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE));
-			        TampilanAwal.this.panel = new ChartPanel(chart);
-			        
+					image = ImageIO.read(input);
+					dataset = new HistogramDataset();
+					Raster raster = image.getRaster();
+					final int w = image.getWidth();
+					final int h = image.getHeight();
+					double[] r = new double[w * h];
+					r = raster.getSamples(0, 0, w, h, 0, r);
+					dataset.addSeries("Red", r, BINS);
+					r = raster.getSamples(0, 0, w, h, 1, r);
+					dataset.addSeries("Green", r, BINS);
+					r = raster.getSamples(0, 0, w, h, 2, r);
+					dataset.addSeries("Blue", r, BINS);
+					// chart
+					JFreeChart chart = ChartFactory.createHistogram("Histogram Source Image", "Value", "Count", dataset,
+							PlotOrientation.VERTICAL, true, true, false);
+					XYPlot plot = (XYPlot) chart.getPlot();
+					renderer = (XYBarRenderer) plot.getRenderer();
+					renderer.setBarPainter(new StandardXYBarPainter());
+					// translucent red, green & blue
+					Paint[] paintArray = { new Color(0x80ff0000, true), new Color(0x8000ff00, true),
+							new Color(0x800000ff, true) };
+					plot.setDrawingSupplier(
+							new DefaultDrawingSupplier(paintArray, DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE,
+									DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE,
+									DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE,
+									DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE,
+									DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE));
+					TampilanAwal.this.panel = new ChartPanel(chart);
+
 //			        renderer.setSeriesVisible(2, true);
 //			        renderer.setSeriesVisible(1, !renderer.getSeriesVisible(1));
-			        TampilanAwal.this.panel.setMouseWheelEnabled(true);
-			        
-			        histogramBiasa.setLayout(new java.awt.BorderLayout());
-			        histogramBiasa.add(TampilanAwal.this.panel,BorderLayout.CENTER);
-			        histogramBiasa.validate();
-			        
-			        
-			        
-			        //histogram luar biasa
-			        input = new File(simpan);
-			    	image = ImageIO.read(input);
-			        dataset = new HistogramDataset();
-			        raster = image.getRaster();
-			        final int l = image.getWidth();
-			        final int t = image.getHeight();
-			        r = new double[w * h];
-			        r = raster.getSamples(0, 0, l, t, 0, r);
-			        dataset.addSeries("Red", r, BINS);
-			        r = raster.getSamples(0, 0, l, t, 1, r);
-			        dataset.addSeries("Green", r, BINS);
-			        r = raster.getSamples(0, 0, l, t, 2, r);
-			        dataset.addSeries("Blue", r, BINS);
-			        // chart
-			        chart = ChartFactory.createHistogram("Histogram Equelization", "Value",
-			            "Count", dataset, PlotOrientation.VERTICAL, true, true, false);
-			        plot = (XYPlot) chart.getPlot();
-			        renderer = (XYBarRenderer) plot.getRenderer();
-			        renderer.setBarPainter(new StandardXYBarPainter());
-			        // translucent red, green & blue
-			        Paint[] aa = {
-			            new Color(0x80ff0000, true),
-			            new Color(0x8000ff00, true),
-			            new Color(0x800000ff, true)
-			        };
-			        plot.setDrawingSupplier(new DefaultDrawingSupplier(
-			            aa,
-			            DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE,
-			            DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE,
-			            DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE,
-			            DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE,
-			            DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE));
-			        TampilanAwal.this.panel = new ChartPanel(chart);
-			        
+					TampilanAwal.this.panel.setMouseWheelEnabled(true);
+
+					histogramBiasa.setLayout(new java.awt.BorderLayout());
+					histogramBiasa.add(TampilanAwal.this.panel, BorderLayout.CENTER);
+					histogramBiasa.validate();
+
+					// histogram luar biasa
+					input = new File(simpan);
+					image = ImageIO.read(input);
+					dataset = new HistogramDataset();
+					raster = image.getRaster();
+					final int l = image.getWidth();
+					final int t = image.getHeight();
+					r = new double[w * h];
+					r = raster.getSamples(0, 0, l, t, 0, r);
+					dataset.addSeries("Red", r, BINS);
+					r = raster.getSamples(0, 0, l, t, 1, r);
+					dataset.addSeries("Green", r, BINS);
+					r = raster.getSamples(0, 0, l, t, 2, r);
+					dataset.addSeries("Blue", r, BINS);
+					// chart
+					chart = ChartFactory.createHistogram("Histogram Result Image", "Value", "Count", dataset,
+							PlotOrientation.VERTICAL, true, true, false);
+					plot = (XYPlot) chart.getPlot();
+					renderer = (XYBarRenderer) plot.getRenderer();
+					renderer.setBarPainter(new StandardXYBarPainter());
+					// translucent red, green & blue
+					Paint[] aa = { new Color(0x80ff0000, true), new Color(0x8000ff00, true),
+							new Color(0x800000ff, true) };
+					plot.setDrawingSupplier(
+							new DefaultDrawingSupplier(aa, DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE,
+									DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE,
+									DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE,
+									DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE,
+									DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE));
+					TampilanAwal.this.panel = new ChartPanel(chart);
+
 //			        renderer.setSeriesVisible(2, true);
 //			        renderer.setSeriesVisible(1, !renderer.getSeriesVisible(1));
-			        TampilanAwal.this.panel.setMouseWheelEnabled(true);
-			        
-			        histogramEq.setLayout(new java.awt.BorderLayout());
-			        histogramEq.add(TampilanAwal.this.panel,BorderLayout.CENTER);
-			        histogramEq.validate();
-				}catch (Exception e1) {
+					TampilanAwal.this.panel.setMouseWheelEnabled(true);
+
+					histogramEq.setLayout(new java.awt.BorderLayout());
+					histogramEq.add(TampilanAwal.this.panel, BorderLayout.CENTER);
+					histogramEq.validate();
+				} catch (Exception e1) {
 					// TODO: handle exception
 				}
-				
+
 //							
-				
+
 			}
 		});
-		
-		
-		
+
 		btnResult.setForeground(Color.WHITE);
 		btnResult.setBackground(Color.ORANGE);
 		btnResult.setBounds(987, 558, 107, 35);
 		panel.add(btnResult);
-		
+
 		JLabel lblHistogramImage = new JLabel("Histogram Image");
 		lblHistogramImage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHistogramImage.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblHistogramImage.setBounds(958, 66, 150, 35);
 		panel.add(lblHistogramImage);
-		
+
+		JButton btnEdgeDetectionDefault = new JButton("Edge Detection Sobel");
+		btnEdgeDetectionDefault.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				edge = true;
+				edgeCanny = false;
+			}
+		});
+		btnEdgeDetectionDefault.setForeground(Color.WHITE);
+		btnEdgeDetectionDefault.setBackground(new Color(60, 179, 113));
+		btnEdgeDetectionDefault.setBounds(475, 512, 175, 35);
+
+		JButton btnEdgeDetectionCanny = new JButton("Edge Detection Canny");
+		btnEdgeDetectionCanny.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				edge = true;
+				edgeCanny = true;
+			}
+		});
+		btnEdgeDetectionCanny.setForeground(Color.WHITE);
+		btnEdgeDetectionCanny.setBackground(new Color(60, 179, 113));
+		btnEdgeDetectionCanny.setBounds(700, 512, 175, 35);
 
 		JButton btnVertikal = new JButton("Vertikal");
 		btnVertikal.addActionListener(new ActionListener() {
@@ -1503,7 +1527,7 @@ public class TampilanAwal extends JFrame {
 		lblEdge.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEdge.setBounds(24, 0, 205, 55);
 		lblEdge.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
+
 		JLabel lblHistogramEq = new JLabel("Histogram Equalization");
 		lblHistogramEq.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHistogramEq.setBounds(24, 0, 250, 55);
@@ -1590,11 +1614,12 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
 
-				
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -1687,10 +1712,11 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1784,10 +1810,11 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1881,10 +1908,12 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -1977,10 +2006,11 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2074,10 +2104,11 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2171,10 +2202,11 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2268,10 +2300,11 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2365,10 +2398,11 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2462,10 +2496,11 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2559,10 +2594,11 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2656,12 +2692,12 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
 
-				
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -2754,10 +2790,11 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.add(lblEdge);
-				
+				panel.add(btnEdgeDetectionDefault);
+				panel.add(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2769,7 +2806,7 @@ public class TampilanAwal extends JFrame {
 		btnEdgeDetection.setBackground(new Color(255, 215, 0));
 		btnEdgeDetection.setBounds(0, 459, 150, 30);
 		menu.add(btnEdgeDetection);
-		
+
 		JButton btnHistogramEq = new JButton("Histogram EQ");
 		btnHistogramEq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -2851,12 +2888,12 @@ public class TampilanAwal extends JFrame {
 
 				// edge
 				panel_1.remove(lblEdge);
-				
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
 				// histogram eq
 				panel_1.add(lblHistogramEq);
-				
-				
-				
+
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -2870,7 +2907,6 @@ public class TampilanAwal extends JFrame {
 
 		// Button in menu end
 		// MENU ENDS
-		
-		
+
 	}
 }
