@@ -273,62 +273,62 @@ public class TampilanAwal extends JFrame {
 				if (!setFinalAddress) {
 					StringBuffer str = new StringBuffer(txtSourceAddress.getText());
 					if (rgbtogray) {
-						str.insert(str.length() - 4, " Gray");
+						str.insert(str.length() - 5, " Gray");
 					}
 					;
 					if (brightness) {
-						str.insert(str.length() - 4, " Brightness");
+						str.insert(str.length() - 5, " Brightness");
 					}
 					;
 					if (negatif) {
-						str.insert(str.length() - 4, " Negative");
+						str.insert(str.length() - 5, " Negative");
 					}
 					;
 					if (bandw) {
-						str.insert(str.length() - 4, " B&W");
+						str.insert(str.length() - 5, " B&W");
 					}
 					;
 					if (kontras) {
-						str.insert(str.length() - 4, " Kontras");
+						str.insert(str.length() - 5, " Kontras");
 					}
 					if (translasi) {
-						str.insert(str.length() - 4, " Translasi");
+						str.insert(str.length() - 5, " Translasi");
 					}
 					;
 					if (flipping) {
-						str.insert(str.length() - 4, " Flipping");
+						str.insert(str.length() - 5, " Flipping");
 					}
 					;
 					if (cropping) {
-						str.insert(str.length() - 4, " Cropping");
+						str.insert(str.length() - 5, " Cropping");
 					}
 					;
 					if (rotation) {
-						str.insert(str.length() - 4, " Rotation");
+						str.insert(str.length() - 5, " Rotation");
 					}
 					;
 					if (scalling) {
-						str.insert(str.length() - 4, " Scalling");
+						str.insert(str.length() - 5, " Scalling");
 					}
 					;
 					if (smoothing) {
-						str.insert(str.length() - 4, " Smoothing");
+						str.insert(str.length() - 5, " Smoothing");
 					}
 					;
 					if (sharpening) {
-						str.insert(str.length() - 4, " Sharpening");
+						str.insert(str.length() - 5, " Sharpening");
 					}
 					;
 					if (edge && !edgeCanny) {
-						str.insert(str.length() - 4, " EdgeSobel");
+						str.insert(str.length() - 5, " EdgeSobel");
 					}
 					;
 					if (edge && edgeCanny) {
-						str.insert(str.length() - 4, " EdgeCanny");
+						str.insert(str.length() - 5, " EdgeCanny");
 					}
 					;
 					if (histogrameq) {
-						str.insert(str.length() - 4, " Equalization");
+						str.insert(str.length() - 5, " Equalization");
 					}
 					;
 					txtFinalAddress.setText(str.toString());
