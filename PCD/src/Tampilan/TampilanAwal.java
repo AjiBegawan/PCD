@@ -177,7 +177,7 @@ public class TampilanAwal extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setForeground(UIManager.getColor("text"));
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(160, 0, 1199, 703);
+		panel.setBounds(149, 0, 1210, 703);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
