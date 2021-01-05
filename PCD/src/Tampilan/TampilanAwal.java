@@ -38,9 +38,17 @@ import java.awt.event.MouseEvent;
 import java.awt.image.*;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Iterator;
 import java.awt.event.ActionEvent;
+
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -92,6 +100,7 @@ public class TampilanAwal extends JFrame {
 	private boolean sharpening = false;
 	private boolean edge = false;
 	private boolean histogrameq = false;
+	private boolean compress = false;
 
 	// inisialisasi false untuk flipping
 	private boolean vertikal = true;
@@ -252,10 +261,17 @@ public class TampilanAwal extends JFrame {
 				}
 				alamat = txtSourceAddress.getText();
 
-				ImageIcon gambarAwal = new ImageIcon(alamat);
-				Image ga = gambarAwal.getImage(); // transform it
+				//ImageIcon gambarAwal = new ImageIcon(alamat);
+				File input = new File(alamat);
+				Image ga = null;
+				try {
+					ga = ImageIO.read(input);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}// transform it
 				Image newimg = ga.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-				gambarAwal = new ImageIcon(newimg); // transform it back
+				ImageIcon gambarAwal = new ImageIcon(newimg); // transform it back
 				LblIS.setIcon(gambarAwal);
 			}
 		});
@@ -331,6 +347,9 @@ public class TampilanAwal extends JFrame {
 						str.insert(str.length() - 4, " Equalization");
 					}
 					;
+					if (compress) {
+						str.insert(str.length() - 4, " Compress");
+					}
 					txtFinalAddress.setText(str.toString());
 				}
 				;
@@ -1082,8 +1101,36 @@ public class TampilanAwal extends JFrame {
 																										// smooth way
 						gambarAkhir = new ImageIcon(newimg2); // transform it back
 						LblFS.setIcon(gambarAkhir);
-					}
-					;
+				};
+					if(compress) {
+						File input = new File(alamat);
+						image = ImageIO.read(input);
+						File output = new File(simpan);
+						OutputStream os = new FileOutputStream(output);
+						String formatFile = alamat.substring(alamat.length() - 3);
+						
+						Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(formatFile);
+					    ImageWriter writer = (ImageWriter) writers.next();
+					    ImageOutputStream ios = ImageIO.createImageOutputStream(os);
+					    writer.setOutput(ios);
+
+					    ImageWriteParam param = writer.getDefaultWriteParam();
+
+					    param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+					    param.setCompressionQuality(0.05f);  // Change the quality value you prefer
+					    writer.write(null, new IIOImage(image, null, null), param);
+
+					    os.close();
+					    ios.close();
+					    writer.dispose();
+					    
+					    ImageIcon gambarAkhir = new ImageIcon(simpan);
+						Image gak = gambarAkhir.getImage(); // transform it
+						Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
+																										// smooth way
+						gambarAkhir = new ImageIcon(newimg2); // transform it back
+						LblFS.setIcon(gambarAkhir);
+					};
 				} catch (Exception e) {
 				}
 			}
@@ -1532,6 +1579,11 @@ public class TampilanAwal extends JFrame {
 		lblHistogramEq.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHistogramEq.setBounds(24, 0, 250, 55);
 		lblHistogramEq.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		JLabel lblCompress = new JLabel("Compress");
+		lblCompress.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCompress.setBounds(24, 0, 250, 55);
+		lblCompress.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
 		JButton btnRGBtoGray = new JButton("RGB to Gray");
 		btnRGBtoGray.addActionListener(new ActionListener() {
@@ -1552,6 +1604,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.add(lblRGBtoGray);
@@ -1619,6 +1672,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1650,6 +1706,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1717,6 +1774,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1748,6 +1808,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1815,6 +1876,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1846,6 +1910,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1913,6 +1978,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1944,6 +2012,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2011,6 +2080,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2042,6 +2114,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2109,6 +2182,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2140,6 +2216,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2207,6 +2284,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2238,6 +2318,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2305,6 +2386,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2336,6 +2420,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2403,6 +2488,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2434,6 +2522,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2501,6 +2590,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2532,6 +2624,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2599,6 +2692,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2630,6 +2726,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = true;
 				edge = false;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2697,6 +2794,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2728,6 +2828,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = true;
 				histogrameq = false;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2795,6 +2896,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2826,6 +2930,7 @@ public class TampilanAwal extends JFrame {
 				sharpening = false;
 				edge = false;
 				histogrameq = true;
+				compress = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2893,6 +2998,9 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.add(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2904,6 +3012,108 @@ public class TampilanAwal extends JFrame {
 		btnHistogramEq.setBackground(new Color(255, 215, 0));
 		btnHistogramEq.setBounds(0, 500, 150, 30);
 		menu.add(btnHistogramEq);
+		
+		JButton btnCompress = new JButton("Compress");
+		btnCompress.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
+				txtFinalAddress.setText("");
+				rgbtogray = false;
+				brightness = false;
+				negatif = false;
+				bandw = false;
+				kontras = false;
+				translasi = false;
+				flipping = false;
+				cropping = false;
+				rotation = false;
+				scalling = false;
+				smoothing = false;
+				sharpening = false;
+				edge = false;
+				histogrameq = false;
+				compress = true;
+
+				// Gray
+				panel_1.remove(lblRGBtoGray);
+
+				// Brightness
+				panel_1.remove(lblBrightness);
+				panel.remove(sliderBrightness);
+				panel.remove(lblSlider);
+
+				// negatif
+				panel_1.remove(lblNegatif);
+
+				// Black and White
+				panel_1.remove(lblBandW);
+
+				// Kontras
+				panel_1.remove(lblKontras);
+				panel.remove(FieldContras);
+				panel.remove(lblContras);
+				panel.remove(lblContrasPer);
+
+				// translasi
+				panel_1.remove(lblTranlasi);
+				panel.remove(FieldTranslasiM);
+				panel.remove(FieldTranslasiN);
+				panel.remove(lblTranslasiM);
+				panel.remove(lblTranslasiN);
+
+				// flipping
+				panel_1.remove(lblFlipping);
+				panel.remove(btnHorizontal);
+				panel.remove(btnVertikal);
+
+				// cropping
+				panel_1.remove(lblCropping);
+				panel.remove(FieldCroppingX);
+				panel.remove(FieldCroppingY);
+				panel.remove(FieldCroppingpixelX);
+				panel.remove(FieldCroppingpixelY);
+				panel.remove(lblCroppingpixel);
+				panel.remove(lblCroppingKali);
+				panel.remove(lblCroppingY);
+				panel.remove(lblCroppingX);
+
+				// rotation
+				panel_1.remove(lblRotation);
+				panel.remove(btnRotatekanan);
+				panel.remove(btnRotatekiri);
+
+				// scalling
+				panel_1.remove(lblScalling);
+				panel.remove(btnScallingBesar);
+				panel.remove(btnScallingKecil);
+
+				// smoothing
+				panel_1.remove(lblSmoothing);
+
+				// sharpening
+				panel_1.remove(lblSharpening);
+
+				// edge
+				panel_1.remove(lblEdge);
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.add(lblCompress);
+
+				panel.setVisible(false);
+				panel.setVisible(true);
+				setFinalAddress = false;
+			}
+		});
+		btnCompress.setForeground(Color.BLACK);
+		btnCompress.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnCompress.setBackground(new Color(255, 215, 0));
+		btnCompress.setBounds(0, 530, 150, 30);
+		menu.add(btnCompress);
 
 		// Button in menu end
 		// MENU ENDS
