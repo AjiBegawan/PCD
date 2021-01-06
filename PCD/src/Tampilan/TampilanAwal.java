@@ -1109,7 +1109,7 @@ public class TampilanAwal extends JFrame {
 						OutputStream os = new FileOutputStream(output);
 						String formatFile = alamat.substring(alamat.length() - 3);
 						
-						Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(formatFile);
+						Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
 					    ImageWriter writer = (ImageWriter) writers.next();
 					    ImageOutputStream ios = ImageIO.createImageOutputStream(os);
 					    writer.setOutput(ios);
