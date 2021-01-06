@@ -1104,10 +1104,10 @@ public class TampilanAwal extends JFrame {
 				};
 					if(compress) {
 						File input = new File(alamat);
-						image = ImageIO.read(input);
+						BufferedImage imagesatu = ImageIO.read(input);
 						File output = new File(simpan);
 						OutputStream os = new FileOutputStream(output);
-						String formatFile = alamat.substring(alamat.length() - 3);
+						//String formatFile = alamat.substring(alamat.length() - 3);
 						
 						Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
 					    ImageWriter writer = (ImageWriter) writers.next();
@@ -1118,11 +1118,23 @@ public class TampilanAwal extends JFrame {
 
 					    param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 					    param.setCompressionQuality(0.05f);  // Change the quality value you prefer
-					    writer.write(null, new IIOImage(image, null, null), param);
+					    writer.write(null, new IIOImage(imagesatu, null, null), param);
 
 					    os.close();
 					    ios.close();
 					    writer.dispose();
+					    
+					    input = new File(alamat);
+						Image ga1 = null;
+						try {
+							ga1 = ImageIO.read(input);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}// transform it
+						Image newimg1 = ga1.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+						ImageIcon gambarAwal1 = new ImageIcon(newimg1); // transform it back
+						LblIS.setIcon(gambarAwal1);
 					    
 					    ImageIcon gambarAkhir = new ImageIcon(simpan);
 						Image gak = gambarAkhir.getImage(); // transform it
