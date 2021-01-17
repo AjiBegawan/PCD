@@ -101,6 +101,7 @@ public class TampilanAwal extends JFrame {
 	private boolean edge = false;
 	private boolean histogrameq = false;
 	private boolean compress = false;
+	private boolean steganografi = false;
 
 	// inisialisasi false untuk flipping
 	private boolean vertikal = true;
@@ -116,6 +117,10 @@ public class TampilanAwal extends JFrame {
 
 	// inisialisasi false untuk edge detection
 	private boolean edgeCanny = false;
+	
+	// inisialisasi false untuk encode dan decode steganografi
+	private boolean stegaEncode = false;
+	private boolean stegaDecode = false;
 
 	// smoothing
 	int[][][] rgb_buffer;
@@ -144,6 +149,7 @@ public class TampilanAwal extends JFrame {
 	private HistogramDataset dataset;
 	private XYBarRenderer renderer;
 	ChartPanel panel;
+	private JTextField txtHiddenAddress;
 
 	/**
 	 * Launch the application.
@@ -228,6 +234,7 @@ public class TampilanAwal extends JFrame {
 		result.setBackground(new Color(255, 255, 255));
 		result.setBounds(475, 104, 400, 400);
 		panel.add(result);
+		
 
 		JLabel LblFS = new JLabel("");
 		LblFS.setForeground(new Color(139, 69, 19));
@@ -350,6 +357,15 @@ public class TampilanAwal extends JFrame {
 					if (compress) {
 						str.insert(str.length() - 4, " Compress");
 					}
+					if (stegaDecode) {
+						str.insert(str.length() - 4, " Decode");
+					}
+					;
+					if (stegaEncode) {
+						str.insert(str.length() - 4, " Encode");
+					}
+					;
+					
 					txtFinalAddress.setText(str.toString());
 				}
 				;
@@ -1143,6 +1159,13 @@ public class TampilanAwal extends JFrame {
 						gambarAkhir = new ImageIcon(newimg2); // transform it back
 						LblFS.setIcon(gambarAkhir);
 					};
+					if(stegaEncode) {
+						
+					};
+					if(stegaDecode) {
+						
+					}
+					
 				} catch (Exception e) {
 				}
 			}
@@ -1166,12 +1189,25 @@ public class TampilanAwal extends JFrame {
 		lblSource.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSource.setBounds(164, 66, 150, 35);
 		panel.add(lblSource);
+		
+		JLabel lblContainer = new JLabel("Container Image");
+		lblContainer.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblContainer.setHorizontalAlignment(SwingConstants.CENTER);
+		lblContainer.setBounds(164, 66, 150, 35);
+		//panel.add(lblContainer);
+		
 
 		JLabel lblResult = new JLabel("Result Image");
 		lblResult.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblResult.setHorizontalAlignment(SwingConstants.CENTER);
 		lblResult.setBounds(605, 66, 150, 35);
 		panel.add(lblResult);
+		
+		JLabel lblHidden = new JLabel("Hidden Image");
+		lblHidden.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblHidden.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHidden.setBounds(605, 66, 150, 35);
+		//panel.add(lblResult);
 
 		JButton btnSave = new JButton("Browse Save Address");
 		btnSave.setForeground(new Color(255, 255, 255));
@@ -1393,6 +1429,58 @@ public class TampilanAwal extends JFrame {
 		lblHistogramImage.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblHistogramImage.setBounds(958, 66, 150, 35);
 		panel.add(lblHistogramImage);
+		
+		JButton btnBrowseHiddenAddress = new JButton("Browse Hidden Address");
+		btnBrowseHiddenAddress.setForeground(Color.WHITE);
+		btnBrowseHiddenAddress.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource() == btnBrowseHiddenAddress) {
+					JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+					// invoke the showsOpenDialog function to show the save dialog
+					int r = j.showOpenDialog(null);
+
+					// if the user selects a file
+					if (r == JFileChooser.APPROVE_OPTION)
+
+					{
+						// set the label to the path of the selected file
+						txtHiddenAddress.setText(j.getSelectedFile().getAbsolutePath());
+
+					}
+					// if the user cancelled the operation
+					else
+						l.setText("the user cancelled the operation");
+				}
+				String alamatHidden = txtHiddenAddress.getText();
+
+				//ImageIcon gambarAwal = new ImageIcon(alamat);
+				File input1 = new File(alamatHidden);
+				Image ga1 = null;
+				try {
+					ga1 = ImageIO.read(input1);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}// transform it
+				Image newimg1 = ga1.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+				ImageIcon gambarAwal1 = new ImageIcon(newimg1); // transform it back
+				LblFS.setIcon(gambarAwal1);
+			}
+		});
+		btnBrowseHiddenAddress.setBackground(new Color(60, 179, 113));
+		btnBrowseHiddenAddress.setBounds(475, 558, 175, 35);
+		//panel.add(btnBrowseHiddenAddress);
+		
+		
+		//panel.add(btnDecode);
+		
+		txtHiddenAddress = new JTextField();
+		txtHiddenAddress.setHorizontalAlignment(SwingConstants.CENTER);
+		txtHiddenAddress.setColumns(10);
+		txtHiddenAddress.setBounds(475, 510, 400, 45);
+		
+		//panel.add(txtHiddenAddress);
 
 		JButton btnEdgeDetectionDefault = new JButton("Edge Detection Sobel");
 		btnEdgeDetectionDefault.addActionListener(new ActionListener() {
@@ -1596,7 +1684,83 @@ public class TampilanAwal extends JFrame {
 		lblCompress.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCompress.setBounds(24, 0, 250, 55);
 		lblCompress.setFont(new Font("Tahoma", Font.PLAIN, 24));
-
+		
+		JLabel lblStegano = new JLabel("Steganografi");
+		lblStegano.setHorizontalAlignment(SwingConstants.CENTER);
+		lblStegano.setBounds(24, 0, 250, 55);
+		lblStegano.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		JLabel lblSteganoEncode = new JLabel("Steganografi Encode");
+		lblSteganoEncode.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSteganoEncode.setBounds(24, 0, 250, 55);
+		lblSteganoEncode.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		JLabel lblSteganoDecode = new JLabel("Steganografi Decode");
+		lblSteganoDecode.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSteganoDecode.setBounds(24, 0, 250, 55);
+		lblSteganoDecode.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		JButton btnEncode = new JButton("Encode");
+		btnEncode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtFinalAddress.setText("");
+				txtSourceAddress.setText("");
+				txtHiddenAddress.setText("");
+				stegaEncode = true;
+				stegaDecode = false;
+				
+				//panel add
+				panel.add(btnBrowseHiddenAddress);
+				panel.add(txtHiddenAddress);
+				panel.add(lblHidden);
+				panel_1.add(lblSteganoEncode);
+				
+				//panel remove
+				panel.remove(btnSave);
+				panel.remove(lblResult);
+				panel_1.remove(lblSteganoDecode);
+				panel_1.remove(lblStegano);
+				
+				
+				panel.setVisible(false);
+				panel.setVisible(true);
+			}
+		});
+		btnEncode.setForeground(Color.WHITE);
+		btnEncode.setBackground(new Color(60, 179, 113));
+		btnEncode.setBounds(40, 512, 175, 35);
+		//panel.add(btnEncode);
+		
+		JButton btnDecode = new JButton("Decode");
+		btnDecode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtFinalAddress.setText("");
+				txtSourceAddress.setText("");
+				txtHiddenAddress.setText("");
+				stegaEncode = false;
+				stegaDecode = true;
+				
+				//panel add
+				panel.add(btnSave);
+				panel.add(lblResult);
+				panel_1.add(lblSteganoDecode);
+				
+				//panel remove
+				panel.remove(btnBrowseHiddenAddress);
+				panel.remove(txtHiddenAddress);
+				panel.remove(lblHidden);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblStegano);
+				
+				
+				panel.setVisible(false);
+				panel.setVisible(true);
+			}
+		});
+		btnDecode.setForeground(Color.WHITE);
+		btnDecode.setBackground(new Color(60, 179, 113));
+		btnDecode.setBounds(265, 512, 175, 35);
+		
 		JButton btnRGBtoGray = new JButton("RGB to Gray");
 		btnRGBtoGray.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1617,6 +1781,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.add(lblRGBtoGray);
@@ -1687,6 +1854,16 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1719,6 +1896,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1789,6 +1969,16 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1821,6 +2011,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1891,6 +2084,16 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1923,6 +2126,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1993,6 +2199,16 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2025,6 +2241,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2095,6 +2314,16 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2127,6 +2356,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2197,6 +2429,16 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2229,6 +2471,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2299,6 +2544,16 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2331,6 +2586,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2401,6 +2659,16 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2433,6 +2701,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2504,6 +2775,16 @@ public class TampilanAwal extends JFrame {
 				// compressing
 				panel_1.remove(lblCompress);
 
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
+
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -2535,6 +2816,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2605,6 +2889,16 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2637,6 +2931,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2707,6 +3004,16 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2739,6 +3046,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2809,6 +3119,17 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel.remove(lblHidden);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2841,6 +3162,9 @@ public class TampilanAwal extends JFrame {
 				edge = true;
 				histogrameq = false;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2911,6 +3235,17 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel.remove(lblHidden);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2943,6 +3278,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = true;
 				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -3013,6 +3351,17 @@ public class TampilanAwal extends JFrame {
 				
 				// compressing
 				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel.remove(lblHidden);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -3045,6 +3394,9 @@ public class TampilanAwal extends JFrame {
 				edge = false;
 				histogrameq = false;
 				compress = true;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -3116,6 +3468,17 @@ public class TampilanAwal extends JFrame {
 				// compressing
 				panel_1.add(lblCompress);
 
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel.remove(lblHidden);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
+
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -3126,6 +3489,122 @@ public class TampilanAwal extends JFrame {
 		btnCompress.setBackground(new Color(255, 215, 0));
 		btnCompress.setBounds(0, 530, 150, 30);
 		menu.add(btnCompress);
+		
+		JButton btnSteganografi = new JButton("Steganografi");
+		btnSteganografi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
+				txtFinalAddress.setText("");
+				rgbtogray = false;
+				brightness = false;
+				negatif = false;
+				bandw = false;
+				kontras = false;
+				translasi = false;
+				flipping = false;
+				cropping = false;
+				rotation = false;
+				scalling = false;
+				smoothing = false;
+				sharpening = false;
+				edge = false;
+				histogrameq = false;
+				compress = false;
+				steganografi = true;
+				stegaDecode = false;
+				stegaEncode = false;
+
+				// Gray
+				panel_1.remove(lblRGBtoGray);
+
+				// Brightness
+				panel_1.remove(lblBrightness);
+				panel.remove(sliderBrightness);
+				panel.remove(lblSlider);
+
+				// negatif
+				panel_1.remove(lblNegatif);
+
+				// Black and White
+				panel_1.remove(lblBandW);
+
+				// Kontras
+				panel_1.remove(lblKontras);
+				panel.remove(FieldContras);
+				panel.remove(lblContras);
+				panel.remove(lblContrasPer);
+
+				// translasi
+				panel_1.remove(lblTranlasi);
+				panel.remove(FieldTranslasiM);
+				panel.remove(FieldTranslasiN);
+				panel.remove(lblTranslasiM);
+				panel.remove(lblTranslasiN);
+
+				// flipping
+				panel_1.remove(lblFlipping);
+				panel.remove(btnHorizontal);
+				panel.remove(btnVertikal);
+
+				// cropping
+				panel_1.remove(lblCropping);
+				panel.remove(FieldCroppingX);
+				panel.remove(FieldCroppingY);
+				panel.remove(FieldCroppingpixelX);
+				panel.remove(FieldCroppingpixelY);
+				panel.remove(lblCroppingpixel);
+				panel.remove(lblCroppingKali);
+				panel.remove(lblCroppingY);
+				panel.remove(lblCroppingX);
+
+				// rotation
+				panel_1.remove(lblRotation);
+				panel.remove(btnRotatekanan);
+				panel.remove(btnRotatekiri);
+
+				// scalling
+				panel_1.remove(lblScalling);
+				panel.remove(btnScallingBesar);
+				panel.remove(btnScallingKecil);
+
+				// smoothing
+				panel_1.remove(lblSmoothing);
+
+				// sharpening
+				panel_1.remove(lblSharpening);
+
+				// edge
+				panel_1.remove(lblEdge);
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
+				
+				//steganografi
+				panel_1.add(lblStegano);
+				panel.add(btnEncode);
+				panel.add(btnDecode);
+				
+
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
+				panel.remove(lblResult);
+				
+				
+				panel.setVisible(false);
+				panel.setVisible(true);
+				setFinalAddress = false;
+			}
+		});
+		btnSteganografi.setForeground(Color.BLACK);
+		btnSteganografi.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnSteganografi.setBackground(new Color(255, 215, 0));
+		btnSteganografi.setBounds(0, 560, 150, 30);
+		menu.add(btnSteganografi);
 
 		// Button in menu end
 		// MENU ENDS
