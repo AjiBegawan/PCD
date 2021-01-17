@@ -82,6 +82,7 @@ public class TampilanAwal extends JFrame {
 	private JTextField txtSourceAddress;
 	private JTextField txtFinalAddress;
 	private String alamat = "null";
+	private String alamatHidden = "null";
 	private String simpan = "null";
 	private String simpanHRed = "null";
 
@@ -102,6 +103,7 @@ public class TampilanAwal extends JFrame {
 	private boolean histogrameq = false;
 	private boolean compress = false;
 	private boolean steganografi = false;
+	private boolean watermark = false;
 
 	// inisialisasi false untuk flipping
 	private boolean vertikal = true;
@@ -365,11 +367,16 @@ public class TampilanAwal extends JFrame {
 						str.insert(str.length() - 4, " Encode");
 					}
 					;
+					if (watermark) {
+						str.insert(str.length() - 4, " Watermark");
+					}
+					;
 					
 					txtFinalAddress.setText(str.toString());
 				}
 				;
 				simpan = txtFinalAddress.getText();
+				
 
 				ImageIcon gambarAwal = new ImageIcon(alamat);
 				Image ga = gambarAwal.getImage(); // transform it
@@ -1160,10 +1167,86 @@ public class TampilanAwal extends JFrame {
 						LblFS.setIcon(gambarAkhir);
 					};
 					if(stegaEncode) {
+						alamatHidden = txtHiddenAddress.getText();
+						File input = new File(alamat);
+						File output = new File(simpan);
+						BufferedImage image = ImageIO.read(input);
+						
+						int[][] cover = new int [image.getHeight()][image.getWidth()];
+						for(int y=0;y<cover.length;y++) {
+							for(int x=0;y<cover[y].length;x++) {
+								cover[y][x] = image.getRGB(x, y);
+							}
+						}
+						String msg = "TExting";
+						char[] msgChar = msg.toCharArray();
+						String secret = "";
+						for(int i=0;i<msgChar.length;i++ ) {
+							int tmp01 = (int)msgChar[i];
+							String tmp02= Integer.toBinaryString(tmp01);
+							secret += String.format("%1$7s",tmp02 ).replace(' ', '0');
+						}
+						
+						
+						int index = -1;
+						for(int y = 0; y < cover.length;y++) {
+							for(int x = 0 ; x< cover[y].length;x++) {
+								int secretBinary=0;
+								if(++index<secret.length()) {
+									secretBinary= Integer.parseInt(secret.substring(index,index+1));
+								}
+								Color pixel = new Color(2* Math.floorDiv((cover[y][x]>>16)& 0xFF,2 )+secretBinary, (cover[y][x]>>8)& 0xFF, cover[y][x]& 0xFF, (cover[y][x]>>24)& 0xFF);
+								image.setRGB(x, y, pixel.getRGB());
+							}
+						}
+						ImageIO.write(image, "png", output);
+						
+						ImageIcon gambarAkhir = new ImageIcon(simpan);
+						Image gak = gambarAkhir.getImage(); // transform it
+						Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
+																										// smooth way
+						gambarAkhir = new ImageIcon(newimg2); // transform it back
+						LblFS.setIcon(gambarAkhir);
 						
 					};
 					if(stegaDecode) {
 						
+					}
+					if(watermark) {
+						File input = new File(alamat);
+						File output = new File(simpan);
+						ImageIcon icon = new ImageIcon(input.getPath());
+						 
+			            // create BufferedImage object of same width and height as of original image
+			            BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(),
+			                        icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+			 
+			            // create graphics object and add original image to it
+			            Graphics graphics = bufferedImage.getGraphics();
+			            graphics.drawImage(icon.getImage(), 0, 0, null);
+			 
+			            // set font for the watermark text
+			            graphics.setFont(new Font("Arial", Font.BOLD, 20));
+			 
+			            //unicode characters for (c) is \u00a9
+			            String watermark = "\u00a9 Kelompok 4";
+			 
+			            // add the watermark text
+			            graphics.drawString(watermark, 0, icon.getIconHeight() / 2);
+			            graphics.dispose();
+			            
+			            try {
+			                  ImageIO.write(bufferedImage, "jpg", output);
+			            } catch (IOException e) {
+			                  e.printStackTrace();
+			            }
+			            
+			            ImageIcon gambarAkhir = new ImageIcon(simpan);
+						Image gak = gambarAkhir.getImage(); // transform it
+						Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
+																										// smooth way
+						gambarAkhir = new ImageIcon(newimg2); // transform it back
+						LblFS.setIcon(gambarAkhir);
 					}
 					
 				} catch (Exception e) {
@@ -1452,20 +1535,7 @@ public class TampilanAwal extends JFrame {
 					else
 						l.setText("the user cancelled the operation");
 				}
-				String alamatHidden = txtHiddenAddress.getText();
-
-				//ImageIcon gambarAwal = new ImageIcon(alamat);
-				File input1 = new File(alamatHidden);
-				Image ga1 = null;
-				try {
-					ga1 = ImageIO.read(input1);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}// transform it
-				Image newimg1 = ga1.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-				ImageIcon gambarAwal1 = new ImageIcon(newimg1); // transform it back
-				LblFS.setIcon(gambarAwal1);
+				
 			}
 		});
 		btnBrowseHiddenAddress.setBackground(new Color(60, 179, 113));
@@ -1607,7 +1677,7 @@ public class TampilanAwal extends JFrame {
 						"Kelompok 4\nDicky Febrian Dwiputra 3411181097\nAde Ridwan Nugraha 3411181117\nIndiarto Aji Begawan 3411181114");
 			}
 		});
-		btnAbout.setBounds(10, 610, 130, 30);
+		btnAbout.setBounds(10, 662, 130, 30);
 		menu.add(btnAbout);
 
 		JLabel lblRGBtoGray = new JLabel("RGB to Grayscale");
@@ -1690,6 +1760,11 @@ public class TampilanAwal extends JFrame {
 		lblStegano.setBounds(24, 0, 250, 55);
 		lblStegano.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		
+		JLabel lblWatermark = new JLabel("Watermark");
+		lblWatermark.setHorizontalAlignment(SwingConstants.CENTER);
+		lblWatermark.setBounds(24, 0, 250, 55);
+		lblWatermark.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
 		JLabel lblSteganoEncode = new JLabel("Steganografi Encode");
 		lblSteganoEncode.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSteganoEncode.setBounds(24, 0, 250, 55);
@@ -1710,13 +1785,12 @@ public class TampilanAwal extends JFrame {
 				stegaDecode = false;
 				
 				//panel add
-				panel.add(btnBrowseHiddenAddress);
+				//panel.add(btnBrowseHiddenAddress);
 				panel.add(txtHiddenAddress);
 				panel.add(lblHidden);
 				panel_1.add(lblSteganoEncode);
 				
 				//panel remove
-				panel.remove(btnSave);
 				panel.remove(lblResult);
 				panel_1.remove(lblSteganoDecode);
 				panel_1.remove(lblStegano);
@@ -1784,6 +1858,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.add(lblRGBtoGray);
@@ -1864,6 +1939,9 @@ public class TampilanAwal extends JFrame {
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1872,7 +1950,7 @@ public class TampilanAwal extends JFrame {
 		});
 		btnRGBtoGray.setForeground(new Color(0, 0, 0));
 		btnRGBtoGray.setBackground(new Color(255, 215, 0));
-		btnRGBtoGray.setBounds(0, 70, 150, 30);
+		btnRGBtoGray.setBounds(0, 54, 150, 30);
 		menu.add(btnRGBtoGray);
 		btnRGBtoGray.setFont(new Font("Tahoma", Font.PLAIN, 15));
 
@@ -1899,6 +1977,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -1979,6 +2058,9 @@ public class TampilanAwal extends JFrame {
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -1988,7 +2070,7 @@ public class TampilanAwal extends JFrame {
 		btnBrightness.setForeground(new Color(0, 0, 0));
 		btnBrightness.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnBrightness.setBackground(new Color(255, 215, 0));
-		btnBrightness.setBounds(0, 100, 150, 30);
+		btnBrightness.setBounds(0, 84, 150, 30);
 		menu.add(btnBrightness);
 
 		JButton btnBW = new JButton("B & W");
@@ -2014,6 +2096,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2094,6 +2177,9 @@ public class TampilanAwal extends JFrame {
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2103,7 +2189,7 @@ public class TampilanAwal extends JFrame {
 		btnBW.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnBW.setForeground(new Color(0, 0, 0));
 		btnBW.setBackground(new Color(255, 215, 0));
-		btnBW.setBounds(0, 160, 150, 30);
+		btnBW.setBounds(0, 144, 150, 30);
 		menu.add(btnBW);
 
 		JButton btnNegatif = new JButton("Negatif Film");
@@ -2129,6 +2215,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2209,6 +2296,9 @@ public class TampilanAwal extends JFrame {
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2218,7 +2308,7 @@ public class TampilanAwal extends JFrame {
 		btnNegatif.setForeground(new Color(0, 0, 0));
 		btnNegatif.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnNegatif.setBackground(new Color(255, 215, 0));
-		btnNegatif.setBounds(0, 130, 150, 30);
+		btnNegatif.setBounds(0, 114, 150, 30);
 		menu.add(btnNegatif);
 
 		JButton btnKontras = new JButton("Kontras");
@@ -2244,6 +2334,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2324,6 +2415,9 @@ public class TampilanAwal extends JFrame {
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2333,7 +2427,7 @@ public class TampilanAwal extends JFrame {
 		btnKontras.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnKontras.setForeground(new Color(0, 0, 0));
 		btnKontras.setBackground(new Color(255, 215, 0));
-		btnKontras.setBounds(0, 190, 150, 30);
+		btnKontras.setBounds(0, 174, 150, 30);
 		menu.add(btnKontras);
 
 		JButton btnTranslasi = new JButton("Translasi");
@@ -2359,6 +2453,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2439,6 +2534,9 @@ public class TampilanAwal extends JFrame {
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2448,7 +2546,7 @@ public class TampilanAwal extends JFrame {
 		btnTranslasi.setForeground(Color.BLACK);
 		btnTranslasi.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnTranslasi.setBackground(new Color(255, 215, 0));
-		btnTranslasi.setBounds(0, 235, 150, 30);
+		btnTranslasi.setBounds(0, 219, 150, 30);
 		menu.add(btnTranslasi);
 
 		JButton btnFlipping = new JButton("Flipping");
@@ -2474,6 +2572,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2554,6 +2653,9 @@ public class TampilanAwal extends JFrame {
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2563,7 +2665,7 @@ public class TampilanAwal extends JFrame {
 		btnFlipping.setForeground(Color.BLACK);
 		btnFlipping.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnFlipping.setBackground(new Color(255, 215, 0));
-		btnFlipping.setBounds(0, 265, 150, 30);
+		btnFlipping.setBounds(0, 249, 150, 30);
 		menu.add(btnFlipping);
 
 		JButton btnCropping = new JButton("Cropping");
@@ -2589,6 +2691,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2669,6 +2772,9 @@ public class TampilanAwal extends JFrame {
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2678,7 +2784,7 @@ public class TampilanAwal extends JFrame {
 		btnCropping.setForeground(Color.BLACK);
 		btnCropping.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnCropping.setBackground(new Color(255, 215, 0));
-		btnCropping.setBounds(0, 295, 150, 30);
+		btnCropping.setBounds(0, 279, 150, 30);
 		menu.add(btnCropping);
 
 		JButton btnRotation = new JButton("Rotation");
@@ -2704,6 +2810,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2784,6 +2891,9 @@ public class TampilanAwal extends JFrame {
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2793,7 +2903,7 @@ public class TampilanAwal extends JFrame {
 		btnRotation.setForeground(Color.BLACK);
 		btnRotation.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnRotation.setBackground(new Color(255, 215, 0));
-		btnRotation.setBounds(0, 325, 150, 30);
+		btnRotation.setBounds(0, 309, 150, 30);
 		menu.add(btnRotation);
 
 		JButton btnScalling = new JButton("Scalling");
@@ -2819,6 +2929,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -2899,6 +3010,9 @@ public class TampilanAwal extends JFrame {
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -2908,7 +3022,7 @@ public class TampilanAwal extends JFrame {
 		btnScalling.setForeground(Color.BLACK);
 		btnScalling.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnScalling.setBackground(new Color(255, 215, 0));
-		btnScalling.setBounds(0, 355, 150, 30);
+		btnScalling.setBounds(0, 339, 150, 30);
 		menu.add(btnScalling);
 
 		JButton btnSmoothing = new JButton("Smoothing");
@@ -2934,6 +3048,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -3014,6 +3129,9 @@ public class TampilanAwal extends JFrame {
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -3023,7 +3141,7 @@ public class TampilanAwal extends JFrame {
 		btnSmoothing.setForeground(Color.BLACK);
 		btnSmoothing.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnSmoothing.setBackground(new Color(255, 215, 0));
-		btnSmoothing.setBounds(0, 399, 150, 30);
+		btnSmoothing.setBounds(0, 383, 150, 30);
 		menu.add(btnSmoothing);
 
 		JButton btnSharpening = new JButton("Sharpening");
@@ -3049,6 +3167,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -3130,6 +3249,9 @@ public class TampilanAwal extends JFrame {
 				panel.remove(lblHidden);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -3139,7 +3261,7 @@ public class TampilanAwal extends JFrame {
 		btnSharpening.setForeground(Color.BLACK);
 		btnSharpening.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnSharpening.setBackground(new Color(255, 215, 0));
-		btnSharpening.setBounds(0, 429, 150, 30);
+		btnSharpening.setBounds(0, 413, 150, 30);
 		menu.add(btnSharpening);
 
 		JButton btnEdgeDetection = new JButton("Edge Detection");
@@ -3165,6 +3287,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -3246,6 +3369,9 @@ public class TampilanAwal extends JFrame {
 				panel.remove(lblHidden);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -3255,7 +3381,7 @@ public class TampilanAwal extends JFrame {
 		btnEdgeDetection.setForeground(Color.BLACK);
 		btnEdgeDetection.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnEdgeDetection.setBackground(new Color(255, 215, 0));
-		btnEdgeDetection.setBounds(0, 459, 150, 30);
+		btnEdgeDetection.setBounds(0, 443, 150, 30);
 		menu.add(btnEdgeDetection);
 
 		JButton btnHistogramEq = new JButton("Histogram EQ");
@@ -3281,6 +3407,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -3362,6 +3489,9 @@ public class TampilanAwal extends JFrame {
 				panel.remove(lblHidden);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -3371,7 +3501,7 @@ public class TampilanAwal extends JFrame {
 		btnHistogramEq.setForeground(Color.BLACK);
 		btnHistogramEq.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnHistogramEq.setBackground(new Color(255, 215, 0));
-		btnHistogramEq.setBounds(0, 500, 150, 30);
+		btnHistogramEq.setBounds(0, 484, 150, 30);
 		menu.add(btnHistogramEq);
 		
 		JButton btnCompress = new JButton("Compress");
@@ -3397,6 +3527,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = false;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -3478,7 +3609,10 @@ public class TampilanAwal extends JFrame {
 				panel.remove(lblHidden);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-
+				
+				//watermark
+				panel_1.remove(lblWatermark);
+				
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -3487,7 +3621,7 @@ public class TampilanAwal extends JFrame {
 		btnCompress.setForeground(Color.BLACK);
 		btnCompress.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnCompress.setBackground(new Color(255, 215, 0));
-		btnCompress.setBounds(0, 530, 150, 30);
+		btnCompress.setBounds(0, 514, 150, 30);
 		menu.add(btnCompress);
 		
 		JButton btnSteganografi = new JButton("Steganografi");
@@ -3513,6 +3647,7 @@ public class TampilanAwal extends JFrame {
 				steganografi = true;
 				stegaDecode = false;
 				stegaEncode = false;
+				watermark = false;
 
 				// Gray
 				panel_1.remove(lblRGBtoGray);
@@ -3594,6 +3729,9 @@ public class TampilanAwal extends JFrame {
 				panel_1.remove(lblSteganoDecode);
 				panel.remove(lblResult);
 				
+				//watermark
+				panel_1.remove(lblWatermark);
+				
 				
 				panel.setVisible(false);
 				panel.setVisible(true);
@@ -3603,8 +3741,128 @@ public class TampilanAwal extends JFrame {
 		btnSteganografi.setForeground(Color.BLACK);
 		btnSteganografi.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnSteganografi.setBackground(new Color(255, 215, 0));
-		btnSteganografi.setBounds(0, 560, 150, 30);
+		btnSteganografi.setBounds(0, 544, 150, 30);
 		menu.add(btnSteganografi);
+		
+		JButton btnWatermark = new JButton("Watermark");
+		btnWatermark.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LblFS.setIcon(null);
+				txtFinalAddress.setText("");
+				rgbtogray = false;
+				brightness = false;
+				negatif = false;
+				bandw = false;
+				kontras = false;
+				translasi = false;
+				flipping = false;
+				cropping = false;
+				rotation = false;
+				scalling = false;
+				smoothing = false;
+				sharpening = false;
+				edge = false;
+				histogrameq = false;
+				compress = false;
+				steganografi = false;
+				stegaDecode = false;
+				stegaEncode = false;
+				watermark = true;
+
+				// Gray
+				panel_1.remove(lblRGBtoGray);
+
+				// Brightness
+				panel_1.remove(lblBrightness);
+				panel.remove(sliderBrightness);
+				panel.remove(lblSlider);
+
+				// negatif
+				panel_1.remove(lblNegatif);
+
+				// Black and White
+				panel_1.remove(lblBandW);
+
+				// Kontras
+				panel_1.remove(lblKontras);
+				panel.remove(FieldContras);
+				panel.remove(lblContras);
+				panel.remove(lblContrasPer);
+
+				// translasi
+				panel_1.remove(lblTranlasi);
+				panel.remove(FieldTranslasiM);
+				panel.remove(FieldTranslasiN);
+				panel.remove(lblTranslasiM);
+				panel.remove(lblTranslasiN);
+
+				// flipping
+				panel_1.remove(lblFlipping);
+				panel.remove(btnHorizontal);
+				panel.remove(btnVertikal);
+
+				// cropping
+				panel_1.remove(lblCropping);
+				panel.remove(FieldCroppingX);
+				panel.remove(FieldCroppingY);
+				panel.remove(FieldCroppingpixelX);
+				panel.remove(FieldCroppingpixelY);
+				panel.remove(lblCroppingpixel);
+				panel.remove(lblCroppingKali);
+				panel.remove(lblCroppingY);
+				panel.remove(lblCroppingX);
+
+				// rotation
+				panel_1.remove(lblRotation);
+				panel.remove(btnRotatekanan);
+				panel.remove(btnRotatekiri);
+
+				// scalling
+				panel_1.remove(lblScalling);
+				panel.remove(btnScallingBesar);
+				panel.remove(btnScallingKecil);
+
+				// smoothing
+				panel_1.remove(lblSmoothing);
+
+				// sharpening
+				panel_1.remove(lblSharpening);
+
+				// edge
+				panel_1.remove(lblEdge);
+				panel.remove(btnEdgeDetectionDefault);
+				panel.remove(btnEdgeDetectionCanny);
+
+				// histogram eq
+				panel_1.remove(lblHistogramEq);
+				
+				// compressing
+				panel_1.remove(lblCompress);
+
+				//steganografi
+				panel_1.remove(lblStegano);
+				panel.remove(btnEncode);
+				panel.remove(btnDecode);
+				
+
+				panel.add(lblResult);
+				panel.remove(lblHidden);
+				panel_1.remove(lblSteganoEncode);
+				panel_1.remove(lblSteganoDecode);
+				
+				//watermark
+				panel_1.add(lblWatermark);
+
+				panel.setVisible(false);
+				panel.setVisible(true);
+				setFinalAddress = false;
+			}
+		});
+		btnWatermark.setForeground(Color.BLACK);
+		btnWatermark.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnWatermark.setBackground(new Color(255, 215, 0));
+		btnWatermark.setBounds(0, 574, 150, 30);
+		menu.add(btnWatermark);
 
 		// Button in menu end
 		// MENU ENDS
