@@ -38,9 +38,12 @@ import java.awt.event.MouseEvent;
 import java.awt.image.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.awt.event.ActionEvent;
 
@@ -119,7 +122,7 @@ public class TampilanAwal extends JFrame {
 
 	// inisialisasi false untuk edge detection
 	private boolean edgeCanny = false;
-	
+
 	// inisialisasi false untuk encode dan decode steganografi
 	private boolean stegaEncode = false;
 	private boolean stegaDecode = false;
@@ -152,6 +155,9 @@ public class TampilanAwal extends JFrame {
 	private XYBarRenderer renderer;
 	ChartPanel panel;
 	private JTextField txtHiddenAddress;
+	
+	public static String b_msg="";
+	public static int len = 0;
 
 	/**
 	 * Launch the application.
@@ -236,7 +242,6 @@ public class TampilanAwal extends JFrame {
 		result.setBackground(new Color(255, 255, 255));
 		result.setBounds(475, 104, 400, 400);
 		panel.add(result);
-		
 
 		JLabel LblFS = new JLabel("");
 		LblFS.setForeground(new Color(139, 69, 19));
@@ -270,7 +275,7 @@ public class TampilanAwal extends JFrame {
 				}
 				alamat = txtSourceAddress.getText();
 
-				//ImageIcon gambarAwal = new ImageIcon(alamat);
+				// ImageIcon gambarAwal = new ImageIcon(alamat);
 				File input = new File(alamat);
 				Image ga = null;
 				try {
@@ -278,7 +283,7 @@ public class TampilanAwal extends JFrame {
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}// transform it
+				} // transform it
 				Image newimg = ga.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
 				ImageIcon gambarAwal = new ImageIcon(newimg); // transform it back
 				LblIS.setIcon(gambarAwal);
@@ -371,12 +376,11 @@ public class TampilanAwal extends JFrame {
 						str.insert(str.length() - 4, " Watermark");
 					}
 					;
-					
+
 					txtFinalAddress.setText(str.toString());
 				}
 				;
 				simpan = txtFinalAddress.getText();
-				
 
 				ImageIcon gambarAwal = new ImageIcon(alamat);
 				Image ga = gambarAwal.getImage(); // transform it
@@ -923,25 +927,24 @@ public class TampilanAwal extends JFrame {
 						int y = image.getHeight();
 
 						if (edgeCanny) {
-							
+
 							CannyEdge detector = new CannyEdge();
-							//adjust its parameters as desired
+							// adjust its parameters as desired
 							detector.setLowThreshold(0.5f);
 							detector.setHighThreshold(1f);
-							//apply it to an image
+							// apply it to an image
 							detector.setSourceImage(image);
 							detector.process();
 							baruimage = detector.getEdgesImage();
-							
-							
-							//save file masih gagal
+
+							// save file masih gagal
 							File output = new File(simpan);
 							ImageIO.write(baruimage, "jpg", output);
-							
-							Image dImg = baruimage.getScaledInstance(400,400, java.awt.Image.SCALE_SMOOTH);
+
+							Image dImg = baruimage.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH);
 							ImageIcon AkhirGambar = new ImageIcon(dImg);
 							LblFS.setIcon(AkhirGambar);
-							
+
 						} else {
 							int[][] edgeColors = new int[x][y];
 							int maxGradient = -1;
@@ -997,13 +1000,14 @@ public class TampilanAwal extends JFrame {
 
 							ImageIcon gambarAkhir = new ImageIcon(simpan);
 							Image gak = gambarAkhir.getImage(); // transform it
-							Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
-																											// smooth way
+							Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it
+																											// the
+																											// smooth
+																											// way
 							gambarAkhir = new ImageIcon(newimg2); // transform it back
 							LblFS.setIcon(gambarAkhir);
 						}
 
-						
 					}
 					;
 
@@ -1124,131 +1128,162 @@ public class TampilanAwal extends JFrame {
 																										// smooth way
 						gambarAkhir = new ImageIcon(newimg2); // transform it back
 						LblFS.setIcon(gambarAkhir);
-				};
-					if(compress) {
+					}
+					;
+					if (compress) {
 						File input = new File(alamat);
 						BufferedImage imagesatu = ImageIO.read(input);
 						File output = new File(simpan);
 						OutputStream os = new FileOutputStream(output);
-						//String formatFile = alamat.substring(alamat.length() - 3);
-						
+						// String formatFile = alamat.substring(alamat.length() - 3);
+
 						Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
-					    ImageWriter writer = (ImageWriter) writers.next();
-					    ImageOutputStream ios = ImageIO.createImageOutputStream(os);
-					    writer.setOutput(ios);
+						ImageWriter writer = (ImageWriter) writers.next();
+						ImageOutputStream ios = ImageIO.createImageOutputStream(os);
+						writer.setOutput(ios);
 
-					    ImageWriteParam param = writer.getDefaultWriteParam();
+						ImageWriteParam param = writer.getDefaultWriteParam();
 
-					    param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-					    param.setCompressionQuality(0.05f);  // Change the quality value you prefer
-					    writer.write(null, new IIOImage(imagesatu, null, null), param);
+						param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+						param.setCompressionQuality(0.05f); // Change the quality value you prefer
+						writer.write(null, new IIOImage(imagesatu, null, null), param);
 
-					    os.close();
-					    ios.close();
-					    writer.dispose();
-					    
-					    input = new File(alamat);
+						os.close();
+						ios.close();
+						writer.dispose();
+
+						input = new File(alamat);
 						Image ga1 = null;
 						try {
 							ga1 = ImageIO.read(input);
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
-						}// transform it
-						Image newimg1 = ga1.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+						} // transform it
+						Image newimg1 = ga1.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
+																										// smooth way
 						ImageIcon gambarAwal1 = new ImageIcon(newimg1); // transform it back
 						LblIS.setIcon(gambarAwal1);
-					    
-					    ImageIcon gambarAkhir = new ImageIcon(simpan);
-						Image gak = gambarAkhir.getImage(); // transform it
-						Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
-																										// smooth way
-						gambarAkhir = new ImageIcon(newimg2); // transform it back
-						LblFS.setIcon(gambarAkhir);
-					};
-					if(stegaEncode) {
-						alamatHidden = txtHiddenAddress.getText();
-						File input = new File(alamat);
-						File output = new File(simpan);
-						BufferedImage image = ImageIO.read(input);
-						
-						int[][] cover = new int [image.getHeight()][image.getWidth()];
-						for(int y=0;y<cover.length;y++) {
-							for(int x=0;y<cover[y].length;x++) {
-								cover[y][x] = image.getRGB(x, y);
-							}
-						}
-						String msg = "TExting";
-						char[] msgChar = msg.toCharArray();
-						String secret = "";
-						for(int i=0;i<msgChar.length;i++ ) {
-							int tmp01 = (int)msgChar[i];
-							String tmp02= Integer.toBinaryString(tmp01);
-							secret += String.format("%1$7s",tmp02 ).replace(' ', '0');
-						}
-						
-						
-						int index = -1;
-						for(int y = 0; y < cover.length;y++) {
-							for(int x = 0 ; x< cover[y].length;x++) {
-								int secretBinary=0;
-								if(++index<secret.length()) {
-									secretBinary= Integer.parseInt(secret.substring(index,index+1));
-								}
-								Color pixel = new Color(2* Math.floorDiv((cover[y][x]>>16)& 0xFF,2 )+secretBinary, (cover[y][x]>>8)& 0xFF, cover[y][x]& 0xFF, (cover[y][x]>>24)& 0xFF);
-								image.setRGB(x, y, pixel.getRGB());
-							}
-						}
-						ImageIO.write(image, "png", output);
-						
+
 						ImageIcon gambarAkhir = new ImageIcon(simpan);
 						Image gak = gambarAkhir.getImage(); // transform it
 						Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
 																										// smooth way
 						gambarAkhir = new ImageIcon(newimg2); // transform it back
 						LblFS.setIcon(gambarAkhir);
-						
-					};
-					if(stegaDecode) {
-						
 					}
-					if(watermark) {
+					;
+					if (stegaEncode) {
+						String alamatHid = txtHiddenAddress.getText();
+						LSB_encode encoder = new LSB_encode();
+						encoder.MESSAGEFILE = alamatHid;
+						encoder.COVERIMAGEFILE = alamat;
+						encoder.STEGIMAGEFILE = simpan;
+
+						String contentOfMessageFile = (encoder.readMessageFile());
+						int[] bits = encoder.bit_Msg(contentOfMessageFile);
+						System.out.println("msg in file " + contentOfMessageFile);
+						for (int i = 0; i < bits.length; i++)
+							System.out.print(bits[i]);
+						System.out.println();
+						BufferedImage theImage = encoder.readImageFile(encoder.COVERIMAGEFILE);
+						encoder.hideTheMessage(bits, theImage);
+
+						ImageIcon gambarAkhir = new ImageIcon(simpan);
+						Image gak = gambarAkhir.getImage(); // transform it
+						Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
+																										// smooth way
+						gambarAkhir = new ImageIcon(newimg2); // transform it back
+						LblFS.setIcon(gambarAkhir);
+						/*
+						 * 
+						 * alamatHidden = txtHiddenAddress.getText(); File input = new File(alamat);
+						 * File output = new File(simpan); BufferedImage image = ImageIO.read(input);
+						 * 
+						 * int[][] cover = new int [image.getHeight()][image.getWidth()]; for(int
+						 * y=0;y<cover.length;y++) { for(int x=0;y<cover[y].length;x++) { cover[y][x] =
+						 * image.getRGB(x, y); } } String msg = "TExting"; char[] msgChar =
+						 * msg.toCharArray(); String secret = ""; for(int i=0;i<msgChar.length;i++ ) {
+						 * int tmp01 = (int)msgChar[i]; String tmp02= Integer.toBinaryString(tmp01);
+						 * secret += String.format("%1$7s",tmp02 ).replace(' ', '0'); }
+						 * 
+						 * 
+						 * int index = -1; for(int y = 0; y < cover.length;y++) { for(int x = 0 ; x<
+						 * cover[y].length;x++) { int secretBinary=0; if(++index<secret.length()) {
+						 * secretBinary= Integer.parseInt(secret.substring(index,index+1)); } Color
+						 * pixel = new Color(2* Math.floorDiv((cover[y][x]>>16)& 0xFF,2 )+secretBinary,
+						 * (cover[y][x]>>8)& 0xFF, cover[y][x]& 0xFF, (cover[y][x]>>24)& 0xFF);
+						 * image.setRGB(x, y, pixel.getRGB()); } } ImageIO.write(image, "png", output);
+						 * 
+						 * ImageIcon gambarAkhir = new ImageIcon(simpan); Image gak =
+						 * gambarAkhir.getImage(); // transform it Image newimg2 =
+						 * gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
+						 * // smooth way gambarAkhir = new ImageIcon(newimg2); // transform it back
+						 * LblFS.setIcon(gambarAkhir);
+						 */
+					}
+					;
+					if (stegaDecode) {
+						LSB_decode decoder = new LSB_decode();
+						decoder.STEGIMAGEFILE = alamat;
+						decoder.DECODEDMESSAGEFILE = simpan;
+						
+						BufferedImage yImage = decoder.readImageFile(decoder.STEGIMAGEFILE);
+
+						decoder.DecodeTheMessage(yImage);
+						String msg = "";
+						//System.out.println("len is "+len*8);
+						for (int i = 0; i < len * 8; i = i + 8) {
+
+							String sub = b_msg.substring(i, i + 8);
+
+							int m = Integer.parseInt(sub, 2);
+							char ch = (char) m;
+							System.out.println("m " + m + " c " + ch);
+							msg += ch;
+						}
+						PrintWriter out = new PrintWriter(new FileWriter(decoder.DECODEDMESSAGEFILE, true), true);
+						out.write(msg);
+						out.close();
+					
+					}
+					if (watermark) {
 						File input = new File(alamat);
 						File output = new File(simpan);
 						ImageIcon icon = new ImageIcon(input.getPath());
-						 
-			            // create BufferedImage object of same width and height as of original image
-			            BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(),
-			                        icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
-			 
-			            // create graphics object and add original image to it
-			            Graphics graphics = bufferedImage.getGraphics();
-			            graphics.drawImage(icon.getImage(), 0, 0, null);
-			 
-			            // set font for the watermark text
-			            graphics.setFont(new Font("Arial", Font.BOLD, 20));
-			 
-			            //unicode characters for (c) is \u00a9
-			            String watermark = "\u00a9 Kelompok 4";
-			 
-			            // add the watermark text
-			            graphics.drawString(watermark, 0, icon.getIconHeight() / 2);
-			            graphics.dispose();
-			            
-			            try {
-			                  ImageIO.write(bufferedImage, "jpg", output);
-			            } catch (IOException e) {
-			                  e.printStackTrace();
-			            }
-			            
-			            ImageIcon gambarAkhir = new ImageIcon(simpan);
+
+						// create BufferedImage object of same width and height as of original image
+						BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
+								BufferedImage.TYPE_INT_RGB);
+
+						// create graphics object and add original image to it
+						Graphics graphics = bufferedImage.getGraphics();
+						graphics.drawImage(icon.getImage(), 0, 0, null);
+
+						// set font for the watermark text
+						graphics.setFont(new Font("Arial", Font.BOLD, 20));
+
+						// unicode characters for (c) is \u00a9
+						String watermark = "\u00a9 Kelompok 4";
+
+						// add the watermark text
+						graphics.drawString(watermark, 0, icon.getIconHeight() / 2);
+						graphics.dispose();
+
+						try {
+							ImageIO.write(bufferedImage, "jpg", output);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
+						ImageIcon gambarAkhir = new ImageIcon(simpan);
 						Image gak = gambarAkhir.getImage(); // transform it
 						Image newimg2 = gak.getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH); // scale it the
 																										// smooth way
 						gambarAkhir = new ImageIcon(newimg2); // transform it back
 						LblFS.setIcon(gambarAkhir);
 					}
-					
+
 				} catch (Exception e) {
 				}
 			}
@@ -1272,25 +1307,24 @@ public class TampilanAwal extends JFrame {
 		lblSource.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSource.setBounds(164, 66, 150, 35);
 		panel.add(lblSource);
-		
+
 		JLabel lblContainer = new JLabel("Container Image");
 		lblContainer.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblContainer.setHorizontalAlignment(SwingConstants.CENTER);
 		lblContainer.setBounds(164, 66, 150, 35);
-		//panel.add(lblContainer);
-		
+		// panel.add(lblContainer);
 
 		JLabel lblResult = new JLabel("Result Image");
 		lblResult.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblResult.setHorizontalAlignment(SwingConstants.CENTER);
 		lblResult.setBounds(605, 66, 150, 35);
 		panel.add(lblResult);
-		
+
 		JLabel lblHidden = new JLabel("Hidden Image");
 		lblHidden.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblHidden.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHidden.setBounds(605, 66, 150, 35);
-		//panel.add(lblResult);
+		// panel.add(lblResult);
 
 		JButton btnSave = new JButton("Browse Save Address");
 		btnSave.setForeground(new Color(255, 255, 255));
@@ -1512,7 +1546,7 @@ public class TampilanAwal extends JFrame {
 		lblHistogramImage.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblHistogramImage.setBounds(958, 66, 150, 35);
 		panel.add(lblHistogramImage);
-		
+
 		JButton btnBrowseHiddenAddress = new JButton("Browse Hidden Address");
 		btnBrowseHiddenAddress.setForeground(Color.WHITE);
 		btnBrowseHiddenAddress.addActionListener(new ActionListener() {
@@ -1535,22 +1569,21 @@ public class TampilanAwal extends JFrame {
 					else
 						l.setText("the user cancelled the operation");
 				}
-				
+
 			}
 		});
 		btnBrowseHiddenAddress.setBackground(new Color(60, 179, 113));
 		btnBrowseHiddenAddress.setBounds(475, 558, 175, 35);
-		//panel.add(btnBrowseHiddenAddress);
-		
-		
-		//panel.add(btnDecode);
-		
+		// panel.add(btnBrowseHiddenAddress);
+
+		// panel.add(btnDecode);
+
 		txtHiddenAddress = new JTextField();
 		txtHiddenAddress.setHorizontalAlignment(SwingConstants.CENTER);
 		txtHiddenAddress.setColumns(10);
 		txtHiddenAddress.setBounds(475, 510, 400, 45);
-		
-		//panel.add(txtHiddenAddress);
+
+		// panel.add(txtHiddenAddress);
 
 		JButton btnEdgeDetectionDefault = new JButton("Edge Detection Sobel");
 		btnEdgeDetectionDefault.addActionListener(new ActionListener() {
@@ -1749,32 +1782,32 @@ public class TampilanAwal extends JFrame {
 		lblHistogramEq.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHistogramEq.setBounds(24, 0, 250, 55);
 		lblHistogramEq.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
+
 		JLabel lblCompress = new JLabel("Compress");
 		lblCompress.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCompress.setBounds(24, 0, 250, 55);
 		lblCompress.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
+
 		JLabel lblStegano = new JLabel("Steganografi");
 		lblStegano.setHorizontalAlignment(SwingConstants.CENTER);
 		lblStegano.setBounds(24, 0, 250, 55);
 		lblStegano.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
+
 		JLabel lblWatermark = new JLabel("Watermark");
 		lblWatermark.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWatermark.setBounds(24, 0, 250, 55);
 		lblWatermark.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
+
 		JLabel lblSteganoEncode = new JLabel("Steganografi Encode");
 		lblSteganoEncode.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSteganoEncode.setBounds(24, 0, 250, 55);
 		lblSteganoEncode.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
+
 		JLabel lblSteganoDecode = new JLabel("Steganografi Decode");
 		lblSteganoDecode.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSteganoDecode.setBounds(24, 0, 250, 55);
 		lblSteganoDecode.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		
+
 		JButton btnEncode = new JButton("Encode");
 		btnEncode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1783,19 +1816,19 @@ public class TampilanAwal extends JFrame {
 				txtHiddenAddress.setText("");
 				stegaEncode = true;
 				stegaDecode = false;
-				
-				//panel add
-				//panel.add(btnBrowseHiddenAddress);
+
+				// panel add
+				panel.add(btnBrowseHiddenAddress);
 				panel.add(txtHiddenAddress);
 				panel.add(lblHidden);
 				panel_1.add(lblSteganoEncode);
-				
-				//panel remove
+
+				// panel remove
 				panel.remove(lblResult);
 				panel_1.remove(lblSteganoDecode);
 				panel_1.remove(lblStegano);
-				
-				
+				panel.remove(btnSave);
+
 				panel.setVisible(false);
 				panel.setVisible(true);
 			}
@@ -1803,8 +1836,8 @@ public class TampilanAwal extends JFrame {
 		btnEncode.setForeground(Color.WHITE);
 		btnEncode.setBackground(new Color(60, 179, 113));
 		btnEncode.setBounds(40, 512, 175, 35);
-		//panel.add(btnEncode);
-		
+		// panel.add(btnEncode);
+
 		JButton btnDecode = new JButton("Decode");
 		btnDecode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1813,20 +1846,19 @@ public class TampilanAwal extends JFrame {
 				txtHiddenAddress.setText("");
 				stegaEncode = false;
 				stegaDecode = true;
-				
-				//panel add
+
+				// panel add
 				panel.add(btnSave);
 				panel.add(lblResult);
 				panel_1.add(lblSteganoDecode);
-				
-				//panel remove
+
+				// panel remove
 				panel.remove(btnBrowseHiddenAddress);
 				panel.remove(txtHiddenAddress);
 				panel.remove(lblHidden);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblStegano);
-				
-				
+
 				panel.setVisible(false);
 				panel.setVisible(true);
 			}
@@ -1834,7 +1866,7 @@ public class TampilanAwal extends JFrame {
 		btnDecode.setForeground(Color.WHITE);
 		btnDecode.setBackground(new Color(60, 179, 113));
 		btnDecode.setBounds(265, 512, 175, 35);
-		
+
 		JButton btnRGBtoGray = new JButton("RGB to Gray");
 		btnRGBtoGray.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1926,21 +1958,20 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -2045,21 +2076,20 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -2164,21 +2194,20 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -2283,21 +2312,20 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -2402,21 +2430,20 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -2521,21 +2548,20 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -2640,21 +2666,20 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -2759,21 +2784,20 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -2878,21 +2902,20 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
 
-				//steganografi
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -2997,21 +3020,20 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -3116,21 +3138,20 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -3235,22 +3256,21 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel.remove(lblHidden);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -3355,22 +3375,21 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel.remove(lblHidden);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -3475,22 +3494,21 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.add(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel.remove(lblHidden);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
 
 				panel.setVisible(false);
@@ -3503,7 +3521,7 @@ public class TampilanAwal extends JFrame {
 		btnHistogramEq.setBackground(new Color(255, 215, 0));
 		btnHistogramEq.setBounds(0, 484, 150, 30);
 		menu.add(btnHistogramEq);
-		
+
 		JButton btnCompress = new JButton("Compress");
 		btnCompress.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -3595,24 +3613,23 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.add(lblCompress);
 
-				//steganografi
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel.remove(lblHidden);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
-				
+
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -3623,7 +3640,7 @@ public class TampilanAwal extends JFrame {
 		btnCompress.setBackground(new Color(255, 215, 0));
 		btnCompress.setBounds(0, 514, 150, 30);
 		menu.add(btnCompress);
-		
+
 		JButton btnSteganografi = new JButton("Steganografi");
 		btnSteganografi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -3715,24 +3732,22 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
-				
-				//steganografi
+
+				// steganografi
 				panel_1.add(lblStegano);
 				panel.add(btnEncode);
 				panel.add(btnDecode);
-				
 
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
 				panel.remove(lblResult);
-				
-				//watermark
+
+				// watermark
 				panel_1.remove(lblWatermark);
-				
-				
+
 				panel.setVisible(false);
 				panel.setVisible(true);
 				setFinalAddress = false;
@@ -3743,7 +3758,7 @@ public class TampilanAwal extends JFrame {
 		btnSteganografi.setBackground(new Color(255, 215, 0));
 		btnSteganografi.setBounds(0, 544, 150, 30);
 		menu.add(btnSteganografi);
-		
+
 		JButton btnWatermark = new JButton("Watermark");
 		btnWatermark.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -3835,22 +3850,21 @@ public class TampilanAwal extends JFrame {
 
 				// histogram eq
 				panel_1.remove(lblHistogramEq);
-				
+
 				// compressing
 				panel_1.remove(lblCompress);
 
-				//steganografi
+				// steganografi
 				panel_1.remove(lblStegano);
 				panel.remove(btnEncode);
 				panel.remove(btnDecode);
-				
 
 				panel.add(lblResult);
 				panel.remove(lblHidden);
 				panel_1.remove(lblSteganoEncode);
 				panel_1.remove(lblSteganoDecode);
-				
-				//watermark
+
+				// watermark
 				panel_1.add(lblWatermark);
 
 				panel.setVisible(false);
